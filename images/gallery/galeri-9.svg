@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" width="480" height="480" role="img" aria-label="Foto Kegiatan">
+  <rect width="480" height="480" fill="#E3F2E8"/>
+  <rect x="0.5" y="0.5" width="479" height="479" fill="none" stroke="#DCE4E0" stroke-width="1"/>
+  <circle cx="240.0" cy="226.0" r="43.199999999999996" fill="none" stroke="#145C38" stroke-width="3" opacity="0.55"/><path d="M163.2 248.0 l48.0 -57.599999999999994 l38.4 38.4 l48.0 -67.2 l67.2 86.39999999999999" fill="none" stroke="#145C38" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>
+  <text x="240.0" y="316.8" font-family="Arial, sans-serif" font-size="28.799999999999997" fill="#145C38" text-anchor="middle" opacity="0.75">Foto Kegiatan</text>
+</svg>

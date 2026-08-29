@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320" width="480" height="320" role="img" aria-label="Foto Berita 2">
+  <rect width="480" height="320" fill="#E3F2E8"/>
+  <rect x="0.5" y="0.5" width="479" height="319" fill="none" stroke="#DCE4E0" stroke-width="1"/>
+  <circle cx="240.0" cy="146.0" r="28.799999999999997" fill="none" stroke="#145C38" stroke-width="3" opacity="0.55"/><path d="M188.8 168.0 l32.0 -38.4 l25.6 25.6 l32.0 -44.800000000000004 l44.800000000000004 57.599999999999994" fill="none" stroke="#145C38" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>
+  <text x="240.0" y="211.2" font-family="Arial, sans-serif" font-size="19.2" fill="#145C38" text-anchor="middle" opacity="0.75">Foto Berita 2</text>
+</svg>

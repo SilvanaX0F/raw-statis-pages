@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 460" width="400" height="460" role="img" aria-label="Foto Profil">
+  <rect width="400" height="460" fill="#E3F2E8"/>
+  <rect x="0.5" y="0.5" width="399" height="459" fill="none" stroke="#DCE4E0" stroke-width="1"/>
+  <circle cx="200.0" cy="193.2" r="56.00000000000001" fill="none" stroke="#145C38" stroke-width="3" opacity="0.6"/><path d="M112.0 322.0 q88.0 -80.0 176.0 0" fill="none" stroke="#145C38" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+  <text x="200.0" y="303.6" font-family="Arial, sans-serif" font-size="24.0" fill="#145C38" text-anchor="middle" opacity="0.75">Foto Profil</text>
+</svg>

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 280" width="280" height="280" role="img" aria-label="QRIS Placeholder">
+  <rect width="280" height="280" fill="#E3F2E8"/>
+  <rect x="0.5" y="0.5" width="279" height="279" fill="none" stroke="#DCE4E0" stroke-width="1"/>
+  <circle cx="140.0" cy="126.0" r="25.2" fill="none" stroke="#145C38" stroke-width="3" opacity="0.55"/><path d="M95.19999999999999 148.0 l28.0 -33.6 l22.400000000000002 22.400000000000002 l28.0 -39.2 l39.2 50.4" fill="none" stroke="#145C38" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>
+  <text x="140.0" y="184.8" font-family="Arial, sans-serif" font-size="16.8" fill="#145C38" text-anchor="middle" opacity="0.75">QRIS Placeholder</text>
+</svg>

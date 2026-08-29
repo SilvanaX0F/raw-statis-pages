@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 620" width="560" height="620" role="img" aria-label="Foto Profil Yayasan">
+  <rect width="560" height="620" fill="#E3F2E8"/>
+  <rect x="0.5" y="0.5" width="559" height="619" fill="none" stroke="#DCE4E0" stroke-width="1"/>
+  <circle cx="280.0" cy="296.0" r="50.4" fill="none" stroke="#145C38" stroke-width="3" opacity="0.55"/><path d="M190.39999999999998 318.0 l56.0 -67.2 l44.800000000000004 44.800000000000004 l56.0 -78.4 l78.4 100.8" fill="none" stroke="#145C38" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>
+  <text x="280.0" y="409.2" font-family="Arial, sans-serif" font-size="33.6" fill="#145C38" text-anchor="middle" opacity="0.75">Foto Profil Yayasan</text>
+</svg>
