@@ -25,7 +25,8 @@ function initMobileMenu() {
   toggle.addEventListener("click", function () {
     var isOpen = menu.classList.toggle("is-open");
     toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
-    document.body.style.overflow = isOpen ? "hidden" : "";
+    // Baris pengunci scroll di bawah ini dihapus/dikomen agar halaman tetap bisa di-scroll:
+    // document.body.style.overflow = isOpen ? "hidden" : "";
   });
 
   // Tutup menu saat link diklik (mobile)
@@ -33,7 +34,7 @@ function initMobileMenu() {
     link.addEventListener("click", function () {
       menu.classList.remove("is-open");
       toggle.setAttribute("aria-expanded", "false");
-      document.body.style.overflow = "";
+      // document.body.style.overflow = "";
     });
   });
 
@@ -42,7 +43,7 @@ function initMobileMenu() {
     if (e.key === "Escape" && menu.classList.contains("is-open")) {
       menu.classList.remove("is-open");
       toggle.setAttribute("aria-expanded", "false");
-      document.body.style.overflow = "";
+      // document.body.style.overflow = "";
     }
   });
 }
