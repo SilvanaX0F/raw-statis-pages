@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Organisasi — Yayasan Padang Wulan Cipicung</title>
-  <meta name="description" content="Struktur organisasi, pimpinan, dan tim Yayasan Padang Wulan Cipicung">
+  <title>Organisasi — Yayasan Bina Umat Padang Wulan Cipicung</title>
+  <meta name="description" content="Struktur organisasi, pimpinan, dan tim Yayasan Bina Umat Padang Wulan Cipicung">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Organisasi — Yayasan Padang Wulan Cipicung">
-  <meta property="og:description" content="Struktur organisasi, pimpinan, dan tim Yayasan Padang Wulan Cipicung.">
+  <meta property="og:title" content="Organisasi — Yayasan Bina Umat Padang Wulan Cipicung">
+  <meta property="og:description" content="Struktur organisasi, pimpinan, dan tim Yayasan Bina Umat Padang Wulan Cipicung.">
   <meta property="og:image" content="images/hero.svg">
-  <link rel="icon" href="images/logo.png" type="image/svg+xml">
+  <link rel="icon" href="images/logo.ico" type="image/x-icon">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -42,6 +42,7 @@
       flex-direction: column;
       align-items: center;
     }
+    /* Garis Penghubung Hitam Tipis */
     .org-tree li::before, .org-tree li::after {
       content: '';
       position: absolute;
@@ -81,6 +82,7 @@
       width: 0;
       height: 20px;
     }
+    /* Node/Kotak Bagan */
     .org-node {
       border-radius: 6px;
       padding: 8px 12px;
@@ -91,10 +93,10 @@
       display: inline-block;
       box-shadow: 0 2px 4px rgba(0,0,0,0.06);
       color: #ffffff;
-      min-width: 130px;
-      max-width: 160px;
+      min-width: 140px;
+      max-width: 180px;
       word-wrap: break-word;
-      line-height: 1.25;
+      line-height: 1.3;
     }
     .org-node small {
       display: block;
@@ -103,11 +105,36 @@
       margin-top: 2px;
       opacity: 0.95;
     }
-    .node-orange { background-color: #f97316; }
-    .node-teal   { background-color: #0ea5e9; }
-    .node-blue   { background-color: #0284c7; }
-    .node-yellow { background-color: #eab308; color: #1e293b; }
-    .node-green  { background-color: #22c55e; }
+    /* Skema Warna Sesuai Gambar */
+    .node-green-top { background-color: #22c55e; color: #ffffff; }
+    .node-brown     { background-color: #c2410c; color: #ffffff; }
+    .node-blue      { background-color: #0284c7; color: #ffffff; }
+    .node-gold      { background-color: #a16207; color: #ffffff; }
+    .node-peach     { background-color: #ffedd5; color: #1e293b; border: 1px solid #fed7aa; }
+    .node-light-blue{ background-color: #e0f2fe; color: #1e293b; border: 1px solid #bae6fd; }
+    .node-yellow    { background-color: #fef08a; color: #1e293b; border: 1px solid #fef08a; }
+
+    /* Layout Khusus Bertingkat / Vertikal */
+    .v-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+      position: relative;
+    }
+    .v-stack .org-node {
+      position: relative;
+    }
+    .v-stack .org-node:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      bottom: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1px;
+      height: 12px;
+      background-color: #000000;
+    }
   </style>
 </head>
 <body>
@@ -115,8 +142,8 @@
     <a class="skip-link" href="#main">Langsung ke konten utama</a>
     <nav class="navbar" aria-label="Navigasi utama">
       <div class="navbar__inner">
-        <a href="index.html" class="navbar__brand" aria-label="Yayasan Padang Wulan Cipicung — Beranda">
-          <img src="images/logo.png" alt="Logo Yayasan Padang Wulan Cipicung" width="160" height="40">
+        <a href="index.html" class="navbar__brand" aria-label="Yayasan Bina Umat Padang Wulan Cipicung — Beranda">
+          <img src="images/logo.png" alt="Logo Yayasan Bina Umat Padang Wulan Cipicung" width="160" height="40">
         </a>
         <div class="navbar__menu" data-nav-menu>
           <ul class="navbar__links">
@@ -166,94 +193,92 @@
         <div class="org-tree" data-reveal>
           <ul>
             <li>
-              <div class="org-node node-orange">PEMBINA<small>ABDUROHIM</small></div>
+              <!-- PEMBINA -->
+              <div class="org-node node-green-top">
+                PEMBINA
+                <small>ABDUROHIM</small>
+              </div>
+              
               <ul>
                 <li>
-                  <div class="org-node node-orange">PENGAWAS<small>TONY M.S.</small></div>
+                  <!-- PENGURUS & PENGAWAS SEJAJAR -->
+                  <div style="display: flex; gap: 20px; align-items: flex-start; justify-content: center;">
+                    <div class="org-node node-green-top">
+                      PENGURUS
+                      <small>KETUA : JARMANTO</small>
+                      <small>SEKRETARIS : NURKHOLIK</small>
+                      <small>BENDAHARA : WARTO</small>
+                    </div>
+                    <div class="org-node node-green-top">
+                      PENGAWAS
+                      <small>TONY M.S.</small>
+                    </div>
+                  </div>
+
                   <ul>
+                    <!-- 3 KETUA BIDANG -->
+                    <!-- 1. BIDANG SOSIAL -->
                     <li>
-                      <div class="org-node node-teal">PENGURUS</div>
-                      <ul>
+                      <div class="org-node node-brown">
+                        KETUA BIDANG SOSIAL
+                        <small>MUHLISUN</small>
+                      </div>
+                      <ul style="padding-top: 12px;">
                         <li>
-                          <div class="org-node node-orange">BENDAHARA<small>WARTO</small></div>
-                        </li>
-                        <li>
-                          <div class="org-node node-orange">KETUA<small>JARMANTO</small></div>
-                          <ul>
-                            <!-- KETUA BIDANG SOSIAL -->
-                            <li>
-                              <div class="org-node node-yellow">KETUA BIDANG SOSIAL<small>MUHLISUN</small></div>
-                              <ul>
-                                <li>
-                                  <div class="org-node node-green">KESENIAN<small>KETUA: DERI</small></div>
-                                  <ul>
-                                    <li>
-                                      <div class="org-node node-green">SARANA &amp; PRASARANA<small>KETUA: RASWIN</small></div>
-                                      <ul>
-                                        <li>
-                                          <div class="org-node node-green">PENDIDIKAN<small>KETUA: D. WARDIMAN</small></div>
-                                        </li>
-                                      </ul>
-                                    </li>
-                                  </ul>
-                                </li>
-                              </ul>
-                            </li>
-                            <!-- KETUA BIDANG KEMANUSIAAN -->
-                            <li>
-                              <div class="org-node node-blue">KETUA BIDANG KEMANUSIAAN<small>SUDIMAN</small></div>
-                              <ul>
-                                <li>
-                                  <div class="org-node node-green">LBH PADANG WULAN<small>KETUA: AKMAL</small></div>
-                                  <ul>
-                                    <li>
-                                      <div class="org-node node-green">SAMPAH BERKAH PW<small>KETUA: SAMIN</small></div>
-                                      <ul>
-                                        <li>
-                                          <div class="org-node node-green">RUKUN KEMATIAN<small>KETUA: WARTO</small></div>
-                                        </li>
-                                      </ul>
-                                    </li>
-                                  </ul>
-                                </li>
-                              </ul>
-                            </li>
-                            <!-- KETUA BIDANG KEAGAMAAN -->
-                            <li>
-                              <div class="org-node node-yellow">KETUA BIDANG KEAGAMAAN<small>HASYIM MUNIR</small></div>
-                              <ul>
-                                <li>
-                                  <div class="org-node node-green">MAJELIS TA'LIM AL HIDAYAH<small>KETUA: NURKHOLIK</small></div>
-                                  <ul>
-                                    <li>
-                                      <div class="org-node node-green">UPZ PADANG WULAN<small>KETUA: WAWAN</small></div>
-                                      <ul>
-                                        <li>
-                                          <div class="org-node node-green">DKM NURHIDAYAH<small>KETUA: JASIRUN</small></div>
-                                          <ul>
-                                            <li>
-                                              <div class="org-node node-green">TPA/TPQ AL-HIDAYAH<small>KETUA: DEDE NURHASANAH</small></div>
-                                              <ul>
-                                                <li>
-                                                  <div class="org-node node-green">IRMA NURHIDAYAH<small>KETUA: ABDUL GANI</small></div>
-                                                </li>
-                                              </ul>
-                                            </li>
-                                          </ul>
-                                        </li>
-                                      </ul>
-                                    </li>
-                                  </ul>
-                                </li>
-                              </ul>
-                            </li>
-                          </ul>
-                        </li>
-                        <li>
-                          <div class="org-node node-orange">SEKRETARIS<small>NURKHOLIK</small></div>
+                          <div class="v-stack">
+                            <div class="org-node node-peach">KESENIAN PW<small>KETUA : DERI</small></div>
+                            <div class="org-node node-peach">SARANA &amp; PRASARANA PW<small>KETUA : RASWIN</small></div>
+                            <div class="org-node node-peach">SARANA DIGITAL PW<small>KETUA : CIPTO N.</small></div>
+                            <div class="org-node node-peach">PENDIDIKAN PW<small>KETUA : D. WARDIMAN</small></div>
+                          </div>
                         </li>
                       </ul>
                     </li>
+
+                    <!-- 2. BIDANG KEMANUSIAAN -->
+                    <li>
+                      <div class="org-node node-blue">
+                        KETUA BIDANG KEMANUSIAAN
+                        <small>SUDIMAN</small>
+                      </div>
+                      <ul style="padding-top: 12px;">
+                        <li>
+                          <div class="v-stack">
+                            <div class="org-node node-light-blue">LBH PADANG WULAN<small>KETUA : AKMAL</small></div>
+                            <div class="org-node node-light-blue">SAMPAH BERKAH PW<small>KETUA : SAMIN</small></div>
+                            <div class="org-node node-light-blue">RUKUN KEMATIAN PW<small>KETUA : WARTO</small></div>
+                          </div>
+                        </li>
+                      </ul>
+                    </li>
+
+                    <!-- 3. BIDANG KEAGAMAAN -->
+                    <li>
+                      <div class="org-node node-gold">
+                        KETUA BIDANG KEAGAMAAN
+                        <small>HASYIM MUNIR</small>
+                      </div>
+                      <ul style="padding-top: 12px;">
+                        <li>
+                          <div style="display: flex; gap: 12px;">
+                            <!-- Keagamaan Cabang Kiri -->
+                            <div class="v-stack">
+                              <div class="org-node node-yellow">UPZ PADANG WULAN<small>KETUA : WAWAN</small></div>
+                              <div class="org-node node-yellow">AGRO WAKAF PW<small>KETUA : NURKHOLIK</small></div>
+                              <div class="org-node node-yellow">L. PEMBANGUNAN PW<small>KETUA : KARJO</small></div>
+                            </div>
+                            <!-- Keagamaan Cabang Kanan -->
+                            <div class="v-stack">
+                              <div class="org-node node-yellow">DKM NURHIDAYAH<small>KETUA : JASIRUN</small></div>
+                              <div class="org-node node-yellow">TPQ AL-HIDAYAH<small>KETUA : DEDE NURHASANAH</small></div>
+                              <div class="org-node node-yellow">PEMUDA NURUL FATA<small>KETUA : ABDUL GANI</small></div>
+                              <div class="org-node node-yellow">M. TA'LIM AL-HIDAYAH<small>KETUA : ENGKOS</small></div>
+                            </div>
+                          </div>
+                        </li>
+                      </ul>
+                    </li>
+
                   </ul>
                 </li>
               </ul>
@@ -275,31 +300,39 @@
             <div class="img-frame img-frame--sm team-card__photo">
               <img src="images/team/ketua.svg" alt="Foto [Nama Ketua]" width="200" height="220" loading="lazy">
             </div>
-            <h3>[Nama Ketua]</h3>
-            <p class="team-card__role">Ketua Yayasan</p>
+            <h3>ABDUROHIM</h3>
+            <p class="team-card__role">Pembina Yayasan</p>
             <p>Memimpin arah strategis dan memastikan setiap program berjalan sesuai visi misi.</p>
           </div>
           <div class="card team-card" data-reveal>
             <div class="img-frame img-frame--sm team-card__photo">
               <img src="images/team/sekretaris.svg" alt="Foto [Nama Sekretaris]" width="200" height="220" loading="lazy">
             </div>
-            <h3>[Nama Sekretaris]</h3>
-            <p class="team-card__role">Sekretaris</p>
+            <h3>TONY M.S.</h3>
+            <p class="team-card__role">Pengawas</p>
             <p>Mengelola administrasi, arsip, dan komunikasi kelembagaan yayasan.</p>
           </div>
           <div class="card team-card" data-reveal>
             <div class="img-frame img-frame--sm team-card__photo">
               <img src="images/team/bendahara.svg" alt="Foto [Nama Bendahara]" width="200" height="220" loading="lazy">
             </div>
-            <h3>[Nama Bendahara]</h3>
-            <p class="team-card__role">Bendahara</p>
+            <h3>JARMANTO</h3>
+            <p class="team-card__role">Ketua</p>
             <p>Bertanggung jawab atas pengelolaan keuangan yang transparan dan akuntabel.</p>
           </div>
           <div class="card team-card" data-reveal>
             <div class="img-frame img-frame--sm team-card__photo">
               <img src="images/team/bendahara.svg" alt="Foto [Nama Bendahara]" width="200" height="220" loading="lazy">
             </div>
-            <h3>[Nama Bendahara]</h3>
+            <h3>NURKHOLIK</h3>
+            <p class="team-card__role">Sekretaris</p>
+            <p>Bertanggung jawab atas pengelolaan keuangan yang transparan dan akuntabel.</p>
+            </div>
+          <div class="card team-card" data-reveal>
+            <div class="img-frame img-frame--sm team-card__photo">
+              <img src="images/team/bendahara.svg" alt="Foto [Nama Bendahara]" width="200" height="220" loading="lazy">
+            </div>
+            <h3>WARTO</h3>
             <p class="team-card__role">Bendahara</p>
             <p>Bertanggung jawab atas pengelolaan keuangan yang transparan dan akuntabel.</p>
           </div>
@@ -307,62 +340,197 @@
       </div>
     </section>
 
-    <!-- Anggota / Tim -->
+    <!-- Anggota / Tim Divisi -->
     <section class="section">
       <div class="container">
         <div class="section-heading text-center">
           <span class="section-heading__eyebrow">Bersama Menjalankan Program</span>
           <h2>Anggota &amp; Tim Divisi</h2>
+          <p>Para penanggung jawab bidang dan unit kerja operasional yayasan.</p>
         </div>
         <div class="grid grid-3">
+          
+          <!-- ================= BARIS 1: 3 KETUA BIDANG UTAMA ================= -->
+          <!-- Kolom 1 (Bidang Sosial) -->
           <div class="card team-card" data-reveal>
             <div class="img-frame img-frame--sm team-card__photo">
-              <img src="images/team/divisi-1.svg" alt="Foto [Nama Anggota]" width="200" height="220" loading="lazy">
+              <img src="images/team/divisi-1.svg" alt="Foto Muhlisun" width="200" height="220" loading="lazy">
             </div>
-            <h3>[Nama Anggota]</h3>
-            <p class="team-card__role">Koordinator Divisi Pendidikan</p>
-            <p>Mengelola pelaksanaan program-program di bidang pendidikan.</p>
+            <h3>Muhlisun</h3>
+            <p class="team-card__role">Ketua Bidang Sosial</p>
+            <p>Mengoordinasikan pelaksanaan seluruh program dan inisiatif berbasis kemasyarakatan guna mempererat solidaritas sosial.</p>
           </div>
+
+          <!-- Kolom 2 (Bidang Kemanusiaan) -->
           <div class="card team-card" data-reveal>
             <div class="img-frame img-frame--sm team-card__photo">
-              <img src="images/team/divisi-2.svg" alt="Foto [Nama Anggota]" width="200" height="220" loading="lazy">
+              <img src="images/team/divisi-2.svg" alt="Foto Sudiman" width="200" height="220" loading="lazy">
             </div>
-            <h3>[Nama Anggota]</h3>
-            <p class="team-card__role">Koordinator Divisi Pemberdayaan</p>
-            <p>Mendampingi kelompok masyarakat dalam program pemberdayaan ekonomi.</p>
+            <h3>Sudiman</h3>
+            <p class="team-card__role">Ketua Bidang Kemanusiaan</p>
+            <p>Memimpin dan mengarahkan strategi penanggulangan tanggap darurat bencana serta layanan aksi sosial kemanusiaan publik.</p>
           </div>
+
+          <!-- Kolom 3 (Bidang Keagamaan) -->
           <div class="card team-card" data-reveal>
             <div class="img-frame img-frame--sm team-card__photo">
-              <img src="images/team/divisi-3.svg" alt="Foto [Nama Anggota]" width="200" height="220" loading="lazy">
+              <img src="images/team/divisi-3.svg" alt="Foto Hasyim Munir" width="200" height="220" loading="lazy">
             </div>
-            <h3>[Nama Anggota]</h3>
-            <p class="team-card__role">Koordinator Divisi Sosial</p>
-            <p>Mengoordinasikan kegiatan sosial dan kemanusiaan di lapangan.</p>
+            <h3>Hasyim Munir</h3>
+            <p class="team-card__role">Ketua Bidang Keagamaan</p>
+            <p>Membina kerukunan umat, mengoordinasikan syiar Islam, serta mengawasi tata kelola lembaga keagamaan di bawah yayasan.</p>
           </div>
+
+
+          <!-- ================= BARIS 2: UNIT KE-1 MASING-MASING BIDANG ================= -->
+          <!-- Di bawah Bidang Sosial (1) -->
           <div class="card team-card" data-reveal>
             <div class="img-frame img-frame--sm team-card__photo">
-              <img src="images/team/divisi-4.svg" alt="Foto [Nama Anggota]" width="200" height="220" loading="lazy">
+              <img src="images/team/divisi-4.svg" alt="Foto Deri" width="200" height="220" loading="lazy">
             </div>
-            <h3>[Nama Anggota]</h3>
-            <p class="team-card__role">Koordinator Divisi Humas &amp; Publikasi</p>
-            <p>Mengelola informasi, media sosial, dan komunikasi publik yayasan.</p>
+            <h3>Deri</h3>
+            <p class="team-card__role">Ketua Kesenian PW</p>
+            <p>Mengembangkan potensi seni dan budaya lokal serta mengoordinasikan pementasan atau event kebudayaan di lingkungan yayasan.</p>
           </div>
+
+          <!-- Di bawah Bidang Kemanusiaan (1) -->
           <div class="card team-card" data-reveal>
             <div class="img-frame img-frame--sm team-card__photo">
-              <img src="images/team/divisi-5.svg" alt="Foto [Nama Anggota]" width="200" height="220" loading="lazy">
+              <img src="images/team/divisi-5.svg" alt="Foto Akmal" width="200" height="220" loading="lazy">
             </div>
-            <h3>[Nama Anggota]</h3>
-            <p class="team-card__role">Koordinator Divisi Logistik &amp; Sarana</p>
-            <p>Menyiapkan fasilitas, inventaris, dan perlengkapan kebutuhan kegiatan.</p>
+            <h3>Akmal</h3>
+            <p class="team-card__role">Ketua LBH Padang Wulan</p>
+            <p>Memberikan layanan bantuan hukum, advokasi, serta penyuluhan kesadaran hukum secara pro-bono bagi warga yang membutuhkan.</p>
           </div>
+
+          <!-- Di bawah Bidang Keagamaan (1) -->
           <div class="card team-card" data-reveal>
             <div class="img-frame img-frame--sm team-card__photo">
-              <img src="images/team/divisi-6.svg" alt="Foto [Nama Anggota]" width="200" height="220" loading="lazy">
+              <img src="images/team/divisi-6.svg" alt="Foto Wawan" width="200" height="220" loading="lazy">
             </div>
-            <h3>[Nama Anggota]</h3>
-            <p class="team-card__role">Koordinator Divisi Fundraising &amp; Kemitraan</p>
-            <p>Membangun kerja sama strategis dan penggalangan sumber daya yayasan.</p>
+            <h3>Wawan</h3>
+            <p class="team-card__role">Ketua UPZ Padang Wulan</p>
+            <p>Mengoptimalkan pengumpulan dan pendistribusian Zakat, Infak, serta Sedekah (ZIS) secara transparan dan tepat sasaran.</p>
           </div>
+
+
+          <!-- ================= BARIS 3: UNIT KE-2 MASING-MASING BIDANG ================= -->
+          <!-- Di bawah Bidang Sosial (2) -->
+          <div class="card team-card" data-reveal>
+            <div class="img-frame img-frame--sm team-card__photo">
+              <img src="images/team/divisi-1.svg" alt="Foto Raswin" width="200" height="220" loading="lazy">
+            </div>
+            <h3>Raswin</h3>
+            <p class="team-card__role">Ketua Sarana &amp; Prasarana PW</p>
+            <p>Bertanggung jawab penuh atas pemeliharaan, perawatan fasilitas fisik, serta penyediaan inventaris penunjang operasional yayasan.</p>
+          </div>
+
+          <!-- Di bawah Bidang Kemanusiaan (2) -->
+          <div class="card team-card" data-reveal>
+            <div class="img-frame img-frame--sm team-card__photo">
+              <img src="images/team/divisi-2.svg" alt="Foto Samin" width="200" height="220" loading="lazy">
+            </div>
+            <h3>Samin</h3>
+            <p class="team-card__role">Ketua Sampah Berkah PW</p>
+            <p>Menginisiasi program bank sampah mandiri, pemilahan limbah, serta daur ulang bernilai ekonomis untuk kelestarian lingkungan.</p>
+          </div>
+
+          <!-- Di bawah Bidang Keagamaan (2) -->
+          <div class="card team-card" data-reveal>
+            <div class="img-frame img-frame--sm team-card__photo">
+              <img src="images/team/divisi-3.svg" alt="Foto Nurkholik" width="200" height="220" loading="lazy">
+            </div>
+            <h3>Nurkholik</h3>
+            <p class="team-card__role">Ketua Agro Wakaf PW</p>
+            <p>Mengelola aset produktif wakaf di sektor pertanian dan perkebunan guna mendukung kemandirian finansial program sosial yayasan.</p>
+          </div>
+
+
+          <!-- ================= BARIS 4: UNIT KE-3 MASING-MASING BIDANG ================= -->
+          <!-- Di bawah Bidang Sosial (3) -->
+          <div class="card team-card" data-reveal>
+            <div class="img-frame img-frame--sm team-card__photo">
+              <img src="images/team/divisi-4.svg" alt="Foto D. Wardiman" width="200" height="220" loading="lazy">
+            </div>
+            <h3>D. Wardiman</h3>
+            <p class="team-card__role">Ketua Pendidikan PW</p>
+            <p>Merumuskan kurikulum, mengawasi mutu pembelajaran, serta memperluas akses edukasi formal maupun non-formal bagi masyarakat.</p>
+          </div>
+
+          <!-- Di bawah Bidang Kemanusiaan (3) -->
+          <div class="card team-card" data-reveal>
+            <div class="img-frame img-frame--sm team-card__photo">
+              <img src="images/team/divisi-5.svg" alt="Foto Warto" width="200" height="220" loading="lazy">
+            </div>
+            <h3>Warto</h3>
+            <p class="team-card__role">Ketua Rukun Kematian PW</p>
+            <p>Mengorganisir pelayanan sosial kemasyarakatan dalam pengurusan fardu kifayah serta santunan duka bagi keluarga yang berduka.</p>
+          </div>
+
+          <!-- Di bawah Bidang Keagamaan (3) -->
+          <div class="card team-card" data-reveal>
+            <div class="img-frame img-frame--sm team-card__photo">
+              <img src="images/team/divisi-6.svg" alt="Foto Karjo" width="200" height="220" loading="lazy">
+            </div>
+            <h3>Karjo</h3>
+            <p class="team-card__role">Ketua L. Pembangunan PW</p>
+            <p>Mengawasi perencanaan teknis dan pelaksanaan konstruksi fasilitas fisik bangunan keagamaan maupun sarana publik.</p>
+          </div>
+
+
+          <!-- ================= BARIS 5 & SETERUSNYA: UNIT LANJUTAN ================= -->
+          <!-- Di bawah Bidang Sosial (4) -->
+          <div class="card team-card" data-reveal>
+            <div class="img-frame img-frame--sm team-card__photo">
+              <img src="images/team/divisi-1.svg" alt="Foto Abdul Gani" width="200" height="220" loading="lazy">
+            </div>
+            <h3>Abdul Gani</h3>
+            <p class="team-card__role">Ketua Pemuda Nurul Fata</p>
+            <p>Menggerakkan potensi dan kreativitas generasi muda melalui kegiatan positif, keorganisasian, serta bakti sosial.</p>
+          </div>
+
+          <!-- Kosongkan / Lewati untuk Bidang Kemanusiaan karena unitnya sudah habis (3 unit) -->
+
+          <!-- Di bawah Bidang Keagamaan (4) -->
+          <div class="card team-card" data-reveal>
+            <div class="img-frame img-frame--sm team-card__photo">
+              <img src="images/team/divisi-2.svg" alt="Foto Jasirun" width="200" height="220" loading="lazy">
+            </div>
+            <h3>Jasirun</h3>
+            <p class="team-card__role">Ketua DKM Nurhidayah</p>
+            <p>Menjaga kemakmuran masjid, mengatur jadwal ibadah rutin, serta merawat kebersihan dan kenyamanan area masjid.</p>
+          </div>
+
+          <!-- Di bawah Bidang Keagamaan (5) -->
+          <div class="card team-card" data-reveal>
+            <div class="img-frame img-frame--sm team-card__photo">
+              <img src="images/team/divisi-3.svg" alt="Foto Dede Nurhasanah" width="200" height="220" loading="lazy">
+            </div>
+            <h3>Dede Nurhasanah</h3>
+            <p class="team-card__role">Ketua TPQ Al-Hidayah</p>
+            <p>Membimbing metode baca-tulis Al-Qur'an serta menanamkan fondasi akhlak mulia sejak dini bagi anak-anak.</p>
+          </div>
+
+          <!-- Di bawah Bidang Keagamaan (6) -->
+          <div class="card team-card" data-reveal>
+            <div class="img-frame img-frame--sm team-card__photo">
+              <img src="images/team/divisi-4.svg" alt="Foto Engkos" width="200" height="220" loading="lazy">
+            </div>
+            <h3>Engkos</h3>
+            <p class="team-card__role">Ketua M. Ta'lim Al-Hidayah</p>
+            <p>Mengoordinasikan majelis taklim bapak-bapak/ibu-ibu, menyusun jadwal pengajian rutin, serta mempererat ukhuwah islamiyah.</p>
+          </div>
+
+          <!-- Bidang Sosial Tersendiri berada dibawah (7) -->
+          <div class="card team-card" data-reveal>
+            <div class="img-frame img-frame--sm team-card__photo">
+              <img src="images/team/cip.jpg" alt="Foto Cipto N." width="200" height="220" loading="lazy">
+            </div>
+            <h3>Cipto N.</h3>
+            <p class="team-card__role">Ketua Sarana Digital PW</p>
+            <p>Mengelola transformasi teknologi, infrastruktur jaringan, serta sistem informasi digital dan media online yayasan.</p>
+          </div>
+
         </div>
       </div>
     </section>
@@ -380,7 +548,7 @@
         </div>
       </div>
     </section>
-
+  
   </main>
 
   <footer class="footer">
