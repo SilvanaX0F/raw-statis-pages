@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Input Donasi | YBU Padang Wulan</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <section class="section">
+    <div class="container" style="max-width: 500px;">
+      <div class="card" style="padding: var(--space-lg);">
+        <h2 style="margin-bottom: 1rem;">Input Donasi Baru</h2>
+        
+        <form id="form-tambah-donasi">
+          <div class="form-field">
+            <label for="nama">Nama Donatur</label>
+            <input type="text" id="nama" placeholder="Nama Donatur" required>
+          </div>
+          
+          <div class="form-field">
+            <label for="kota">Kota / Asal (Opsional)</label>
+            <input type="text" id="kota" placeholder="Asal Cipicung">
+          </div>
+
+          <div class="form-field">
+            <label for="tanggal">Tanggal Donasi</label>
+            <input type="date" id="tanggal" required>
+          </div>
+
+          <div class="form-field">
+            <label for="jumlah">Jumlah Donasi (Rp)</label>
+            <input type="number" id="jumlah" placeholder="Contoh: 50000" required>
+          </div>
+
+          <button type="submit" id="btn-simpan" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+            Simpan Data Donasi
+          </button>
+        </form>
+
+        <p id="pesan-status" style="margin-top: 1rem; text-align: center; font-size: var(--fs-sm);"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Script pengirim data ke Firebase -->
+  <script type="module">
+    import { db, collection, addDoc, serverTimestamp } from './js/firebase-config.js';
+
+    const form = document.getElementById('form-tambah-donasi');
+    const pesanStatus = document.getElementById('pesan-status');
+    const btnSimpan = document.getElementById('btn-simpan');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      btnSimpan.disabled = true;
+      btnSimpan.textContent = 'Menyimpan...';
+
+      const nama = document.getElementById('nama').value;
+      const kota = document.getElementById('kota').value || '-';
+      const tanggal = document.getElementById('tanggal').value;
+      const jumlah = parseInt(document.getElementById('jumlah').value);
+
+      try {
+        await addDoc(collection(db, 'donations'), {
+          nama: nama,
+          kota: kota,
+          tanggal: tanggal,
+          jumlah: jumlah,
+          createdAt: serverTimestamp()
+        });
+
+        pesanStatus.style.color = 'green';
+        pesanStatus.textContent = '✅ Data donasi berhasil disimpan!';
+        form.reset();
+      } catch (error) {
+        console.error('Gagal menyimpan:', error);
+        pesanStatus.style.color = 'red';
+        pesanStatus.textContent = '❌ Gagal menyimpan data: ' + error.message;
+      } finally {
+        btnSimpan.disabled = false;
+        btnSimpan.textContent = 'Simpan ke Firebase';
+      }
+    });
+  </script>
+</body>
+</html>

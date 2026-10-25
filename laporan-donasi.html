@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laporan Donasi | YBU Padang Wulan</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<section class="section">
+  <div class="container">
+    <div class="section-heading">
+      <span class="section-heading__eyebrow">Transparansi Keuangan</span>
+      <h2>Laporan Donasi Masuk</h2>
+    </div>
+
+    <!-- Tabel -->
+    <div class="card" style="overflow-x: auto; padding: 0;">
+      <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: var(--fs-sm);">
+        <thead>
+          <tr style="background-color: var(--primary); color: var(--white);">
+            <th style="padding: 1rem; text-align: center; width: 60px;">No</th>
+            <th style="padding: 1rem;">Nama</th>
+            <th style="padding: 1rem;">Kota</th>
+            <th style="padding: 1rem;">Tanggal</th>
+            <th style="padding: 1rem; text-align: right;">Jumlah</th>
+          </tr>
+        </thead>
+        <tbody id="tabel-donasi-body">
+          <tr>
+            <td colspan="5" style="padding: 2rem; text-align: center; color: var(--muted);">
+              Memuat data donasi dari Firebase...
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- Script penarik data dari Firebase -->
+<script type="module">
+  import { db, collection, getDocs, query, orderBy } from './js/firebase-config.js';
+
+  const tbody = document.getElementById('tabel-donasi-body');
+
+  async function loadDonasi() {
+    try {
+      const q = query(collection(db, 'donations'), orderBy('createdAt', 'desc'));
+      const querySnapshot = await getDocs(q);
+
+      if (querySnapshot.empty) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="5" style="padding: 3rem 1rem; text-align: center; color: var(--muted);">
+              <strong>Belum Ada Data Donasi</strong>
+              <p style="font-size: var(--fs-xs); margin-top: 0.25rem;">Saat ini belum ada riwayat donasi masuk yang ditampilkan.</p>
+            </td>
+          </tr>`;
+        return;
+      }
+
+      let html = '';
+      let no = 1;
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        const bgRow = no % 2 === 0 ? 'var(--light)' : 'var(--white)';
+        const jumlahFormatted = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(data.jumlah);
+
+        html += `
+          <tr style="border-bottom: 1px solid var(--border); background-color: ${bgRow};">
+            <td style="padding: 0.85rem 1rem; text-align: center; color: var(--muted);">${no++}</td>
+            <td style="padding: 0.85rem 1rem; font-weight: 600;">${data.nama}</td>
+            <td style="padding: 0.85rem 1rem; color: var(--muted);">${data.kota || '-'}</td>
+            <td style="padding: 0.85rem 1rem; color: var(--muted);">${data.tanggal}</td>
+            <td style="padding: 0.85rem 1rem; text-align: right; font-weight: 600; color: var(--primary-dark);">${jumlahFormatted}</td>
+          </tr>`;
+      });
+
+      tbody.innerHTML = html;
+    } catch (err) {
+      console.error('Error fetching data:', err);
+      tbody.innerHTML = `<tr><td colspan="5" style="padding: 2rem; text-align: center; color: red;">Gagal memuat data donasi.</td></tr>`;
+    }
+  }
+
+  loadDonasi();
+</script>
+
+</body>
+</html>

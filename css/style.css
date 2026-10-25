@@ -50,7 +50,7 @@
   --shadow-lg: 0 20px 50px rgba(15, 36, 56, 0.14);
   --container: 1200px;
   --transition: 0.22s ease;
-  --navbar-h: 76px;
+  --navbar-h: 92px;
 }
 
 /* 2) RESET ---------------------------------------------------------------- */
@@ -509,7 +509,7 @@ header {
 }
 
 .navbar__brand img {
-  height: 72px;
+  height: 92px;
   width: auto;
 }
 
