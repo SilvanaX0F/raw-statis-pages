@@ -59,20 +59,70 @@
       </div>
     </section>
 
-    <!-- Daftar Dokumen -->
+    <!-- Daftar Dokumen Legalitas -->
     <section class="section">
       <div class="container">
-        <div class="grid" style="max-width: 780px; margin-inline: auto; grid-template-columns: 1fr;">
+        <div class="section-heading text-center" style="margin-bottom: 2.5rem;">
+          <span class="section-heading__eyebrow">Legalitas & Perizinan</span>
+          <h2>Dokumen Resmi Yayasan</h2>
+          <p>Transparansi legalitas hukum Yayasan Bina Umat Padang Wulan Cipicung.</p>
+        </div>
 
-          <div class="card doc-item" data-reveal>
-            <div class="doc-item__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M9 15h1.5a1.5 1.5 0 0 0 0-3H9v5"/><path d="M13 12v5h1a2 2 0 0 0 0-4h-1Z" opacity="0"/></svg></div>
-            <div class="doc-item__info">
-              <h3>Legalitas Yayasan</h3>
-              <p class="doc-item__meta">PDF &middot; [Ukuran file]</p>
+        <div class="grid" style="max-width: 800px; margin-inline: auto; gap: 1.5rem;">
+
+          <!-- Dokumen 1: Akta Pendirian -->
+          <div class="card doc-item" data-reveal style="display: flex; flex-direction: column; gap: 1rem; padding: 1.5rem;">
+            <div style="display: flex; align-items: flex-start; gap: 1rem;">
+              <div class="doc-item__icon" style="flex-shrink: 0;"><svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M9 15h1.5a1.5 1.5 0 0 0 0-3H9v5"/><path d="M13 12v5h1a2 2 0 0 0 0-4h-1Z" opacity="0"/></svg></div>
+              <div class="doc-item__info" style="flex-grow: 1;">
+                <h3 style="font-size: 1.1rem; margin-bottom: 0.25rem;">Akta Pendirian Yayasan</h3>
+                <p class="doc-item__meta" style="font-size: var(--fs-xs); color: var(--muted);">Akta Pendirian Yayasan Bina Umat Padang Wulan Cipicung</p>
+              </div>
             </div>
-            <a class="btn btn-secondary btn-sm doc-item__action" href="documents/Data_Legalitas_Yayasan_Bina_Umat_Padang_Wulan_Cipicung.pdf" download>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg> Unduh
-            </a>
+            <!-- Tombol Aksi -->
+            <div style="display: flex; gap: 0.75rem; justify-content: flex-end; border-top: 1px solid var(--border); padding-top: 1rem;">
+              <button type="button" class="btn btn-secondary btn-sm" onclick="bukaPreview('documents/AKTA PENDIRIAN YAYASAN BINA UMAT PADANG WULAN CIPICUNG.pdf', 'Akta Pendirian Yayasan')">
+                👁️ Lihat Dokumen
+              </button>
+              <a class="btn btn-primary btn-sm doc-item__action" href="documents/AKTA PENDIRIAN YAYASAN BINA UMAT PADANG WULAN CIPICUNG.pdf" download>
+                📥 Unduh PDF
+              </a>
+            </div>
+          </div>
+
+          <!-- Dokumen 2: SK Kementerian Hukum RI -->
+          <div class="card doc-item" data-reveal style="display: flex; flex-direction: column; gap: 1rem; padding: 1.5rem;">
+            <div style="display: flex; align-items: flex-start; gap: 1rem;">
+              <div class="doc-item__icon" style="flex-shrink: 0;"><svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M9 15h1.5a1.5 1.5 0 0 0 0-3H9v5"/><path d="M13 12v5h1a2 2 0 0 0 0-4h-1Z" opacity="0"/></svg></div>
+              <div class="doc-item__info" style="flex-grow: 1;">
+                <h3 style="font-size: 1.1rem; margin-bottom: 0.25rem;">SK & Lampiran Kementerian Hukum RI</h3>
+                <p class="doc-item__meta" style="font-size: var(--fs-xs); color: var(--muted);">Surat Keputusan dan Lampiran SK Kemenkumham RI Yayasan Bina Umat</p>
+              </div>
+            </div>
+            <!-- Tombol Aksi -->
+            <div style="display: flex; gap: 0.75rem; justify-content: flex-end; border-top: 1px solid var(--border); padding-top: 1rem;">
+              <button type="button" class="btn btn-secondary btn-sm" onclick="bukaPreview('documents/SURAT KEPUTUSAN DAN LAMPIRAN SURAT KEPUTUSAN KEMENTERIAN HUKUM RI YAYASAN BINA UMAT PADANG WULAN CIPICUNG.pdf', 'SK Kementerian Hukum RI')">
+                👁️ Lihat Dokumen
+              </button>
+              <a class="btn btn-primary btn-sm doc-item__action" href="documents/SURAT KEPUTUSAN DAN LAMPIRAN SURAT KEPUTUSAN KEMENTERIAN HUKUM RI YAYASAN BINA UMAT PADANG WULAN CIPICUNG.pdf" download>
+                📥 Unduh PDF
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Modal / Kotak Preview PDF Interaktif -->
+    <section id="pdf-preview-section" class="section" style="display: none; background-color: var(--light, #f8f9fa); border-top: 1px solid var(--border);">
+      <div class="container" style="max-width: 900px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <h3 id="preview-title" style="font-size: 1.25rem; font-weight: 700;">Pratinjau Dokumen</h3>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="tutupPreview()">❌ Tutup Pratinjau</button>
+        </div>
+        <div class="card" style="padding: 0; overflow: hidden; background: #525659; border-radius: 8px;">
+          <iframe id="pdf-iframe" src="" width="100%" height="650px" style="border: none; display: block;"></iframe>
         </div>
       </div>
     </section>
@@ -80,90 +130,97 @@
   </main>
 
   <footer class="footer">
-  <div class="container">
-    <div class="footer__grid">
-      <!-- Kolom 1: Brand & Deskripsi -->
-      <div class="footer__brand">
-        <img src="images/logo-footer.png" alt="Logo Yayasan Bina Umat Padang Wulan Cipicung" width="150" height="32">
-        <p>Yayasan Bina Umat Padang Wulan Cipicung — berkedudukan di Kabupaten Pangandaran, berfokus pada bidang sosial, kemanusiaan, dan keagamaan untuk membangun umat yang mandiri, cerdas, dan sejahtera.</p>
-      </div>
+    <div class="container">
+      <div class="footer__grid">
+        <!-- Kolom 1: Brand & Deskripsi -->
+        <div class="footer__brand">
+          <img src="images/logo-footer.png" alt="Logo Yayasan Bina Umat Padang Wulan Cipicung" width="150" height="32">
+          <p>Yayasan Bina Umat Padang Wulan Cipicung — berkedudukan di Kabupaten Pangandaran, berfokus pada bidang sosial, kemanusiaan, dan keagamaan untuk membangun umat yang mandiri, cerdas, dan sejahtera.</p>
+        </div>
 
-      <!-- Kolom 2: Navigasi -->
-      <div>
-        <h4>Navigasi</h4>
-        <ul class="footer__links">
-          <li><a href="index.html">Beranda</a></li>
-          <li><a href="tentang.html">Tentang Kami</a></li>
-          <li><a href="program.html">Program</a></li>
-          <li><a href="berita.html">Berita</a></li>
-          <li><a href="galeri.html">Galeri</a></li>
-          <li><a href="publikasi.html">Publikasi</a></li>
-        </ul>
-      </div>
+        <!-- Kolom 2: Navigasi -->
+        <div>
+          <h4>Navigasi</h4>
+          <ul class="footer__links">
+            <li><a href="index.html">Beranda</a></li>
+            <li><a href="tentang.html">Tentang Kami</a></li>
+            <li><a href="program.html">Program</a></li>
+            <li><a href="berita.html">Berita</a></li>
+            <li><a href="galeri.html">Galeri</a></li>
+            <li><a href="publikasi.html">Publikasi</a></li>
+          </ul>
+        </div>
 
-      <!-- Kolom 3: Kontak dengan Link Aktif -->
-      <div>
-        <h4>Kontak</h4>
-        <div class="footer__contact">
-          <div class="footer__contact-item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12Z"/><circle cx="12" cy="9" r="2.5"/></svg>
-            <span>Alamat Lengkap :<br>Dusun Cipicung RT. 015 RW. 008, Karangsari, Padaherang, Kab. Pangandaran, Jawa Barat</span>
+        <!-- Kolom 3: Kontak dengan Link Aktif -->
+        <div>
+          <h4>Kontak</h4>
+          <div class="footer__contact">
+            <div class="footer__contact-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12Z"/><circle cx="12" cy="9" r="2.5"/></svg>
+              <span>Alamat Lengkap :<br>Dusun Cipicung RT. 015 RW. 008, Karangsari, Padaherang, Kab. Pangandaran, Jawa Barat</span>
+            </div>
+            <div class="footer__contact-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.68 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.32 1.85.55 2.81.68A2 2 0 0 1 22 16.92Z"/></svg>
+              <a href="https://wa.me/6282312345153" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;">+62 823-1234-5153</a>
+            </div>
+            <div class="footer__contact-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
+              <a href="mailto:info@ybu-padangwulan.or.id" style="color: inherit; text-decoration: underline;">info@ybu-padangwulan.or.id</a>
+            </div>
           </div>
-          <div class="footer__contact-item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.68 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.32 1.85.55 2.81.68A2 2 0 0 1 22 16.92Z"/></svg>
-            <a href="https://wa.me/6282312345153" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;">+62 823-1234-5153</a>
-          </div>
-          <div class="footer__contact-item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
-            <a href="mailto:info@ybu-padangwulan.or.id" style="color: inherit; text-decoration: underline;">info@ybu-padangwulan.or.id</a>
+        </div>
+
+        <!-- Kolom 4: Ikuti Kami dengan Media Sosial -->
+        <div>
+          <h4>Ikuti Kami</h4>
+          <p style="font-size: var(--fs-sm); margin-bottom: 0.75rem;">Pantau kegiatan terbaru kami di media sosial.</p>
+          <div class="footer__social">
+            <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Facebook Yayasan Padang Wulan Cipicung">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 22v-8h2.7l.4-3.2h-3.1V8.6c0-.9.25-1.5 1.6-1.5H17V4.2C16.7 4.1 15.7 4 14.6 4c-2.4 0-4.1 1.5-4.1 4.2v2.6H7.8V13h2.7v9h3Z"/></svg>
+            </a>
+            <a href="#" target="_blank" rel="noopener noreferrer" aria-label="TikTok Yayasan Padang Wulan Cipicung">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 1 1-5.2-1.74 2.89 2.89 0 0 1 2.31-2.83V7.65a6.34 6.34 0 0 0-3.47 1 6.34 6.34 0 1 0 10.86 4.51V8.92a8.28 8.28 0 0 0 4.72 1.47V6.94a4.81 4.81 0 0 1-2-.25Z"/></svg>
+            </a>
+            <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Instagram Yayasan Padang Wulan Cipicung">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
+            </a>
+            <a href="#" target="_blank" rel="noopener noreferrer" aria-label="YouTube Yayasan Padang Wulan Cipicung">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.58 7.19a2.86 2.86 0 0 0-2.01-2.01C17.8 4.67 12 4.67 12 4.67s-5.8 0-7.57.51a2.86 2.86 0 0 0-2.01 2.01C1.9 8.97 1.9 12 1.9 12s0 3.03.52 4.81a2.86 2.86 0 0 0 2.01 2.01c1.77.51 7.57.51 7.57.51s5.8 0 7.57-.51a2.86 2.86 0 0 0 2.01-2.01c.52-1.78.52-4.81.52-4.81s0-3.03-.52-4.81zM9.8 15.46V8.54l6.1 3.46-6.1 3.46z"/></svg>
+            </a>
           </div>
         </div>
       </div>
 
-      <!-- Kolom 4: Ikuti Kami dengan Media Sosial -->
-      <div>
-        <h4>Ikuti Kami</h4>
-        <p style="font-size: var(--fs-sm); margin-bottom: 0.75rem;">Pantau kegiatan terbaru kami di media sosial.</p>
-        <div class="footer__social">
-          <!-- Facebook -->
-          <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Facebook Yayasan Padang Wulan Cipicung">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 22v-8h2.7l.4-3.2h-3.1V8.6c0-.9.25-1.5 1.6-1.5H17V4.2C16.7 4.1 15.7 4 14.6 4c-2.4 0-4.1 1.5-4.1 4.2v2.6H7.8V13h2.7v9h3Z"/></svg>
-          </a>
-          <!-- TikTok -->
-          <a href="#" target="_blank" rel="noopener noreferrer" aria-label="TikTok Yayasan Padang Wulan Cipicung">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 1 1-5.2-1.74 2.89 2.89 0 0 1 2.31-2.83V7.65a6.34 6.34 0 0 0-3.47 1 6.34 6.34 0 1 0 10.86 4.51V8.92a8.28 8.28 0 0 0 4.72 1.47V6.94a4.81 4.81 0 0 1-2-.25Z"/></svg>
-          </a>
-          <!-- Instagram -->
-          <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Instagram Yayasan Padang Wulan Cipicung">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
-          </a>
-          <!-- YouTube -->
-          <a href="#" target="_blank" rel="noopener noreferrer" aria-label="YouTube Yayasan Padang Wulan Cipicung">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.58 7.19a2.86 2.86 0 0 0-2.01-2.01C17.8 4.67 12 4.67 12 4.67s-5.8 0-7.57.51a2.86 2.86 0 0 0-2.01 2.01C1.9 8.97 1.9 12 1.9 12s0 3.03.52 4.81a2.86 2.86 0 0 0 2.01 2.01c1.77.51 7.57.51 7.57.51s5.8 0 7.57-.51a2.86 2.86 0 0 0 2.01-2.01c.52-1.78.52-4.81.52-4.81s0-3.03-.52-4.81zM9.8 15.46V8.54l6.1 3.46-6.1 3.46z"/></svg>
-          </a>
-        </div>
+      <!-- Bottom Footer -->
+      <div class="footer__bottom">
+        <p>&copy; 2026 Yayasan Padang Wulan Cipicung. Semua hak cipta dilindungi.</p>
       </div>
     </div>
+  </footer>
 
-    <!-- Bottom Footer (Hanya Copyright) -->
-    <div class="footer__bottom">
-      <p>&copy; 2026 Yayasan Padang Wulan Cipicung. Semua hak cipta dilindungi.</p>
-    </div>
-  </div>
-</footer>
+  <!-- Script untuk mengontrol interaksi Preview PDF -->
+  <script>
+    function bukaPreview(urlFile, judulDokumen) {
+      const sectionPreview = document.getElementById('pdf-preview-section');
+      const iframePdf = document.getElementById('pdf-iframe');
+      const textTitle = document.getElementById('preview-title');
 
-  <!-- Lightbox galeri (dipakai di halaman yang memuat galeri) -->
-  <div class="lightbox" data-lightbox aria-hidden="true">
-    <div class="lightbox__content">
-      <img src="" alt="" data-lightbox-img>
-      <p class="lightbox__caption" data-lightbox-caption></p>
-    </div>
-    <button type="button" class="lightbox__close" aria-label="Tutup lightbox"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m18 6-12 12M6 6l12 12"/></svg></button>
-    <button type="button" class="lightbox__prev" aria-label="Foto sebelumnya"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
-    <button type="button" class="lightbox__next" aria-label="Foto berikutnya"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
-  </div>
+      textTitle.textContent = "Pratinjau: " + judulDokumen;
+      iframePdf.src = urlFile;
+      sectionPreview.style.display = 'block';
 
-  <button type="button" class="back-to-top" data-back-to-top aria-label="Kembali ke atas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg></button>
+      // Otomatis scroll perlahan ke area pratinjau PDF
+      sectionPreview.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function tutupPreview() {
+      const sectionPreview = document.getElementById('pdf-preview-section');
+      const iframePdf = document.getElementById('pdf-iframe');
+      
+      sectionPreview.style.display = 'none';
+      iframePdf.src = ""; // Kosongkan source agar berhenti memuat
+    }
+  </script>
 
   <script src="js/main.js"></script>
 </body>
