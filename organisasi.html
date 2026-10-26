@@ -182,105 +182,461 @@
 
   <main id="main">
 
-    <!-- Page Banner -->
-    <section class="page-banner">
-      <div class="container">
-        <nav class="breadcrumb" aria-label="Breadcrumb">
-          <a href="index.html">Beranda</a>
-          <span class="breadcrumb__sep">/</span>
-          <span aria-current="page">Organisasi</span>
-        </nav>
-        <h1>Struktur Organisasi &amp; Tim Kami</h1>
-        <p>Mengenal susunan kepengurusan yang menjalankan visi dan misi yayasan</p>
-      </div>
-    </section>
-
-    <!-- Struktur Organisasi Bagan -->
+    <!-- Struktur Organisasi Bagan (replika gambar) -->
 <section class="section">
   <div class="container">
-    <div class="section-heading text-center">
-      <span class="section-heading__eyebrow">Susunan Kepengurusan</span>
-      <h2>Struktur Organisasi</h2>
-      <p>Alur tanggung jawab dari pembina hingga unit pelaksana program.</p>
-    </div>
+    <div class="oc-wrap">
+      <div class="oc-board" role="img" aria-label="Bagan struktur Yayasan Bina Umat Padang Wulan Cipicung">
 
-    <div class="oc-scroll" data-reveal>
-      <div class="oc-chart">
+        <!-- ===== LAPISAN GAMBAR: latar, hiasan, judul, garis penghubung ===== -->
+        <svg class="oc-svg" viewBox="0 0 790 760" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="ocBg" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#f6ecd2"/>
+              <stop offset="1" stop-color="#efe0b8"/>
+            </linearGradient>
+            <linearGradient id="ocGold" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#a87a1c"/>
+              <stop offset=".5" stop-color="#f7d774"/>
+              <stop offset="1" stop-color="#a87a1c"/>
+            </linearGradient>
+            <pattern id="ocStar" width="46" height="46" patternUnits="userSpaceOnUse">
+              <path d="M23 6l5 12 12 5-12 5-5 12-5-12-12-5 12-5z" fill="none" stroke="#c9a24a" stroke-opacity=".22" stroke-width="1"/>
+            </pattern>
+            <radialGradient id="ocGreen" cx=".5" cy=".5" r=".5">
+              <stop offset="0" stop-color="#1f8a5b"/>
+              <stop offset="1" stop-color="#0e5b3c"/>
+            </radialGradient>
 
-        <!-- ATAS: Pembina -> Pengurus (+ Pengawas di kanan) -->
-        <div class="oc-top">
-          <div class="oc-node oc-green">PEMBINA<small>ABDUROHIM</small></div>
-          <div class="oc-vline"></div>
+            <!-- Lentera -->
+            <g id="ocLantern">
+              <line x1="35" y1="0" x2="35" y2="30" stroke="#b8860b" stroke-width="2"/>
+              <path d="M20 40 Q35 22 50 40 Z" fill="url(#ocGold)"/>
+              <rect x="30" y="30" width="10" height="10" rx="2" fill="url(#ocGold)"/>
+              <path d="M18 44h34l6 14v62l-6 14H18l-6-14V58z" fill="url(#ocGold)" stroke="#8a6410" stroke-width="1.5"/>
+              <path d="M24 56h22l3 10v48l-3 10H24l-3-10V66z" fill="#fff3b0" fill-opacity=".85"/>
+              <path d="M35 56v68M24 90h22" stroke="#b8860b" stroke-width="1.2"/>
+              <path d="M16 136h38l-8 14H24z" fill="url(#ocGold)" stroke="#8a6410" stroke-width="1.2"/>
+              <path d="M35 150v12" stroke="#b8860b" stroke-width="2"/>
+              <circle cx="35" cy="166" r="4" fill="url(#ocGold)"/>
+            </g>
+          </defs>
 
-          <div class="oc-pengurus-wrap">
-            <div class="oc-node oc-green oc-wide">
-              PENGURUS
-              <small>KETUA : JARMANTO</small>
-              <small>SEKRETARIS : NURKHOLIK</small>
-              <small>BENDAHARA : WARTO</small>
-            </div>
-            <div class="oc-pengawas">
-              <span class="oc-hline"></span>
-              <div class="oc-node oc-green">PENGAWAS<small>TONY M.S.</small></div>
-            </div>
-          </div>
+          <!-- Latar -->
+          <rect width="790" height="760" fill="url(#ocBg)"/>
+          <rect width="790" height="400" fill="url(#ocStar)"/>
 
-          <div class="oc-vline"></div>
-        </div>
+          <!-- Hiasan sudut -->
+          <g fill="none" stroke="#c9a24a" stroke-opacity=".55" stroke-width="2">
+            <circle cx="0" cy="0" r="170"/><circle cx="790" cy="0" r="170"/>
+            <circle cx="0" cy="0" r="140" stroke-opacity=".3"/><circle cx="790" cy="0" r="140" stroke-opacity=".3"/>
+          </g>
+          <circle cx="0" cy="760" r="120" fill="url(#ocGreen)"/>
+          <circle cx="790" cy="760" r="120" fill="url(#ocGreen)"/>
+          <g fill="none" stroke="#e8c765" stroke-width="2.5">
+            <circle cx="0" cy="760" r="100"/><circle cx="0" cy="760" r="78" stroke-opacity=".6"/>
+            <circle cx="790" cy="760" r="100"/><circle cx="790" cy="760" r="78" stroke-opacity=".6"/>
+          </g>
+          <circle cx="0" cy="130" r="70" fill="url(#ocGreen)" fill-opacity=".9"/>
+          <circle cx="790" cy="130" r="70" fill="url(#ocGreen)" fill-opacity=".9"/>
+          <g fill="none" stroke="#e8c765" stroke-width="2">
+            <circle cx="0" cy="130" r="58"/><circle cx="790" cy="130" r="58"/>
+          </g>
 
-        <!-- 3 BIDANG -->
-        <div class="oc-fork">
+          <!-- Watermark logo -->
+          <g opacity=".13" transform="translate(397 345)">
+            <circle r="150" fill="none" stroke="#7a5a10" stroke-width="3"/>
+            <circle r="132" fill="none" stroke="#7a5a10" stroke-width="1.5"/>
+            <circle r="70" fill="none" stroke="#7a5a10" stroke-width="2"/>
+            <path id="ocArc" d="M-118 0A118 118 0 0 1 118 0" fill="none"/>
+            <text font-family="Impact, 'Arial Black', sans-serif" font-size="26" fill="#7a5a10" letter-spacing="2">
+              <textPath href="#ocArc" startOffset="50%" text-anchor="middle">YAYASAN BINA UMAT</textPath>
+            </text>
+          </g>
 
-          <!-- 1. SOSIAL -->
-          <div class="oc-col">
-            <div class="oc-node oc-orange">KETUA BIDANG SOSIAL<small>MUHLISUN</small></div>
-            <div class="oc-stack">
-              <div class="oc-node oc-peach">KESENIAN PW<small>KETUA : DERI</small></div>
-              <div class="oc-node oc-peach">SARANA &amp; PRASARANA PW<small>KETUA : RASWIN</small></div>
-              <div class="oc-node oc-peach">SARANA DIGITAL PW<small>KETUA : CIPTO N.</small></div>
-              <div class="oc-node oc-peach">PENDIDIKAN PW<small>KETUA : D. WARDIMAN</small></div>
-            </div>
-          </div>
+          <!-- Siluet masjid -->
+          <g fill="#d6b56d" fill-opacity=".72">
+            <rect x="170" y="712" width="450" height="48"/>
+            <path d="M335 712Q335 625 397 612Q459 625 459 712Z"/>
+            <rect x="394" y="592" width="6" height="22"/>
+            <path d="M283 712Q283 672 318 664Q353 672 353 712Z"/>
+            <path d="M441 712Q441 672 476 664Q511 672 511 712Z"/>
+            <path d="M195 730Q195 702 222 696Q249 702 249 730Z"/>
+            <path d="M545 730Q545 702 572 696Q599 702 599 730Z"/>
+            <rect x="262" y="590" width="18" height="170"/><path d="M260 590L271 566L282 590Z"/>
+            <rect x="520" y="590" width="18" height="170"/><path d="M518 590L529 566L540 590Z"/>
+            <rect x="200" y="640" width="12" height="120"/><path d="M198 640L206 624L214 640Z"/>
+            <rect x="584" y="640" width="12" height="120"/><path d="M582 640L590 624L598 640Z"/>
+          </g>
 
-          <!-- 2. KEMANUSIAAN -->
-          <div class="oc-col">
-            <div class="oc-node oc-blue">KETUA BIDANG KEMANUSIAAN<small>SUDIMAN</small></div>
-            <div class="oc-stack">
-              <div class="oc-node oc-lightblue">LBH PADANG WULAN<small>KETUA : AKMAL</small></div>
-              <div class="oc-node oc-lightblue">SAMPAH BERKAH PW<small>KETUA : SAMIN</small></div>
-              <div class="oc-node oc-lightblue">RUKUN KEMATIAN PW<small>KETUA : WARTO</small></div>
-            </div>
-          </div>
+          <!-- Lentera -->
+          <use href="#ocLantern" transform="translate(48 62)"/>
+          <use href="#ocLantern" transform="translate(672 62)"/>
 
-          <!-- 3. KEAGAMAAN -->
-          <div class="oc-col">
-            <div class="oc-node oc-brown">KETUA BIDANG KEAGAMAAN<small>HASYIM MUNIR</small></div>
-            <div class="oc-vline"></div>
+          <!-- Judul -->
+          <g>
+            <path d="M205 42h380l22 14v68l-22 14H205l-22-14V56z" fill="#0b3d1c" stroke="url(#ocGold)" stroke-width="4"/>
+            <path d="M212 50h366l16 10v60l-16 10H212l-16-10V60z" fill="none" stroke="#e8c765" stroke-width="1.2" stroke-opacity=".7"/>
+            <g font-family="Impact, 'Arial Black', 'Haettenschweiler', sans-serif" text-anchor="middle" fill="#fff">
+              <text x="395" y="76" font-size="25" letter-spacing="1">BAGAN STRUKTUR</text>
+              <text x="395" y="108" font-size="35" letter-spacing="1">YAYASAN BINA UMAT</text>
+              <text x="395" y="133" font-size="25" letter-spacing="1">PADANG WULAN CIPICUNG</text>
+            </g>
+          </g>
 
-            <div class="oc-fork oc-fork--sub">
-              <div class="oc-col oc-col--sub">
-                <div class="oc-stack oc-stack--first">
-                  <div class="oc-node oc-yellow">UPZ PADANG WULAN<small>KETUA : WAWAN</small></div>
-                  <div class="oc-node oc-yellow">AGRO WAKAF PW<small>KETUA : NURKHOLIK</small></div>
-                  <div class="oc-node oc-yellow">L. PEMBANGUNAN PW<small>KETUA : KARJO</small></div>
-                </div>
-              </div>
-              <div class="oc-col oc-col--sub">
-                <div class="oc-stack oc-stack--first">
-                  <div class="oc-node oc-yellow">DKM NURHIDAYAH<small>KETUA : JASIRUN</small></div>
-                  <div class="oc-node oc-yellow">TPQ AL-HIDAYAH<small>KETUA : DEDE NURHASANAH</small></div>
-                  <div class="oc-node oc-yellow">PEMUDA NURUL FATA<small>KETUA : ABDUL GANI</small></div>
-                  <div class="oc-node oc-yellow">M. TA'LIM AL-HIDAYAH<small>KETUA : ENGKOS</small></div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <!-- ===== GARIS PENGHUBUNG ===== -->
+          <g stroke="#2b2b2b" stroke-width="1.3" fill="none" stroke-linecap="square">
+            <!-- Pembina -> Pengurus -->
+            <path d="M397.5 235V258"/>
+            <!-- cabang ke Pengawas -->
+            <path d="M397.5 245H582.5V258"/>
+            <!-- Pengurus -> bus -->
+            <path d="M397.5 370V385"/>
+            <path d="M148 385H645"/>
+            <path d="M148 385V400M397.5 385V400M645 385V400"/>
 
-        </div>
+            <!-- Sosial: tulang di kanan, cabang masuk ke sisi kanan kotak -->
+            <path d="M193 445V658"/>
+            <path d="M178 484H193M178 542H193M178 600H193M178 658H193"/>
+
+            <!-- Kemanusiaan -->
+            <path d="M443 445V598"/>
+            <path d="M425 482H443M425 540H443M425 598H443"/>
+
+            <!-- Keagamaan: tulang di tengah dua kolom -->
+            <path d="M600 445V658"/>
+            <path d="M583 486H600M583 544H600M583 602H600"/>
+            <path d="M600 484H617M600 542H617M600 600H617M600 658H617"/>
+          </g>
+        </svg>
+
+        <!-- ===== KOTAK ===== -->
+        <!-- Pimpinan -->
+        <div class="oc-nd oc-green" style="--x:335;--y:185;--w:125;--h:50"><b>PEMBINA</b><span>ABDUROHIM</span></div>
+        <div class="oc-nd oc-green" style="--x:335;--y:258;--w:125;--h:112"><b>PENGURUS</b><span>KETUA :<br>JARMANTO</span><span>SEKRETARIS :<br>NURKHOLIK</span><span>BENDAHARA :<br>WARTO</span></div>
+        <div class="oc-nd oc-green" style="--x:520;--y:258;--w:125;--h:48"><b>PENGAWAS</b><span>TONY M.S.</span></div>
+
+        <!-- Ketua bidang -->
+        <div class="oc-nd oc-head oc-orange" style="--x:48;--y:400;--w:200;--h:45"><b>KETUA BIDANG SOSIAL</b><span>MUHLISUN</span></div>
+        <div class="oc-nd oc-head oc-blue"   style="--x:300;--y:400;--w:195;--h:45"><b>KETUA BIDANG KEMANUSIAAN</b><span>SUDIMAN</span></div>
+        <div class="oc-nd oc-head oc-gold"   style="--x:545;--y:400;--w:200;--h:45"><b>KETUA BIDANG KEAGAMAAN</b><span>HASYIM MUNIR</span></div>
+
+        <!-- Sosial -->
+        <div class="oc-nd oc-peach" style="--x:48;--y:460;--w:130;--h:48"><b>KESENIAN PW</b><span>KETUA : DERI</span></div>
+        <div class="oc-nd oc-peach" style="--x:48;--y:518;--w:130;--h:48"><b class="oc-sm">SARANA &amp; PRASARANA PW</b><span>KETUA : RASWIN</span></div>
+        <div class="oc-nd oc-peach" style="--x:48;--y:576;--w:130;--h:48"><b>SARANA DIGITAL PW</b><span>KETUA : CIPTO N.</span></div>
+        <div class="oc-nd oc-peach" style="--x:48;--y:634;--w:130;--h:48"><b>PENDIDIKAN PW</b><span>KETUA : D. WARDIMAN</span></div>
+
+        <!-- Kemanusiaan -->
+        <div class="oc-nd oc-lblue" style="--x:300;--y:458;--w:125;--h:48"><b>LBH PADANG WULAN</b><span>KETUA : AKMAL</span></div>
+        <div class="oc-nd oc-lblue" style="--x:300;--y:516;--w:125;--h:48"><b>SAMPAH BERKAH PW</b><span>KETUA : SAMIN</span></div>
+        <div class="oc-nd oc-lblue" style="--x:300;--y:574;--w:125;--h:48"><b>RUKUN KEMATIAN PW</b><span>KETUA : WARTO</span></div>
+
+        <!-- Keagamaan kolom kiri -->
+        <div class="oc-nd oc-lyellow" style="--x:458;--y:462;--w:125;--h:48"><b>UPZ PADANG WULAN</b><span>KETUA : WAWAN</span></div>
+        <div class="oc-nd oc-lyellow" style="--x:458;--y:520;--w:125;--h:48"><b>AGRO WAKAF PW</b><span>KETUA : NURKHOLIK</span></div>
+        <div class="oc-nd oc-lyellow" style="--x:458;--y:578;--w:125;--h:48"><b>L. PEMBANGUNAN PW</b><span>KETUA : KARJO</span></div>
+
+        <!-- Keagamaan kolom kanan -->
+        <div class="oc-nd oc-lyellow" style="--x:617;--y:460;--w:125;--h:48"><b>DKM NURHIDAYAH</b><span>KETUA : JASIRUN</span></div>
+        <div class="oc-nd oc-lyellow" style="--x:617;--y:518;--w:125;--h:48"><b>TPQ AL-HIDAYAH</b><span>KETUA :<br>DEDE NURHASANAH</span></div>
+        <div class="oc-nd oc-lyellow" style="--x:617;--y:576;--w:125;--h:48"><b>PEMUDA NURUL FATA</b><span>KETUA : ABDUL GANI</span></div>
+        <div class="oc-nd oc-lyellow" style="--x:617;--y:634;--w:125;--h:48"><b>M. TA'LIM AL-HIDAYAH</b><span>KETUA : ENGKOS</span></div>
+
       </div>
     </div>
   </div>
 </section>
+
+<style>
+/* Seluruh bagan memakai koordinat 790 x 760 lalu diskalakan mengikuti lebar layar,
+   jadi posisi kotak dan garis selalu sama persis dengan gambar di semua ukuran. */
+.oc-wrap { width: 100%; max-width: 790px; margin: 0 auto; }
+
+.oc-board {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 790 / 760;
+  container-type: inline-size;
+  overflow: hidden;
+  border: 1px solid #cfc3a0;
+  background: #f6ecd2;
+  font-family: "Arial Narrow", "Roboto Condensed", "Segoe UI", Arial, sans-serif;
+}
+
+.oc-svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+/* ===== Kotak ===== */
+.oc-nd {
+  --fs: 10;
+  position: absolute;
+  left: calc(var(--x) / 790 * 100%);
+  top: calc(var(--y) / 760 * 100%);
+  width: calc(var(--w) / 790 * 100%);
+  height: calc(var(--h) / 760 * 100%);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 calc(3 * 100cqw / 790);
+  border-radius: calc(3 * 100cqw / 790);
+  color: #111;
+  line-height: 1.15;
+  font-size: calc(var(--fs) * 100cqw / 790);
+  border: 1px solid rgba(0,0,0,.18);
+  border-top-width: calc(3 * 100cqw / 790);
+  box-shadow: calc(2 * 100cqw / 790) calc(3 * 100cqw / 790) calc(4 * 100cqw / 790) rgba(0,0,0,.22);
+}
+.oc-nd b    { font-weight: 800; letter-spacing: .01em; }
+.oc-nd span { font-weight: 500; font-size: .94em; }
+.oc-nd b.oc-sm { font-size: .82em; }
+
+/* Pimpinan (hijau) */
+.oc-green  { background: #8be885; border-color: #2fb22f; border-top-color: #12c212; }
+.oc-green  { --fs: 9.5; }
+
+/* Ketua bidang */
+.oc-head   { --fs: 11; color: #fff; border-radius: calc(4 * 100cqw / 790); border-top-width: 1px; }
+.oc-head b { font-size: 1em; }
+.oc-orange { background: #c55a11; border-color: #a24508; }
+.oc-blue   { background: #2e75b6; border-color: #1f5a92; }
+.oc-gold   { background: #bf9000; border-color: #94700a; }
+
+/* Unit pelaksana */
+.oc-peach   { background: #fbd9c9; border-color: #efb79c; border-top-color: #f4a77f; }
+.oc-lblue   { background: #cfe0f5; border-color: #9dbde3; border-top-color: #7fb0e3; }
+.oc-lyellow { background: #fff2cc; border-color: #f0d37a; border-top-color: #ffd44d; }
+.oc-peach, .oc-lblue, .oc-lyellow { --fs: 9.5; }
+<!-- Struktur Organisasi Bagan (replika gambar) -->
+<section class="section">
+  <div class="container">
+    <div class="oc-wrap">
+      <div class="oc-board" role="img" aria-label="Bagan struktur Yayasan Bina Umat Padang Wulan Cipicung">
+
+        <!-- ===== LAPISAN GAMBAR: latar, hiasan, judul, garis penghubung ===== -->
+        <svg class="oc-svg" viewBox="0 0 790 760" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="ocBg" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#f6ecd2"/>
+              <stop offset="1" stop-color="#efe0b8"/>
+            </linearGradient>
+            <linearGradient id="ocGold" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#a87a1c"/>
+              <stop offset=".5" stop-color="#f7d774"/>
+              <stop offset="1" stop-color="#a87a1c"/>
+            </linearGradient>
+            <pattern id="ocStar" width="46" height="46" patternUnits="userSpaceOnUse">
+              <path d="M23 6l5 12 12 5-12 5-5 12-5-12-12-5 12-5z" fill="none" stroke="#c9a24a" stroke-opacity=".22" stroke-width="1"/>
+            </pattern>
+            <radialGradient id="ocGreen" cx=".5" cy=".5" r=".5">
+              <stop offset="0" stop-color="#1f8a5b"/>
+              <stop offset="1" stop-color="#0e5b3c"/>
+            </radialGradient>
+
+            <!-- Lentera -->
+            <g id="ocLantern">
+              <line x1="35" y1="0" x2="35" y2="30" stroke="#b8860b" stroke-width="2"/>
+              <path d="M20 40 Q35 22 50 40 Z" fill="url(#ocGold)"/>
+              <rect x="30" y="30" width="10" height="10" rx="2" fill="url(#ocGold)"/>
+              <path d="M18 44h34l6 14v62l-6 14H18l-6-14V58z" fill="url(#ocGold)" stroke="#8a6410" stroke-width="1.5"/>
+              <path d="M24 56h22l3 10v48l-3 10H24l-3-10V66z" fill="#fff3b0" fill-opacity=".85"/>
+              <path d="M35 56v68M24 90h22" stroke="#b8860b" stroke-width="1.2"/>
+              <path d="M16 136h38l-8 14H24z" fill="url(#ocGold)" stroke="#8a6410" stroke-width="1.2"/>
+              <path d="M35 150v12" stroke="#b8860b" stroke-width="2"/>
+              <circle cx="35" cy="166" r="4" fill="url(#ocGold)"/>
+            </g>
+          </defs>
+
+          <!-- Latar -->
+          <rect width="790" height="760" fill="url(#ocBg)"/>
+          <rect width="790" height="400" fill="url(#ocStar)"/>
+
+          <!-- Hiasan sudut -->
+          <g fill="none" stroke="#c9a24a" stroke-opacity=".55" stroke-width="2">
+            <circle cx="0" cy="0" r="170"/><circle cx="790" cy="0" r="170"/>
+            <circle cx="0" cy="0" r="140" stroke-opacity=".3"/><circle cx="790" cy="0" r="140" stroke-opacity=".3"/>
+          </g>
+          <circle cx="0" cy="760" r="120" fill="url(#ocGreen)"/>
+          <circle cx="790" cy="760" r="120" fill="url(#ocGreen)"/>
+          <g fill="none" stroke="#e8c765" stroke-width="2.5">
+            <circle cx="0" cy="760" r="100"/><circle cx="0" cy="760" r="78" stroke-opacity=".6"/>
+            <circle cx="790" cy="760" r="100"/><circle cx="790" cy="760" r="78" stroke-opacity=".6"/>
+          </g>
+          <circle cx="0" cy="130" r="70" fill="url(#ocGreen)" fill-opacity=".9"/>
+          <circle cx="790" cy="130" r="70" fill="url(#ocGreen)" fill-opacity=".9"/>
+          <g fill="none" stroke="#e8c765" stroke-width="2">
+            <circle cx="0" cy="130" r="58"/><circle cx="790" cy="130" r="58"/>
+          </g>
+
+          <!-- Watermark logo -->
+          <g opacity=".13" transform="translate(397 345)">
+            <circle r="150" fill="none" stroke="#7a5a10" stroke-width="3"/>
+            <circle r="132" fill="none" stroke="#7a5a10" stroke-width="1.5"/>
+            <circle r="70" fill="none" stroke="#7a5a10" stroke-width="2"/>
+            <path id="ocArc" d="M-118 0A118 118 0 0 1 118 0" fill="none"/>
+            <text font-family="Impact, 'Arial Black', sans-serif" font-size="26" fill="#7a5a10" letter-spacing="2">
+              <textPath href="#ocArc" startOffset="50%" text-anchor="middle">YAYASAN BINA UMAT</textPath>
+            </text>
+          </g>
+
+          <!-- Siluet masjid -->
+          <g fill="#d6b56d" fill-opacity=".72">
+            <rect x="170" y="712" width="450" height="48"/>
+            <path d="M335 712Q335 625 397 612Q459 625 459 712Z"/>
+            <rect x="394" y="592" width="6" height="22"/>
+            <path d="M283 712Q283 672 318 664Q353 672 353 712Z"/>
+            <path d="M441 712Q441 672 476 664Q511 672 511 712Z"/>
+            <path d="M195 730Q195 702 222 696Q249 702 249 730Z"/>
+            <path d="M545 730Q545 702 572 696Q599 702 599 730Z"/>
+            <rect x="262" y="590" width="18" height="170"/><path d="M260 590L271 566L282 590Z"/>
+            <rect x="520" y="590" width="18" height="170"/><path d="M518 590L529 566L540 590Z"/>
+            <rect x="200" y="640" width="12" height="120"/><path d="M198 640L206 624L214 640Z"/>
+            <rect x="584" y="640" width="12" height="120"/><path d="M582 640L590 624L598 640Z"/>
+          </g>
+
+          <!-- Lentera -->
+          <use href="#ocLantern" transform="translate(48 62)"/>
+          <use href="#ocLantern" transform="translate(672 62)"/>
+
+          <!-- Judul -->
+          <g>
+            <path d="M205 42h380l22 14v68l-22 14H205l-22-14V56z" fill="#0b3d1c" stroke="url(#ocGold)" stroke-width="4"/>
+            <path d="M212 50h366l16 10v60l-16 10H212l-16-10V60z" fill="none" stroke="#e8c765" stroke-width="1.2" stroke-opacity=".7"/>
+            <g font-family="Impact, 'Arial Black', 'Haettenschweiler', sans-serif" text-anchor="middle" fill="#fff">
+              <text x="395" y="76" font-size="25" letter-spacing="1">BAGAN STRUKTUR</text>
+              <text x="395" y="108" font-size="35" letter-spacing="1">YAYASAN BINA UMAT</text>
+              <text x="395" y="133" font-size="25" letter-spacing="1">PADANG WULAN CIPICUNG</text>
+            </g>
+          </g>
+
+          <!-- ===== GARIS PENGHUBUNG ===== -->
+          <g stroke="#2b2b2b" stroke-width="1.3" fill="none" stroke-linecap="square">
+            <!-- Pembina -> Pengurus -->
+            <path d="M397.5 235V258"/>
+            <!-- cabang ke Pengawas -->
+            <path d="M397.5 245H582.5V258"/>
+            <!-- Pengurus -> bus -->
+            <path d="M397.5 370V385"/>
+            <path d="M148 385H645"/>
+            <path d="M148 385V400M397.5 385V400M645 385V400"/>
+
+            <!-- Sosial: tulang di kanan, cabang masuk ke sisi kanan kotak -->
+            <path d="M193 445V658"/>
+            <path d="M178 484H193M178 542H193M178 600H193M178 658H193"/>
+
+            <!-- Kemanusiaan -->
+            <path d="M443 445V598"/>
+            <path d="M425 482H443M425 540H443M425 598H443"/>
+
+            <!-- Keagamaan: tulang di tengah dua kolom -->
+            <path d="M600 445V658"/>
+            <path d="M583 486H600M583 544H600M583 602H600"/>
+            <path d="M600 484H617M600 542H617M600 600H617M600 658H617"/>
+          </g>
+        </svg>
+
+        <!-- ===== KOTAK ===== -->
+        <!-- Pimpinan -->
+        <div class="oc-nd oc-green" style="--x:335;--y:185;--w:125;--h:50"><b>PEMBINA</b><span>ABDUROHIM</span></div>
+        <div class="oc-nd oc-green" style="--x:335;--y:258;--w:125;--h:112"><b>PENGURUS</b><span>KETUA :<br>JARMANTO</span><span>SEKRETARIS :<br>NURKHOLIK</span><span>BENDAHARA :<br>WARTO</span></div>
+        <div class="oc-nd oc-green" style="--x:520;--y:258;--w:125;--h:48"><b>PENGAWAS</b><span>TONY M.S.</span></div>
+
+        <!-- Ketua bidang -->
+        <div class="oc-nd oc-head oc-orange" style="--x:48;--y:400;--w:200;--h:45"><b>KETUA BIDANG SOSIAL</b><span>MUHLISUN</span></div>
+        <div class="oc-nd oc-head oc-blue"   style="--x:300;--y:400;--w:195;--h:45"><b>KETUA BIDANG KEMANUSIAAN</b><span>SUDIMAN</span></div>
+        <div class="oc-nd oc-head oc-gold"   style="--x:545;--y:400;--w:200;--h:45"><b>KETUA BIDANG KEAGAMAAN</b><span>HASYIM MUNIR</span></div>
+
+        <!-- Sosial -->
+        <div class="oc-nd oc-peach" style="--x:48;--y:460;--w:130;--h:48"><b>KESENIAN PW</b><span>KETUA : DERI</span></div>
+        <div class="oc-nd oc-peach" style="--x:48;--y:518;--w:130;--h:48"><b class="oc-sm">SARANA &amp; PRASARANA PW</b><span>KETUA : RASWIN</span></div>
+        <div class="oc-nd oc-peach" style="--x:48;--y:576;--w:130;--h:48"><b>SARANA DIGITAL PW</b><span>KETUA : CIPTO N.</span></div>
+        <div class="oc-nd oc-peach" style="--x:48;--y:634;--w:130;--h:48"><b>PENDIDIKAN PW</b><span>KETUA : D. WARDIMAN</span></div>
+
+        <!-- Kemanusiaan -->
+        <div class="oc-nd oc-lblue" style="--x:300;--y:458;--w:125;--h:48"><b>LBH PADANG WULAN</b><span>KETUA : AKMAL</span></div>
+        <div class="oc-nd oc-lblue" style="--x:300;--y:516;--w:125;--h:48"><b>SAMPAH BERKAH PW</b><span>KETUA : SAMIN</span></div>
+        <div class="oc-nd oc-lblue" style="--x:300;--y:574;--w:125;--h:48"><b>RUKUN KEMATIAN PW</b><span>KETUA : WARTO</span></div>
+
+        <!-- Keagamaan kolom kiri -->
+        <div class="oc-nd oc-lyellow" style="--x:458;--y:462;--w:125;--h:48"><b>UPZ PADANG WULAN</b><span>KETUA : WAWAN</span></div>
+        <div class="oc-nd oc-lyellow" style="--x:458;--y:520;--w:125;--h:48"><b>AGRO WAKAF PW</b><span>KETUA : NURKHOLIK</span></div>
+        <div class="oc-nd oc-lyellow" style="--x:458;--y:578;--w:125;--h:48"><b>L. PEMBANGUNAN PW</b><span>KETUA : KARJO</span></div>
+
+        <!-- Keagamaan kolom kanan -->
+        <div class="oc-nd oc-lyellow" style="--x:617;--y:460;--w:125;--h:48"><b>DKM NURHIDAYAH</b><span>KETUA : JASIRUN</span></div>
+        <div class="oc-nd oc-lyellow" style="--x:617;--y:518;--w:125;--h:48"><b>TPQ AL-HIDAYAH</b><span>KETUA :<br>DEDE NURHASANAH</span></div>
+        <div class="oc-nd oc-lyellow" style="--x:617;--y:576;--w:125;--h:48"><b>PEMUDA NURUL FATA</b><span>KETUA : ABDUL GANI</span></div>
+        <div class="oc-nd oc-lyellow" style="--x:617;--y:634;--w:125;--h:48"><b>M. TA'LIM AL-HIDAYAH</b><span>KETUA : ENGKOS</span></div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+/* Seluruh bagan memakai koordinat 790 x 760 lalu diskalakan mengikuti lebar layar,
+   jadi posisi kotak dan garis selalu sama persis dengan gambar di semua ukuran. */
+.oc-wrap { width: 100%; max-width: 790px; margin: 0 auto; }
+
+.oc-board {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 790 / 760;
+  container-type: inline-size;
+  overflow: hidden;
+  border: 1px solid #cfc3a0;
+  background: #f6ecd2;
+  font-family: "Arial Narrow", "Roboto Condensed", "Segoe UI", Arial, sans-serif;
+}
+
+.oc-svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+/* ===== Kotak ===== */
+.oc-nd {
+  --fs: 10;
+  position: absolute;
+  left: calc(var(--x) / 790 * 100%);
+  top: calc(var(--y) / 760 * 100%);
+  width: calc(var(--w) / 790 * 100%);
+  height: calc(var(--h) / 760 * 100%);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 calc(3 * 100cqw / 790);
+  border-radius: calc(3 * 100cqw / 790);
+  color: #111;
+  line-height: 1.15;
+  font-size: calc(var(--fs) * 100cqw / 790);
+  border: 1px solid rgba(0,0,0,.18);
+  border-top-width: calc(3 * 100cqw / 790);
+  box-shadow: calc(2 * 100cqw / 790) calc(3 * 100cqw / 790) calc(4 * 100cqw / 790) rgba(0,0,0,.22);
+}
+.oc-nd b    { font-weight: 800; letter-spacing: .01em; }
+.oc-nd span { font-weight: 500; font-size: .94em; }
+.oc-nd b.oc-sm { font-size: .82em; }
+
+/* Pimpinan (hijau) */
+.oc-green  { background: #8be885; border-color: #2fb22f; border-top-color: #12c212; }
+.oc-green  { --fs: 9.5; }
+
+/* Ketua bidang */
+.oc-head   { --fs: 11; color: #fff; border-radius: calc(4 * 100cqw / 790); border-top-width: 1px; }
+.oc-head b { font-size: 1em; }
+.oc-orange { background: #c55a11; border-color: #a24508; }
+.oc-blue   { background: #2e75b6; border-color: #1f5a92; }
+.oc-gold   { background: #bf9000; border-color: #94700a; }
+
+/* Unit pelaksana */
+.oc-peach   { background: #fbd9c9; border-color: #efb79c; border-top-color: #f4a77f; }
+.oc-lblue   { background: #cfe0f5; border-color: #9dbde3; border-top-color: #7fb0e3; }
+.oc-lyellow { background: #fff2cc; border-color: #f0d37a; border-top-color: #ffd44d; }
+.oc-peach, .oc-lblue, .oc-lyellow { --fs: 9.5; }
+</style>
 
 <style>
 .oc-scroll { overflow-x: auto; padding: 1rem 0; }
