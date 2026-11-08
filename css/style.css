@@ -449,8 +449,7 @@ select:focus-visible,
   font-weight: 600;
 }
 
-/* Bingkai foto khas — dua sudut membulat besar, dua sudut kecil.
-   Ini elemen visual signature yang dipakai konsisten di seluruh situs. */
+/* Bingkai foto khas — dua sudut membulat besar, dua sudut kecil. */
 .img-frame {
   border-radius: 56px 12px 56px 12px;
   overflow: hidden;
@@ -472,7 +471,7 @@ select:focus-visible,
   border-radius: 50%;
 }
 
-/* 5) NAVBAR ----------------------------------------------------------------- */
+/* 5) NAVBAR (UPDATED: Gelap identik footer) ------------------------------- */
 header {
   position: relative;
   z-index: 99999;
@@ -482,13 +481,13 @@ header {
   position: sticky;
   top: 0;
   z-index: 99999;
-  background: rgba(255, 255, 255, 0.98);
-  border-bottom: 1px solid var(--border);
+  background: var(--dark); /* Background gelap */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Garis batas bawah menjadi transparan tipis */
   transition: box-shadow var(--transition), background var(--transition);
 }
 
 .navbar.is-scrolled {
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* Shadow lebih pekat */
 }
 
 .navbar__inner {
@@ -525,10 +524,11 @@ header {
   gap: 1.75rem;
 }
 
+/* Menu Navbar Teks Terang */
 .navbar__links a {
   font-size: var(--fs-sm);
   font-weight: 600;
-  color: var(--text);
+  color: rgba(255, 255, 255, 0.85); 
   padding-block: 0.35rem;
   position: relative;
   transition: color var(--transition);
@@ -541,23 +541,17 @@ header {
   bottom: -2px;
   width: 0;
   height: 2px;
-  background: var(--primary);
+  background: var(--white); /* Garis hover warna putih */
   transition: width var(--transition);
   border-radius: 2px;
 }
 
-.navbar__links a:hover {
-  color: var(--primary-dark);
-}
-
-.navbar__links a:hover::after {
-  width: 100%;
-}
-
+.navbar__links a:hover,
 .navbar__links a.is-active {
-  color: var(--primary-dark);
+  color: var(--white);
 }
 
+.navbar__links a:hover::after,
 .navbar__links a.is-active::after {
   width: 100%;
 }
@@ -566,6 +560,20 @@ header {
   flex-shrink: 0;
 }
 
+/* Perubahan warna khusus tombol action (.btn-primary) di dalam Navbar */
+.navbar__cta .btn-primary {
+  background: var(--secondary); /* Navy sekunder (#1b3a5c) */
+  color: var(--white);
+  border: 1px solid rgba(255, 255, 255, 0.2); 
+  box-shadow: none;
+}
+
+.navbar__cta .btn-primary:hover {
+  background: var(--secondary-dark); /* Navy lebih gelap saat hover */
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Tombol Menu Hamburger Mobile (Terang) */
 .navbar__toggle {
   display: none;
   flex-direction: column;
@@ -574,9 +582,8 @@ header {
   gap: 5px;
   width: 44px;
   height: 44px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--white);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: transparent;
   flex-shrink: 0;
 }
 
@@ -584,7 +591,7 @@ header {
   display: block;
   width: 20px;
   height: 2px;
-  background: var(--secondary);
+  background: var(--white); /* Garis tiga (hamburger) warna putih */
   border-radius: 2px;
   transition: transform var(--transition), opacity var(--transition);
 }
@@ -1174,8 +1181,8 @@ header {
 }
 
 .footer__brand img {
-  height: 82px; /* Ubah angka ini sesuai keinginan (misal: 48px, 52px, atau lebih besar) */
-  width: auto;   /* Memastikan gambar tetap proporsional dan tidak gepeng */
+  height: 82px;
+  width: auto;
   margin-bottom: var(--space-sm);
 }
 
@@ -1643,7 +1650,7 @@ header {
   height: 20px;
 }
 
-/* 17) RESPONSIVE ---------------------------------------------------------------- */
+/* 17) RESPONSIVE (UPDATED: Navbar Mobile Gelap) --------------------------------- */
 @media (max-width: 1024px) {
   .hero__inner {
     grid-template-columns: 1fr;
@@ -1692,12 +1699,10 @@ header {
 }
 
 @media (max-width: 860px) {
-  /* Berikan jarak atas pada body agar konten tidak tertutup navbar yang fixed */
   body {
     padding-top: var(--navbar-h);
   }
 
-  /* Kunci navbar (logo & tombol hamburger/close) agar selalu menetap di atas */
   .navbar {
     position: fixed !important;
     top: 0;
@@ -1706,10 +1711,9 @@ header {
     z-index: 100000;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
-    background: #ffffff;
+    background: var(--dark) !important; /* Navbar mobile gelap */
   }
 
-  /* Panel menu dropdown muncul tepat di bawah header fixed */
   .navbar__menu {
     position: fixed;
     top: var(--navbar-h);
@@ -1717,12 +1721,12 @@ header {
     width: 100%;
     height: auto;
     max-height: calc(100vh - var(--navbar-h));
-    background-color: #ffffff !important;
+    background-color: var(--dark) !important; /* Dropdown menu mobile gelap */
     flex-direction: column;
     align-items: stretch;
     padding: var(--space-md) var(--space-md) var(--space-lg);
     gap: var(--space-sm);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
     transform: translateX(100%);
     transition: transform var(--transition);
     overflow-y: auto;
@@ -1741,8 +1745,9 @@ header {
 
   .navbar__links a {
     padding: 0.8rem 0.25rem;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Garis pisah halus */
     font-size: var(--fs-base);
+    color: rgba(255, 255, 255, 0.85); /* Teks putih di mobile */
   }
 
   .navbar__links a::after {
