@@ -366,6 +366,20 @@ select:focus-visible,
   background: var(--primary-dark);
 }
 
+/* Varian Tombol Gelap (Dark) Tambahan Baru */
+.btn-dark {
+  background: var(--dark);
+  color: var(--white);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-dark:hover {
+  background: var(--secondary-dark);
+  color: var(--white);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
 .btn-secondary {
   background: transparent;
   color: var(--secondary);
@@ -1407,14 +1421,14 @@ header {
 }
 
 .gallery-filter button:hover {
-  border-color: var(--primary);
-  color: var(--primary-dark);
+  border-color: var(--dark);
+  color: var(--dark);
 }
 
 .gallery-filter button.is-active {
-  background: var(--primary);
+  background: var(--dark);
   color: var(--white);
-  border-color: var(--primary);
+  border-color: var(--dark);
 }
 
 .gallery-grid {

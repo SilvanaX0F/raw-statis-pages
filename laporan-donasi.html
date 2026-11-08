@@ -8,18 +8,19 @@
 </head>
 <body>
 
-<section class="section">
+<!-- Menambahkan class section--dark agar teks judul otomatis menyesuaikan warna terang -->
+<section class="section section--dark">
   <div class="container">
     <div class="section-heading">
-      <span class="section-heading__eyebrow">Transparansi Keuangan</span>
+      <span class="section-heading__eyebrow" style="color: #38BDF8;">Transparansi Keuangan</span>
       <h2>Laporan Donasi Masuk</h2>
     </div>
 
-    <!-- Tabel -->
-    <div class="card" style="overflow-x: auto; padding: 0;">
-      <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: var(--fs-sm);">
+    <!-- Tabel dengan background gelap -->
+    <div class="card" style="overflow-x: auto; padding: 0; background-color: var(--dark); border: 1px solid rgba(255, 255, 255, 0.1);">
+      <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: var(--fs-sm); color: var(--white);">
         <thead>
-          <tr style="background-color: var(--primary); color: var(--white);">
+          <tr style="background-color: var(--secondary); color: var(--white); border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
             <th style="padding: 1rem; text-align: center; width: 60px;">No</th>
             <th style="padding: 1rem;">Nama</th>
             <th style="padding: 1rem;">Kota</th>
@@ -29,7 +30,7 @@
         </thead>
         <tbody id="tabel-donasi-body">
           <tr>
-            <td colspan="5" style="padding: 2rem; text-align: center; color: var(--muted);">
+            <td colspan="5" style="padding: 2rem; text-align: center; color: rgba(255, 255, 255, 0.6);">
               Memuat data donasi dari Firebase...
             </td>
           </tr>
@@ -53,8 +54,8 @@
       if (querySnapshot.empty) {
         tbody.innerHTML = `
           <tr>
-            <td colspan="5" style="padding: 3rem 1rem; text-align: center; color: var(--muted);">
-              <strong>Belum Ada Data Donasi</strong>
+            <td colspan="5" style="padding: 3rem 1rem; text-align: center; color: rgba(255, 255, 255, 0.6);">
+              <strong style="color: var(--white);">Belum Ada Data Donasi</strong>
               <p style="font-size: var(--fs-xs); margin-top: 0.25rem;">Saat ini belum ada riwayat donasi masuk yang ditampilkan.</p>
             </td>
           </tr>`;
@@ -65,23 +66,26 @@
       let no = 1;
       querySnapshot.forEach((doc) => {
         const data = doc.data();
-        const bgRow = no % 2 === 0 ? 'var(--light)' : 'var(--white)';
+        
+        // Membuat baris selang-seling (zebra cross) dengan warna gelap transparan
+        const bgRow = no % 2 === 0 ? 'rgba(255, 255, 255, 0.03)' : 'transparent';
         const jumlahFormatted = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(data.jumlah);
 
+        // Penyesuaian warna teks tabel untuk tema gelap
         html += `
-          <tr style="border-bottom: 1px solid var(--border); background-color: ${bgRow};">
-            <td style="padding: 0.85rem 1rem; text-align: center; color: var(--muted);">${no++}</td>
-            <td style="padding: 0.85rem 1rem; font-weight: 600;">${data.nama}</td>
-            <td style="padding: 0.85rem 1rem; color: var(--muted);">${data.kota || '-'}</td>
-            <td style="padding: 0.85rem 1rem; color: var(--muted);">${data.tanggal}</td>
-            <td style="padding: 0.85rem 1rem; text-align: right; font-weight: 600; color: var(--primary-dark);">${jumlahFormatted}</td>
+          <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.05); background-color: ${bgRow};">
+            <td style="padding: 0.85rem 1rem; text-align: center; color: rgba(255, 255, 255, 0.6);">${no++}</td>
+            <td style="padding: 0.85rem 1rem; font-weight: 600; color: var(--white);">${data.nama}</td>
+            <td style="padding: 0.85rem 1rem; color: rgba(255, 255, 255, 0.7);">${data.kota || '-'}</td>
+            <td style="padding: 0.85rem 1rem; color: rgba(255, 255, 255, 0.7);">${data.tanggal}</td>
+            <td style="padding: 0.85rem 1rem; text-align: right; font-weight: 600; color: #38BDF8;">${jumlahFormatted}</td>
           </tr>`;
       });
 
       tbody.innerHTML = html;
     } catch (err) {
       console.error('Error fetching data:', err);
-      tbody.innerHTML = `<tr><td colspan="5" style="padding: 2rem; text-align: center; color: red;">Gagal memuat data donasi.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="5" style="padding: 2rem; text-align: center; color: #ff6b6b;">Gagal memuat data donasi.</td></tr>`;
     }
   }
 
