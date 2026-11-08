@@ -372,12 +372,12 @@
       <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: var(--fs-sm);">
         <thead>
           <tr style="background-color: var(--dark); color: var(--white);">
-            <th style="padding: 1rem 1.5rem; text-align: center; width: 60px;">No</th>
-            <th style="padding: 1rem 1.5rem;">Nama Donatur</th>
-            <th style="padding: 1rem 1.5rem;">Alamat</th>
-            <th style="padding: 1rem 1.5rem;">Tanggal</th>
-            <th style="padding: 1rem 1.5rem; text-align: center;">Kategori</th>
-            <th style="padding: 1rem 1.5rem; text-align: right;">Jumlah (Rp)</th>
+            <th class="donasi-th" style="text-align: center; width: 60px;">No</th>
+            <th class="donasi-th">Nama Donatur</th>
+            <th class="donasi-th">Alamat</th>
+            <th class="donasi-th">Tanggal</th>
+            <th class="donasi-th" style="text-align: center;">Kategori</th>
+            <th class="donasi-th" style="text-align: right;">Jumlah (Rp)</th>
           </tr>
         </thead>
         <tbody id="tabel-donasi-body">
@@ -391,17 +391,44 @@
       </table>
       
       <!-- Container untuk Paginasi (Navigasi Halaman) -->
-      <div id="pagination-container" style="padding: 1rem 1.5rem; display: flex; justify-content: center; gap: 0.5rem; border-top: 1px solid var(--border); background: var(--white);">
+      <div id="pagination-container" style="padding: 1rem; display: flex; justify-content: center; gap: 0.5rem; border-top: 1px solid var(--border); background: var(--white);">
         <!-- Tombol angka halaman akan di-generate oleh JS -->
       </div>
     </div>
   </div>
 </section>
 
-<!-- Tambahan animasi loading putar -->
+<!-- Tambahan animasi loading & responsif tabel -->
 <style>
   @keyframes spin { 100% { transform: rotate(360deg); } }
   
+  /* --- STYLING JARAK TABEL (DESKTOP) --- */
+  .donasi-th { padding: 1rem 1.5rem; }
+  .donasi-td { padding: 0.85rem 1.5rem; }
+  .donasi-td-total { padding: 1.25rem 1.5rem; }
+  .kategori-badge { padding: 0.25rem 0.85rem; font-size: 0.75rem; }
+
+  /* --- STYLING JARAK TABEL (MOBILE / HP) --- */
+  @media (max-width: 768px) {
+    .donasi-th {
+      padding: 0.6rem 0.5rem; /* Padding diperkecil */
+      font-size: var(--fs-xs); /* Font disesuaikan */
+      white-space: nowrap; /* Mencegah judul kolom patah jadi 2 baris */
+    }
+    .donasi-td {
+      padding: 0.5rem 0.5rem; /* Ruang baris list donatur diperkecil */
+      font-size: var(--fs-xs);
+    }
+    .donasi-td-total {
+      padding: 0.8rem 0.5rem;
+      font-size: var(--fs-sm) !important;
+    }
+    .kategori-badge {
+      padding: 0.2rem 0.5rem;
+      font-size: 0.65rem;
+    }
+  }
+
   /* Styling dasar untuk tombol paginasi */
   .page-btn {
     padding: 0.4rem 0.8rem;
@@ -436,11 +463,11 @@
   const filterButtons = document.querySelectorAll('#filter-donasi button');
   
   let dataDonasiMaster = [];
-  let currentFilterData = []; // Menyimpan data yang sedang aktif difilter
+  let currentFilterData = [];
   
   // Konfigurasi Paginasi
   let currentPage = 1;
-  const itemsPerPage = 10; // Jumlah baris per halaman
+  const itemsPerPage = 10; 
 
   // 1. Load Data dari Firebase (1x panggil)
   async function loadDonasi() {
@@ -494,24 +521,20 @@
       return;
     }
 
-    // --- Logika Paginasi ---
     const totalPages = Math.ceil(dataArray.length / itemsPerPage);
     const startIndex = (page - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     
-    // Potong array data hanya untuk halaman ini
     const dataHalamanIni = dataArray.slice(startIndex, endIndex);
 
     let html = '';
     let totalNominalSeluruhnya = 0; 
-    let nomorUrut = startIndex + 1; // Agar nomor berlanjut di halaman berikutnya
+    let nomorUrut = startIndex + 1; 
 
-    // Hitung TOTAL KESELURUHAN (dari dataArray yang sedang difilter, bukan cuma data per halaman)
     dataArray.forEach(data => {
       totalNominalSeluruhnya += (parseInt(data.jumlah) || 0);
     });
 
-    // Render baris untuk halaman ini saja
     dataHalamanIni.forEach((data) => {
       const nominal = parseInt(data.jumlah) || 0;
       const bgRow = nomorUrut % 2 === 0 ? 'var(--light)' : 'var(--white)';
@@ -528,36 +551,33 @@
 
       html += `
         <tr style="border-bottom: 1px solid var(--border); background-color: ${bgRow}; transition: background 0.3s;">
-          <td style="padding: 0.85rem 1.5rem; text-align: center; color: var(--muted);">${nomorUrut++}</td>
-          <td style="padding: 0.85rem 1.5rem; font-weight: 600; color: var(--secondary);">${data.nama}</td>
-          <td style="padding: 0.85rem 1.5rem; color: var(--muted);">${data.kota || data.alamat || '-'}</td>
-          <td style="padding: 0.85rem 1.5rem; color: var(--muted);">${data.tanggal}</td>
-          <td style="padding: 0.85rem 1.5rem; text-align: center;">
-            <span style="background: ${warnaBg}; color: ${warnaTeks}; padding: 0.25rem 0.85rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700; display: inline-block;">
+          <td class="donasi-td" style="text-align: center; color: var(--muted);">${nomorUrut++}</td>
+          <td class="donasi-td" style="font-weight: 600; color: var(--secondary);">${data.nama}</td>
+          <td class="donasi-td" style="color: var(--muted);">${data.kota || data.alamat || '-'}</td>
+          <td class="donasi-td" style="color: var(--muted);">${data.tanggal}</td>
+          <td class="donasi-td" style="text-align: center;">
+            <span class="kategori-badge" style="background: ${warnaBg}; color: ${warnaTeks}; border-radius: 20px; font-weight: 700; display: inline-block;">
               ${kategoriDonasi}
             </span>
           </td>
-          <td style="padding: 0.85rem 1.5rem; text-align: right; font-weight: 700; color: var(--primary-dark);">${jumlahFormatted}</td>
+          <td class="donasi-td" style="text-align: right; font-weight: 700; color: var(--primary-dark);">${jumlahFormatted}</td>
         </tr>`;
     });
 
     const totalFormatted = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(totalNominalSeluruhnya);
 
-    // Tambahkan Baris TOTAL di bawah (Selalu menampilkan total dari semua halaman kategori tersebut)
     html += `
       <tr style="background-color: var(--light); border-top: 2px solid var(--border); border-bottom: 2px solid transparent;">
-        <td colspan="5" style="padding: 1.25rem 1.5rem; text-align: right; font-weight: 800; color: var(--secondary); font-size: var(--fs-base);">TOTAL SELURUHNYA :</td>
-        <td style="padding: 1.25rem 1.5rem; text-align: right; font-weight: 800; color: var(--primary-dark); font-size: var(--fs-base);">${totalFormatted}</td>
+        <td colspan="5" class="donasi-td-total" style="text-align: right; font-weight: 800; color: var(--secondary); font-size: var(--fs-base);">TOTAL SELURUHNYA :</td>
+        <td class="donasi-td-total" style="text-align: right; font-weight: 800; color: var(--primary-dark); font-size: var(--fs-base);">${totalFormatted}</td>
       </tr>
     `;
 
     tbody.innerHTML = html;
-
-    // --- Render Tombol Navigasi Halaman ---
     renderPagination(totalPages, page);
   }
 
-  // Fungsi untuk membuat deretan tombol halaman [1] [2] [3]
+  // 3. Tombol Navigasi Halaman
   function renderPagination(totalPages, activePage) {
     if (totalPages <= 1) {
       paginationContainer.innerHTML = '';
@@ -572,25 +592,24 @@
     
     paginationContainer.innerHTML = pageHtml;
 
-    // Tambahkan event click pada setiap tombol halaman
     const pageButtons = document.querySelectorAll('.page-btn');
     pageButtons.forEach(btn => {
       btn.addEventListener('click', (e) => {
         const pageTarget = parseInt(e.target.getAttribute('data-page'));
         currentPage = pageTarget;
-        renderTabel(currentFilterData, currentPage); // Render ulang tabel untuk halaman baru
+        renderTabel(currentFilterData, currentPage); 
       });
     });
   }
 
-  // 3. Logika Filter Tombol Kategori
+  // 4. Logika Filter Tombol Kategori
   filterButtons.forEach(button => {
     button.addEventListener('click', () => {
       filterButtons.forEach(btn => btn.classList.remove('is-active'));
       button.classList.add('is-active');
       
       const filterValue = button.getAttribute('data-filter');
-      currentPage = 1; // Reset ke halaman 1 setiap kali filter berubah
+      currentPage = 1; 
       
       if (filterValue === 'Semua') {
         currentFilterData = [...dataDonasiMaster];
