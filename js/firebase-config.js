@@ -7,7 +7,10 @@ import {
   getDocs, 
   query, 
   orderBy, 
-  serverTimestamp 
+  serverTimestamp,
+  doc,
+  updateDoc,
+  deleteDoc
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 // Konfigurasi Firebase dari proyek Anda
@@ -25,4 +28,5 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-export { db, collection, addDoc, getDocs, query, orderBy, serverTimestamp };
+// Export semua module yang dibutuhkan termasuk untuk fitur Edit & Hapus
+export { db, collection, addDoc, getDocs, query, orderBy, serverTimestamp, doc, updateDoc, deleteDoc };
