@@ -65,9 +65,15 @@
         <div class="grid grid-2">
 
           <article class="card program-card--full" data-reveal>
-  <div class="program-card__media">
+  <!-- Tambahkan position: relative; agar label tidak keluar dari kotak gambar -->
+  <div class="program-card__media" style="position: relative;">
+    
+    <!-- Label Kategori di pojok kiri atas -->
+    <span style="position: absolute; top: 1rem; left: 1rem; background: #D69E2E; color: #fff; font-size: var(--fs-xs); font-weight: 700; padding: 0.35rem 0.85rem; border-radius: 999px; z-index: 2; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">Keagamaan</span>
+    
     <img src="images/news/kegiatan1.jpg" alt="Pembangunan dan Pemeliharaan Prasarana Ibadah dan Pendidikan Agama Islam" width="480" height="340" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;">
   </div>
+  
   <div class="program-card__body">
     <h3 style="line-height: 1.4;">Pembangunan dan Pemeliharaan Prasarana Ibadah dan Pendidikan Agama Islam</h3>
     <p class="text-muted" style="font-size: var(--fs-sm); line-height: 1.6;">
