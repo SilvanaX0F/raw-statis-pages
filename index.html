@@ -349,28 +349,42 @@
 </section>
 
     <!-- Laporan Donasi Masuk -->
-    <section class="section">
+<section class="section" id="laporan-donasi">
   <div class="container">
-    <div class="section-heading">
-      <h2>Laporan Donasi Masuk</h2>
+    <div class="flex-between mb-lg" style="align-items: flex-end; flex-wrap: wrap; gap: 1rem;">
+      <div class="section-heading" style="margin-bottom: 0;">
+        <span class="section-heading__eyebrow">Transparansi Keuangan</span>
+        <h2>Laporan Donasi Masuk</h2>
+      </div>
+    </div>
+
+    <!-- Tombol Filter Kategori -->
+    <div class="gallery-filter" id="filter-donasi">
+      <button type="button" class="is-active" data-filter="Semua">Semua Donasi</button>
+      <button type="button" data-filter="Zakat">Zakat</button>
+      <button type="button" data-filter="Infaq">Infaq</button>
+      <button type="button" data-filter="Shodaqoh">Shodaqoh</button>
+      <button type="button" data-filter="Wakaf">Wakaf</button>
     </div>
 
     <!-- Tabel -->
-    <div class="card" style="overflow-x: auto; padding: 0;">
+    <div class="card" style="overflow-x: auto; padding: 0; border-radius: var(--radius-md); box-shadow: var(--shadow-sm);">
       <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: var(--fs-sm);">
         <thead>
           <tr style="background-color: var(--dark); color: var(--white);">
-            <th style="padding: 1rem; text-align: center; width: 60px;">No</th>
-            <th style="padding: 1rem;">Nama</th>
-            <th style="padding: 1rem;">Kota</th>
-            <th style="padding: 1rem;">Tanggal</th>
-            <th style="padding: 1rem; text-align: right;">Jumlah</th>
+            <th style="padding: 1rem 1.5rem; text-align: center; width: 60px;">No</th>
+            <th style="padding: 1rem 1.5rem;">Nama Donatur</th>
+            <th style="padding: 1rem 1.5rem;">Alamat</th>
+            <th style="padding: 1rem 1.5rem;">Tanggal</th>
+            <th style="padding: 1rem 1.5rem; text-align: center;">Kategori</th>
+            <th style="padding: 1rem 1.5rem; text-align: right;">Jumlah (Rp)</th>
           </tr>
         </thead>
         <tbody id="tabel-donasi-body">
           <tr>
-            <td colspan="5" style="padding: 2rem; text-align: center; color: var(--muted);">
-              Memuat data donasi dari Firebase...
+            <td colspan="6" style="padding: 3rem; text-align: center; color: var(--muted);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 24px; height: 24px; margin-bottom: 0.5rem; animation: spin 1s linear infinite;"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg><br>
+              Memuat data donasi dari sistem...
             </td>
           </tr>
         </tbody>
@@ -379,12 +393,20 @@
   </div>
 </section>
 
-<!-- Script penarik data dari Firebase -->
+<!-- Tambahan animasi loading putar -->
+<style>
+  @keyframes spin { 100% { transform: rotate(360deg); } }
+</style>
+
+<!-- Script penarik data dan logika filter dari Firebase -->
 <script type="module">
   import { db, collection, getDocs, query, orderBy } from './js/firebase-config.js';
 
   const tbody = document.getElementById('tabel-donasi-body');
+  const filterButtons = document.querySelectorAll('#filter-donasi button');
+  let dataDonasiMaster = [];
 
+  // 1. Load Data dari Firebase (1x panggil)
   async function loadDonasi() {
     try {
       const q = query(collection(db, 'donations'), orderBy('createdAt', 'desc'));
@@ -393,7 +415,7 @@
       if (querySnapshot.empty) {
         tbody.innerHTML = `
           <tr>
-            <td colspan="5" style="padding: 3rem 1rem; text-align: center; color: var(--muted);">
+            <td colspan="6" style="padding: 3rem 1rem; text-align: center; color: var(--muted);">
               <strong>Belum Ada Data Donasi</strong>
               <p style="font-size: var(--fs-xs); margin-top: 0.25rem;">Saat ini belum ada riwayat donasi masuk yang ditampilkan.</p>
             </td>
@@ -401,29 +423,97 @@
         return;
       }
 
-      let html = '';
-      let no = 1;
+      dataDonasiMaster = [];
       querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        const bgRow = no % 2 === 0 ? 'var(--light)' : 'var(--white)';
-        const jumlahFormatted = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(data.jumlah);
-
-        html += `
-          <tr style="border-bottom: 1px solid var(--border); background-color: ${bgRow};">
-            <td style="padding: 0.85rem 1rem; text-align: center; color: var(--muted);">${no++}</td>
-            <td style="padding: 0.85rem 1rem; font-weight: 600;">${data.nama}</td>
-            <td style="padding: 0.85rem 1rem; color: var(--muted);">${data.kota || '-'}</td>
-            <td style="padding: 0.85rem 1rem; color: var(--muted);">${data.tanggal}</td>
-            <td style="padding: 0.85rem 1rem; text-align: right; font-weight: 600; color: var(--primary-dark);">${jumlahFormatted}</td>
-          </tr>`;
+        dataDonasiMaster.push(doc.data());
       });
 
-      tbody.innerHTML = html;
+      renderTabel(dataDonasiMaster);
+
     } catch (err) {
       console.error('Error fetching data:', err);
-      tbody.innerHTML = `<tr><td colspan="5" style="padding: 2rem; text-align: center; color: red;">Gagal memuat data donasi.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="6" style="padding: 2rem; text-align: center; color: red;">Gagal memuat data donasi. Silakan muat ulang halaman.</td></tr>`;
     }
   }
+
+  // 2. Render Tabel & Hitung Total
+  function renderTabel(dataArray) {
+    if (dataArray.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="6" style="padding: 3rem 1rem; text-align: center; color: var(--muted);">
+            Tidak ada riwayat donasi untuk kategori ini.
+          </td>
+        </tr>`;
+      return;
+    }
+
+    let html = '';
+    let no = 1;
+    let totalNominal = 0; // Variabel untuk menyimpan jumlah total
+
+    dataArray.forEach((data) => {
+      // Tambahkan nilai ke totalNominal
+      const nominal = parseInt(data.jumlah) || 0;
+      totalNominal += nominal;
+
+      const bgRow = no % 2 === 0 ? 'var(--light)' : 'var(--white)';
+      const jumlahFormatted = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(nominal);
+      
+      const kategoriDonasi = data.kategori || 'Lainnya';
+      let warnaBg = '#e3f2e8'; 
+      let warnaTeks = '#145c38';
+      
+      if(kategoriDonasi === 'Zakat') { warnaBg = '#EBF8FF'; warnaTeks = '#2B6CB0'; } 
+      else if(kategoriDonasi === 'Infaq') { warnaBg = '#FEEBC8'; warnaTeks = '#C05621'; } 
+      else if(kategoriDonasi === 'Wakaf') { warnaBg = '#FEFCBF'; warnaTeks = '#975A16'; } 
+      else if(kategoriDonasi === 'Shodaqoh') { warnaBg = '#F3E8FF'; warnaTeks = '#6B21A8'; } 
+
+      html += `
+        <tr style="border-bottom: 1px solid var(--border); background-color: ${bgRow}; transition: background 0.3s;">
+          <td style="padding: 0.85rem 1.5rem; text-align: center; color: var(--muted);">${no++}</td>
+          <td style="padding: 0.85rem 1.5rem; font-weight: 600; color: var(--secondary);">${data.nama}</td>
+          <td style="padding: 0.85rem 1.5rem; color: var(--muted);">${data.kota || '-'}</td>
+          <td style="padding: 0.85rem 1.5rem; color: var(--muted);">${data.tanggal}</td>
+          <td style="padding: 0.85rem 1.5rem; text-align: center;">
+            <span style="background: ${warnaBg}; color: ${warnaTeks}; padding: 0.25rem 0.85rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700; display: inline-block;">
+              ${kategoriDonasi}
+            </span>
+          </td>
+          <td style="padding: 0.85rem 1.5rem; text-align: right; font-weight: 700; color: var(--primary-dark);">${jumlahFormatted}</td>
+        </tr>`;
+    });
+
+    // Format Total Nominal
+    const totalFormatted = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(totalNominal);
+
+    // Tambahkan Baris TOTAL di akhir tabel
+    html += `
+      <tr style="background-color: var(--light); border-top: 2px solid var(--border); border-bottom: 2px solid transparent;">
+        <td colspan="5" style="padding: 1.25rem 1.5rem; text-align: right; font-weight: 800; color: var(--secondary); font-size: var(--fs-base);">TOTAL :</td>
+        <td style="padding: 1.25rem 1.5rem; text-align: right; font-weight: 800; color: var(--primary-dark); font-size: var(--fs-base);">${totalFormatted}</td>
+      </tr>
+    `;
+
+    tbody.innerHTML = html;
+  }
+
+  // 3. Logika Filter Tombol
+  filterButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      filterButtons.forEach(btn => btn.classList.remove('is-active'));
+      button.classList.add('is-active');
+      
+      const filterValue = button.getAttribute('data-filter');
+      
+      if (filterValue === 'Semua') {
+        renderTabel(dataDonasiMaster); 
+      } else {
+        const dataDisaring = dataDonasiMaster.filter(item => item.kategori === filterValue);
+        renderTabel(dataDisaring); 
+      }
+    });
+  });
 
   loadDonasi();
 </script>

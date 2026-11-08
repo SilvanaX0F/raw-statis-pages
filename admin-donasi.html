@@ -34,6 +34,19 @@
             <input type="number" id="jumlah" placeholder="Contoh: 50000" required>
           </div>
 
+          <!-- Tambahan Field Kategori Donasi -->
+          <div class="form-field">
+            <label for="kategori">Kategori</label>
+            <select id="kategori" required style="width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--white); color: var(--text);">
+              <option value="" disabled selected>Pilih Kategori</option>
+              <option value="Zakat">Zakat</option>
+              <option value="Infaq">Infaq</option>
+              <option value="Shodaqoh">Shodaqoh</option>
+              <option value="Wakaf">Wakaf</option>
+              <option value="Lainnya">Lainnya</option>
+            </select>
+          </div>
+
           <button type="submit" id="btn-simpan" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
             Simpan Data Donasi
           </button>
@@ -61,6 +74,7 @@
       const kota = document.getElementById('kota').value || '-';
       const tanggal = document.getElementById('tanggal').value;
       const jumlah = parseInt(document.getElementById('jumlah').value);
+      const kategori = document.getElementById('kategori').value; // Mengambil nilai kategori
 
       try {
         await addDoc(collection(db, 'donations'), {
@@ -68,6 +82,7 @@
           kota: kota,
           tanggal: tanggal,
           jumlah: jumlah,
+          kategori: kategori, // Menyimpan nilai kategori ke database
           createdAt: serverTimestamp()
         });
 
@@ -80,7 +95,7 @@
         pesanStatus.textContent = '❌ Gagal menyimpan data: ' + error.message;
       } finally {
         btnSimpan.disabled = false;
-        btnSimpan.textContent = 'Simpan ke Firebase';
+        btnSimpan.textContent = 'Simpan Data Donasi';
       }
     });
   </script>
