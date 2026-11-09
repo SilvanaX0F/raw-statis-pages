@@ -82,6 +82,16 @@
     .btn-edit { background: #38BDF8; color: white; margin-right: 0.25rem; }
     .btn-hapus { background: #EF4444; color: white; }
 
+    /* Pagination Riwayat */
+    #card-riwayat { scroll-margin-top: 80px; }
+    .pagination { padding: 1rem; display: flex; justify-content: center; flex-wrap: wrap; gap: 0.5rem; border-top: 1px solid var(--border); }
+    .pagination:empty { display: none; }
+    .pg-btn { padding: 0.4rem 0.8rem; border: 1px solid var(--border); background: white; color: var(--dark); border-radius: 4px; cursor: pointer; font-size: 0.875rem; font-weight: 600; transition: all 0.2s; }
+    .pg-btn:hover:not(:disabled) { background: #f1f5f9; border-color: #94a3b8; }
+    .pg-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+    .pg-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .pg-dots { align-self: center; color: #94a3b8; }
+
     /* ========================================= */
     /* RESPONSIVE DESIGN (Layar HP < 768px)      */
     /* ========================================= */
@@ -197,7 +207,7 @@
         </div>
 
         <!-- TABEL DATA DONASI -->
-        <div class="card" style="background: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow: hidden;">
+        <div class="card" id="card-riwayat" style="background: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow: hidden;">
           <div style="padding: 1.5rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
             <div>
               <h3 style="margin: 0; font-size: 1.1rem; color: var(--dark);">Riwayat Donasi</h3>
@@ -226,6 +236,7 @@
               </tbody>
             </table>
           </div>
+          <div id="pagination-donasi" class="pagination"></div>
         </div>
 
       </div>
@@ -262,6 +273,13 @@
     
     let dataDonasiMaster = []; 
 
+    // === PAGINATION RIWAYAT (20 data per halaman) ===
+    const itemsPerPage = 20;
+    const pageContainer = document.getElementById('pagination-donasi');
+    const cardRiwayat = document.getElementById('card-riwayat');
+    let dataTampil = [];   // data yang sedang ditampilkan (semua / hasil pencarian)
+    let halamanAktif = 1;
+
     const formatRupiah = (angka) => {
       return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka);
     };
@@ -272,6 +290,7 @@
         const snap = await getDocs(q);
 
         if (snap.empty) {
+          dataDonasiMaster = []; pageContainer.innerHTML = '';
           tbody.innerHTML = `<tr><td colspan="7" style="padding: 2rem; text-align: center; color: #64748b;">Belum ada data donasi.</td></tr>`;
           return;
         }
@@ -282,7 +301,7 @@
         });
 
         dataDonasiMaster.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
-        renderTabelAdmin(dataDonasiMaster);
+        renderTabelAdmin(dataDonasiMaster, halamanAktif);
 
       } catch (err) {
         console.error(err);
@@ -290,13 +309,21 @@
       }
     }
 
-    function renderTabelAdmin(dataArray) {
+    function renderTabelAdmin(dataArray, page = 1) {
+      dataTampil = dataArray;
       if (dataArray.length === 0) {
         tbody.innerHTML = `<tr><td colspan="7" style="padding: 2rem; text-align: center; color: #64748b;">Data tidak ditemukan.</td></tr>`;
+        pageContainer.innerHTML = '';
         return;
       }
-      let html = ''; let no = 1;
-      dataArray.forEach((data) => {
+
+      const totalPages = Math.ceil(dataArray.length / itemsPerPage);
+      halamanAktif = Math.min(Math.max(page, 1), totalPages);
+      const start = (halamanAktif - 1) * itemsPerPage;
+      const dataHalaman = dataArray.slice(start, start + itemsPerPage);
+
+      let html = ''; let no = start + 1; // nomor lanjut antar halaman
+      dataHalaman.forEach((data) => {
         const bgRow = no % 2 === 0 ? '#f8fafc' : '#ffffff';
         html += `
           <tr style="border-bottom: 1px solid var(--border); background-color: ${bgRow};">
@@ -313,7 +340,36 @@
           </tr>`;
       });
       tbody.innerHTML = html;
+      renderPagination(totalPages);
     }
+
+    function renderPagination(totalPages) {
+      if (totalPages <= 1) { pageContainer.innerHTML = ''; return; }
+
+      // Tampilkan halaman pertama, terakhir, dan sekitar halaman aktif
+      const daftar = [];
+      for (let i = 1; i <= totalPages; i++) {
+        if (i === 1 || i === totalPages || Math.abs(i - halamanAktif) <= 1) daftar.push(i);
+      }
+
+      let html = `<button type="button" class="pg-btn" data-page="${halamanAktif - 1}" ${halamanAktif === 1 ? 'disabled' : ''} aria-label="Halaman sebelumnya">&laquo;</button>`;
+      let sebelumnya = 0;
+      daftar.forEach((i) => {
+        if (i - sebelumnya > 1) html += `<span class="pg-dots">&hellip;</span>`;
+        html += `<button type="button" class="pg-btn ${i === halamanAktif ? 'active' : ''}" data-page="${i}">${i}</button>`;
+        sebelumnya = i;
+      });
+      html += `<button type="button" class="pg-btn" data-page="${halamanAktif + 1}" ${halamanAktif === totalPages ? 'disabled' : ''} aria-label="Halaman berikutnya">&raquo;</button>`;
+
+      pageContainer.innerHTML = html;
+    }
+
+    pageContainer.addEventListener('click', (e) => {
+      const btn = e.target.closest('.pg-btn');
+      if (!btn || btn.disabled) return;
+      renderTabelAdmin(dataTampil, parseInt(btn.getAttribute('data-page')));
+      cardRiwayat.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
 
     inputCari.addEventListener('input', (e) => {
       const kata = e.target.value.toLowerCase();
