@@ -94,7 +94,7 @@
       .admin-layout { grid-template-columns: 1fr; }
       .sidebar-overlay.active { display: block; opacity: 1; }
       /* Perbesar area input untuk HP */
-      .admin-form-container input, .admin-form-container textarea { padding: 0.85rem !important; }
+      .admin-form-container input, .admin-form-container select { padding: 0.85rem !important; }
       .admin-form-container button { padding: 0.85rem !important; }
       .sidebar-footer { padding-bottom: 2.5rem; }
       body:has(.sidebar.active) { overflow: hidden; } /* kunci scroll halaman saat menu terbuka */
@@ -170,8 +170,14 @@
             </div>
 
             <div class="form-field">
-              <label for="keterangan" style="font-size: 0.875rem; font-weight: 600; display:block; margin-bottom:0.25rem;">Keterangan (Opsional)</label>
-              <textarea id="keterangan" placeholder="Contoh: Donasi untuk program yatim" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 4px; margin-bottom: 1rem; font-family: inherit; min-height: 80px; resize: vertical;"></textarea>
+              <label for="kategori" style="font-size: 0.875rem; font-weight: 600; display:block; margin-bottom:0.25rem;">Kategori Donasi</label>
+              <select id="kategori" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 4px; background: white; margin-bottom: 1rem;">
+                <option value="" disabled selected>Pilih kategori donasi</option>
+                <option value="Zakat">Zakat</option>
+                <option value="Infaq">Infaq</option>
+                <option value="Shodaqoh">Shodaqoh</option>
+                <option value="Wakaf">Wakaf</option>
+              </select>
             </div>
 
             <button type="submit" id="btn-simpan" class="btn btn-primary" style="width: 100%; padding: 0.75rem; background: #16a34a; color: white; border: none; border-radius: 4px; font-weight: 600; cursor: pointer;">
@@ -204,7 +210,7 @@
                   <th style="padding: 1rem;">Nama Donatur</th>
                   <th style="padding: 1rem;">Tanggal</th>
                   <th style="padding: 1rem;">Jumlah</th>
-                  <th style="padding: 1rem;">Keterangan</th>
+                  <th style="padding: 1rem;">Jenis Donasi</th>
                   <th style="padding: 1rem; text-align: center;">Aksi</th>
                 </tr>
               </thead>
@@ -291,7 +297,7 @@
             <td style="padding: 0.85rem 1rem; font-weight: 600; color: var(--dark);">${data.nama}</td>
             <td style="padding: 0.85rem 1rem; color: #64748b;">${data.tanggal}</td>
             <td style="padding: 0.85rem 1rem; font-weight: 600; color: #16a34a;">${formatRupiah(data.jumlah)}</td>
-            <td style="padding: 0.85rem 1rem; color: #64748b;">${data.keterangan || '-'}</td>
+            <td style="padding: 0.85rem 1rem; color: #64748b;">${data.kategori || '-'}</td>
             <td style="padding: 0.85rem 1rem; text-align: center; white-space: nowrap;">
               <button type="button" class="btn-aksi btn-edit" data-id="${data.id}">Edit</button>
               <button type="button" class="btn-aksi btn-hapus" data-id="${data.id}">Hapus</button>
@@ -316,10 +322,10 @@
       const nama = document.getElementById('nama').value;
       const tanggal = document.getElementById('tanggal').value;
       const jumlah = document.getElementById('jumlah').value;
-      const keterangan = document.getElementById('keterangan').value;
+      const kategori = document.getElementById('kategori').value;
 
       try {
-        const dataPayload = { nama, tanggal, jumlah: Number(jumlah), keterangan };
+        const dataPayload = { nama, tanggal, jumlah: Number(jumlah), kategori };
 
         if (editId === "") {
           dataPayload.createdAt = serverTimestamp();
@@ -351,7 +357,7 @@
         document.getElementById('nama').value = data.nama;
         document.getElementById('tanggal').value = data.tanggal;
         document.getElementById('jumlah').value = data.jumlah;
-        document.getElementById('keterangan').value = data.keterangan || "";
+        document.getElementById('kategori').value = data.kategori || "";
         
         document.getElementById('form-title').textContent = "Edit Data Donasi";
         btnSimpan.textContent = "Update Data Donasi";
