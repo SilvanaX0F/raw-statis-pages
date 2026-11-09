@@ -204,6 +204,9 @@
     .tabel-td-total { padding: 1.25rem 1.5rem; }
     .kategori-badge { padding: 0.25rem 0.85rem; font-size: 0.75rem; }
 
+    /* Tanggal donasi selalu satu baris (tidak patah di tanda "-") */
+    .tabel-tanggal { white-space: nowrap; }
+
     @media (max-width: 768px) {
       .tabel-th { padding: 0.6rem 0.5rem; font-size: var(--fs-xs); white-space: nowrap; }
       .tabel-td { padding: 0.5rem 0.5rem; font-size: var(--fs-xs); }
@@ -234,6 +237,13 @@
     let currentPageDonasi = 1;
     const itemsPerPage = 10; 
 
+    // Ubah 2026-11-10 menjadi 10-11-2026
+const formatTanggal = (t) => {
+  if (!t) return '-';
+  const [thn, bln, tgl] = String(t).split('-');
+  return (thn && bln && tgl) ? `${tgl}-${bln}-${thn}` : t;
+};
+
     async function loadDonasi() {
       try {
         const q = query(collection(db, 'donations'));
@@ -244,7 +254,8 @@
         }
         dataDonasiMaster = [];
         snap.forEach(doc => dataDonasiMaster.push(doc.data()));
-        dataDonasiMaster.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
+        // Urutan donasi: tanggal terlama di nomor 1, tanggal terbaru di nomor terakhir
+        dataDonasiMaster.sort((a, b) => new Date(a.tanggal) - new Date(b.tanggal));
         
         currentFilterDonasi = [...dataDonasiMaster];
         renderTabelDonasi(currentFilterDonasi, currentPageDonasi);
@@ -286,7 +297,7 @@
             <td class="tabel-td" style="text-align: center; color: var(--muted);">${no++}</td>
             <td class="tabel-td" style="font-weight: 600; color: var(--secondary);">${d.nama}</td>
             <td class="tabel-td" style="color: var(--muted);">${d.kota || d.alamat || '-'}</td>
-            <td class="tabel-td" style="color: var(--muted);">${d.tanggal}</td>
+            <td class="tabel-td tabel-tanggal" style="color: var(--muted);">${formatTanggal(d.tanggal)}</td>
             <td class="tabel-td" style="text-align: center;">
               <span class="kategori-badge" style="background: ${wBg}; color: ${wTeks}; border-radius: 20px; font-weight: 700; display: inline-block;">${kat}</span>
             </td>
@@ -382,7 +393,7 @@
             <td class="tabel-td" style="text-align: center; color: var(--muted);">${no++}</td>
             <td class="tabel-td" style="font-weight: 600; color: var(--secondary); white-space: pre-wrap;">${d.keterangan}</td>
             <td class="tabel-td" style="color: var(--muted);">${lokasiText}</td>
-            <td class="tabel-td" style="color: var(--muted);">${d.tanggal}</td>
+            <td class="tabel-td" style="color: var(--muted);">${formatTanggal(d.tanggal)}</td>
             <td class="tabel-td" style="text-align: center;">
               <span class="kategori-badge" style="background: ${wBg}; color: ${wTeks}; border-radius: 20px; font-weight: 700; display: inline-block;">${kat}</span>
             </td>
