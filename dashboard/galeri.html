@@ -37,8 +37,7 @@
     /* === SIDEBAR KIRI === */
     .sidebar {
       width: var(--sidebar-width); background-color: var(--dark); color: white;
-      display: flex; flex-direction: column; position: fixed; height: 100vh;
-      height: 100dvh; /* tinggi layar yang terlihat di HP */
+      display: flex; flex-direction: column; position: fixed; top: 0; bottom: 0; left: 0; /* menempel ke tepi layar yang terlihat */
       overflow-y: auto; z-index: 1000; transition: transform 0.3s ease;
     }
     .sidebar-brand { padding: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); text-align: center; }
@@ -127,6 +126,7 @@
       .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; padding: 1rem; }
       .gallery-card__img { height: 120px; }
       .sidebar-footer { padding-bottom: 2.5rem; }
+      body:has(.sidebar.active) { overflow: hidden; } /* kunci scroll halaman saat menu terbuka */
     }
   </style>
 </head>
