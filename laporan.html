@@ -50,8 +50,8 @@
       <div class="container">
         <div class="flex-between mb-lg" style="align-items: flex-end; flex-wrap: wrap; gap: 1rem;">
           <div class="section-heading" style="margin-bottom: 0;">
-            <span class="section-heading__eyebrow">Transparansi Keuangan</span>
-            <h2>Laporan Donasi Masuk</h2>
+            <span class="section-heading__eyebrow">Keuangan</span>
+            <h2>LAPORAN PENDAPATAN DAN PENERIMAAN</h2>
           </div>
         </div>
 
@@ -70,16 +70,15 @@
             <thead>
               <tr style="background-color: var(--dark); color: var(--white);">
                 <th class="tabel-th" style="text-align: center; width: 60px;">No</th>
-                <th class="tabel-th">Nama Donatur</th>
-                <th class="tabel-th">Alamat</th>
                 <th class="tabel-th">Tanggal</th>
+                <th class="tabel-th">Penerimaan</th>
                 <th class="tabel-th" style="text-align: center;">Kategori</th>
                 <th class="tabel-th" style="text-align: right;">Jumlah (Rp)</th>
               </tr>
             </thead>
             <tbody id="tabel-donasi-body">
               <tr>
-                <td colspan="6" style="padding: 3rem; text-align: center; color: var(--muted);">
+                <td colspan="5" style="padding: 3rem; text-align: center; color: var(--muted);">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 24px; height: 24px; margin-bottom: 0.5rem; animation: spin 1s linear infinite;"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg><br>
                   Memuat data donasi dari sistem...
                 </td>
@@ -91,23 +90,23 @@
       </div>
     </section>
 
-    <!-- ================= LAPORAN PENGELUARAN KAS ================= -->
+    <!-- ================= LAPORAN PENYALURAN PROGRAM ================= -->
     <section class="section" id="laporan-pengeluaran" style="padding-top: 2rem; background-color: var(--light);">
       <div class="container">
         <div class="flex-between mb-lg" style="align-items: flex-end; flex-wrap: wrap; gap: 1rem;">
           <div class="section-heading" style="margin-bottom: 0;">
             <span class="section-heading__eyebrow">Alokasi Dana</span>
-            <h2>Laporan Pengeluaran Kas</h2>
+            <h2>LAPORAN PENYALURAN PROGRAM</h2>
           </div>
         </div>
 
         <!-- Tombol Filter Kategori Pengeluaran -->
         <div class="gallery-filter" id="filter-pengeluaran">
           <button type="button" class="is-active" data-filter="Semua">Semua Pengeluaran</button>
-          <button type="button" data-filter="Operasional Yayasan">Operasional</button>
-          <button type="button" data-filter="Pembangunan Fisik">Pembangunan</button>
-          <button type="button" data-filter="Sosial & Kemanusiaan">Sosial</button>
-          <button type="button" data-filter="Kegiatan Keagamaan">Keagamaan</button>
+          <button type="button" data-filter="Zakat">Zakat</button>
+          <button type="button" data-filter="Infaq">Infaq</button>
+          <button type="button" data-filter="Sodaqoh">Sodaqoh</button>
+          <button type="button" data-filter="Wakaf">Wakaf</button>
         </div>
 
         <!-- Tabel Pengeluaran -->
@@ -116,18 +115,17 @@
             <thead>
               <tr style="background-color: var(--dark); color: var(--white);">
                 <th class="tabel-th" style="text-align: center; width: 60px;">No</th>
-                <th class="tabel-th">Keterangan</th>
-                <th class="tabel-th">Lokasi</th>
                 <th class="tabel-th">Tanggal</th>
+                <th class="tabel-th">Uraian Program</th>
                 <th class="tabel-th" style="text-align: center;">Kategori</th>
                 <th class="tabel-th" style="text-align: right;">Jumlah (Rp)</th>
               </tr>
             </thead>
             <tbody id="tabel-pengeluaran-body">
               <tr>
-                <td colspan="6" style="padding: 3rem; text-align: center; color: var(--muted);">
+                <td colspan="5" style="padding: 3rem; text-align: center; color: var(--muted);">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 24px; height: 24px; margin-bottom: 0.5rem; animation: spin 1s linear infinite;"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg><br>
-                  Memuat data pengeluaran dari sistem...
+                  Memuat data penyaluran dari sistem...
                 </td>
               </tr>
             </tbody>
@@ -237,36 +235,35 @@
     let currentPageDonasi = 1;
     const itemsPerPage = 10; 
 
-    // Ubah 2026-11-10 menjadi 10-11-2026
-const formatTanggal = (t) => {
-  if (!t) return '-';
-  const [thn, bln, tgl] = String(t).split('-');
-  return (thn && bln && tgl) ? `${tgl}-${bln}-${thn}` : t;
-};
+    // Ubah format tanggal
+    const formatTanggal = (t) => {
+      if (!t) return '-';
+      const [thn, bln, tgl] = String(t).split('-');
+      return (thn && bln && tgl) ? `${tgl}-${bln}-${thn}` : t;
+    };
 
     async function loadDonasi() {
       try {
         const q = query(collection(db, 'donations'));
         const snap = await getDocs(q);
         if (snap.empty) {
-          tbodyDonasi.innerHTML = `<tr><td colspan="6" style="padding: 3rem; text-align: center; color: var(--muted);">Belum ada riwayat donasi.</td></tr>`;
+          tbodyDonasi.innerHTML = `<tr><td colspan="5" style="padding: 3rem; text-align: center; color: var(--muted);">Belum ada riwayat donasi.</td></tr>`;
           return;
         }
         dataDonasiMaster = [];
         snap.forEach(doc => dataDonasiMaster.push(doc.data()));
-        // Urutan donasi: tanggal terlama di nomor 1, tanggal terbaru di nomor terakhir
         dataDonasiMaster.sort((a, b) => new Date(a.tanggal) - new Date(b.tanggal));
         
         currentFilterDonasi = [...dataDonasiMaster];
         renderTabelDonasi(currentFilterDonasi, currentPageDonasi);
       } catch (err) {
-        tbodyDonasi.innerHTML = `<tr><td colspan="6" style="text-align: center; color: red;">Gagal memuat data donasi.</td></tr>`;
+        tbodyDonasi.innerHTML = `<tr><td colspan="5" style="text-align: center; color: red;">Gagal memuat data donasi.</td></tr>`;
       }
     }
 
     function renderTabelDonasi(dataArray, page) {
       if (dataArray.length === 0) {
-        tbodyDonasi.innerHTML = `<tr><td colspan="6" style="padding: 3rem; text-align: center; color: var(--muted);">Tidak ada riwayat untuk kategori ini.</td></tr>`;
+        tbodyDonasi.innerHTML = `<tr><td colspan="5" style="padding: 3rem; text-align: center; color: var(--muted);">Tidak ada riwayat untuk kategori ini.</td></tr>`;
         pageDonasiContainer.innerHTML = '';
         return;
       }
@@ -290,14 +287,13 @@ const formatTanggal = (t) => {
         if(kat === 'Zakat') { wBg = '#EBF8FF'; wTeks = '#2B6CB0'; } 
         else if(kat === 'Infaq') { wBg = '#FEEBC8'; wTeks = '#C05621'; } 
         else if(kat === 'Wakaf') { wBg = '#FEFCBF'; wTeks = '#975A16'; } 
-        else if(kat === 'Shodaqoh') { wBg = '#F3E8FF'; wTeks = '#6B21A8'; } 
+        else if(kat === 'Shodaqoh' || kat === 'Sodaqoh') { wBg = '#F3E8FF'; wTeks = '#6B21A8'; } 
 
         html += `
           <tr style="border-bottom: 1px solid var(--border); background-color: ${bg};">
             <td class="tabel-td" style="text-align: center; color: var(--muted);">${no++}</td>
-            <td class="tabel-td" style="font-weight: 600; color: var(--secondary);">${d.nama}</td>
-            <td class="tabel-td" style="color: var(--muted);">${d.kota || d.alamat || '-'}</td>
             <td class="tabel-td tabel-tanggal" style="color: var(--muted);">${formatTanggal(d.tanggal)}</td>
+            <td class="tabel-td" style="font-weight: 600; color: var(--secondary);">${d.nama}</td>
             <td class="tabel-td" style="text-align: center;">
               <span class="kategori-badge" style="background: ${wBg}; color: ${wTeks}; border-radius: 20px; font-weight: 700; display: inline-block;">${kat}</span>
             </td>
@@ -308,7 +304,7 @@ const formatTanggal = (t) => {
       const totalFmt = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(totalSeluruhnya);
       html += `
         <tr style="background-color: var(--light); border-top: 2px solid var(--border);">
-          <td colspan="5" class="tabel-td-total" style="text-align: right; font-weight: 800; color: var(--secondary);">TOTAL SELURUHNYA :</td>
+          <td colspan="4" class="tabel-td-total" style="text-align: right; font-weight: 800; color: var(--secondary);">TOTAL SELURUHNYA :</td>
           <td class="tabel-td-total" style="text-align: right; font-weight: 800; color: var(--primary-dark);">${totalFmt}</td>
         </tr>`;
 
@@ -344,7 +340,7 @@ const formatTanggal = (t) => {
         const q = query(collection(db, 'expenses'));
         const snap = await getDocs(q);
         if (snap.empty) {
-          tbodyPengeluaran.innerHTML = `<tr><td colspan="6" style="padding: 3rem; text-align: center; color: var(--muted);">Belum ada riwayat pengeluaran.</td></tr>`;
+          tbodyPengeluaran.innerHTML = `<tr><td colspan="5" style="padding: 3rem; text-align: center; color: var(--muted);">Belum ada riwayat penyaluran.</td></tr>`;
           return;
         }
         dataPengeluaranMaster = [];
@@ -354,13 +350,13 @@ const formatTanggal = (t) => {
         currentFilterPengeluaran = [...dataPengeluaranMaster];
         renderTabelPengeluaran(currentFilterPengeluaran, currentPagePengeluaran);
       } catch (err) {
-        tbodyPengeluaran.innerHTML = `<tr><td colspan="6" style="text-align: center; color: red;">Gagal memuat data pengeluaran.</td></tr>`;
+        tbodyPengeluaran.innerHTML = `<tr><td colspan="5" style="text-align: center; color: red;">Gagal memuat data penyaluran.</td></tr>`;
       }
     }
 
     function renderTabelPengeluaran(dataArray, page) {
       if (dataArray.length === 0) {
-        tbodyPengeluaran.innerHTML = `<tr><td colspan="6" style="padding: 3rem; text-align: center; color: var(--muted);">Tidak ada riwayat untuk kategori ini.</td></tr>`;
+        tbodyPengeluaran.innerHTML = `<tr><td colspan="5" style="padding: 3rem; text-align: center; color: var(--muted);">Tidak ada riwayat untuk kategori ini.</td></tr>`;
         pagePengeluaranContainer.innerHTML = '';
         return;
       }
@@ -381,19 +377,16 @@ const formatTanggal = (t) => {
         const kat = d.kategori || 'Lainnya';
         
         let wBg = '#f1f5f9', wTeks = '#475569';
-        if(kat === 'Operasional Yayasan') { wBg = '#e2e8f0'; wTeks = '#334155'; } 
-        else if(kat === 'Pembangunan Fisik') { wBg = '#e0e7ff'; wTeks = '#4338ca'; } 
-        else if(kat === 'Sosial & Kemanusiaan') { wBg = '#ccfbf1'; wTeks = '#0f766e'; } 
-        else if(kat === 'Kegiatan Keagamaan') { wBg = '#ffe4e6'; wTeks = '#be123c'; } 
-
-        const lokasiText = d.lokasi && d.lokasi !== '-' ? d.lokasi : '-';
+        if(kat === 'Zakat') { wBg = '#EBF8FF'; wTeks = '#2B6CB0'; } 
+        else if(kat === 'Infaq') { wBg = '#FEEBC8'; wTeks = '#C05621'; } 
+        else if(kat === 'Wakaf') { wBg = '#FEFCBF'; wTeks = '#975A16'; } 
+        else if(kat === 'Shodaqoh' || kat === 'Sodaqoh') { wBg = '#F3E8FF'; wTeks = '#6B21A8'; } 
 
         html += `
           <tr style="border-bottom: 1px solid var(--border); background-color: ${bg};">
             <td class="tabel-td" style="text-align: center; color: var(--muted);">${no++}</td>
-            <td class="tabel-td" style="font-weight: 600; color: var(--secondary); white-space: pre-wrap;">${d.keterangan}</td>
-            <td class="tabel-td" style="color: var(--muted);">${lokasiText}</td>
             <td class="tabel-td" style="color: var(--muted);">${formatTanggal(d.tanggal)}</td>
+            <td class="tabel-td" style="font-weight: 600; color: var(--secondary); white-space: pre-wrap;">${d.keterangan}</td>
             <td class="tabel-td" style="text-align: center;">
               <span class="kategori-badge" style="background: ${wBg}; color: ${wTeks}; border-radius: 20px; font-weight: 700; display: inline-block;">${kat}</span>
             </td>
@@ -405,7 +398,7 @@ const formatTanggal = (t) => {
       const totalFmt = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(totalSeluruhnya);
       html += `
         <tr style="background-color: var(--light); border-top: 2px solid var(--border);">
-          <td colspan="5" class="tabel-td-total" style="text-align: right; font-weight: 800; color: var(--secondary);">TOTAL KELUAR :</td>
+          <td colspan="4" class="tabel-td-total" style="text-align: right; font-weight: 800; color: var(--secondary);">TOTAL KELUAR :</td>
           <td class="tabel-td-total" style="text-align: right; font-weight: 800; color: #ef4444;">- ${totalFmt}</td>
         </tr>`;
 

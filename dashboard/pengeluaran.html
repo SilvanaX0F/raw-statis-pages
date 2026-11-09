@@ -95,7 +95,7 @@
       .admin-layout { grid-template-columns: 1fr; }
       .sidebar-overlay.active { display: block; opacity: 1; }
       /* Perbesar area input untuk HP */
-      .admin-form-container input, .admin-form-container textarea { padding: 0.85rem !important; }
+      .admin-form-container input, .admin-form-container select, .admin-form-container textarea { padding: 0.85rem !important; }
       .admin-form-container button { padding: 0.85rem !important; }
       .sidebar-footer { padding-bottom: 2.5rem; }
       body:has(.sidebar.active) { overflow: hidden; } /* kunci scroll halaman saat menu terbuka */
@@ -142,7 +142,7 @@
     <!-- KONTEN UTAMA -->
     <main class="main-content">
       <div style="margin-bottom: 2rem;">
-        <h1 style="font-size: 1.5rem; color: var(--dark);">Manajemen Data Pengeluaran</h1>
+        <h1 style="font-size: 1.5rem; color: var(--dark);">LAPORAN PENYALURAN PROGRAM</h1>
         <p style="color: #64748b; font-size: 0.875rem;">Catat dan kelola semua biaya operasional yayasan.</p>
       </div>
 
@@ -156,28 +156,29 @@
             <input type="hidden" id="edit-id" value="">
 
             <div class="form-field">
-              <label for="nama" style="font-size: 0.875rem; font-weight: 600; display:block; margin-bottom:0.25rem;">Nama / Jenis Pengeluaran</label>
-              <input type="text" id="nama" placeholder="Contoh: Pembelian Sembako" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 4px; margin-bottom: 1rem;">
-            </div>
-
-            <div class="form-field">
-              <label for="tanggal" style="font-size: 0.875rem; font-weight: 600; display:block; margin-bottom:0.25rem;">Tanggal Kegiatan</label>
+              <label for="tanggal" style="font-size: 0.875rem; font-weight: 600; display:block; margin-bottom:0.25rem;">Tanggal</label>
               <input type="date" id="tanggal" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 4px; margin-bottom: 1rem;">
             </div>
-            
+
             <div class="form-field">
-              <label for="lokasi" style="font-size: 0.875rem; font-weight: 600; display:block; margin-bottom:0.25rem;">Lokasi (Opsional)</label>
-              <input type="text" id="lokasi" placeholder="Contoh: Dusun Cipicung" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 4px; margin-bottom: 1rem;">
+              <label for="keterangan" style="font-size: 0.875rem; font-weight: 600; display:block; margin-bottom:0.25rem;">Uraian Program</label>
+              <textarea id="keterangan" placeholder="Contoh: Pembelian Sembako" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 4px; margin-bottom: 1rem; font-family: inherit; min-height: 80px; resize: vertical;"></textarea>
             </div>
 
             <div class="form-field">
-              <label for="jumlah" style="font-size: 0.875rem; font-weight: 600; display:block; margin-bottom:0.25rem;">Total Biaya (Rp)</label>
+              <label for="kategori" style="font-size: 0.875rem; font-weight: 600; display:block; margin-bottom:0.25rem;">Kategori</label>
+              <select id="kategori" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 4px; background: white; margin-bottom: 1rem;">
+                <option value="" disabled selected>Pilih kategori</option>
+                <option value="Zakat">Zakat</option>
+                <option value="Infaq">Infaq</option>
+                <option value="Shodaqoh">Shodaqoh</option>
+                <option value="Wakaf">Wakaf</option>
+              </select>
+            </div>
+
+            <div class="form-field">
+              <label for="jumlah" style="font-size: 0.875rem; font-weight: 600; display:block; margin-bottom:0.25rem;">Jumlah (Rp)</label>
               <input type="number" id="jumlah" placeholder="Contoh: 1500000" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 4px; margin-bottom: 1rem;">
-            </div>
-
-            <div class="form-field">
-              <label for="keterangan" style="font-size: 0.875rem; font-weight: 600; display:block; margin-bottom:0.25rem;">Keterangan Rinci (Opsional)</label>
-              <textarea id="keterangan" placeholder="Contoh: Biaya transportasi dan konsumsi" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 4px; margin-bottom: 1rem; font-family: inherit; min-height: 80px; resize: vertical;"></textarea>
             </div>
 
             <button type="submit" id="btn-simpan" class="btn btn-primary" style="width: 100%; padding: 0.75rem; background: #ef4444; color: white; border: none; border-radius: 4px; font-weight: 600; cursor: pointer;">
@@ -194,10 +195,10 @@
         <div class="card" style="background: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow: hidden;">
           <div style="padding: 1.5rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
             <div>
-              <h3 style="margin: 0; font-size: 1.1rem; color: var(--dark);">Riwayat Pengeluaran</h3>
+              <h3 style="margin: 0; font-size: 1.1rem; color: var(--dark);">Riwayat Penyaluran Program</h3>
             </div>
             <div style="flex-grow: 1; max-width: 300px; width: 100%;">
-              <input type="text" id="input-cari" placeholder="Cari nama pengeluaran..." style="width: 100%; padding: 0.6rem 1rem; border: 1px solid var(--border); border-radius: 4px; font-size: 0.875rem;">
+              <input type="text" id="input-cari" placeholder="Cari uraian program..." style="width: 100%; padding: 0.6rem 1rem; border: 1px solid var(--border); border-radius: 4px; font-size: 0.875rem;">
             </div>
           </div>
           
@@ -207,16 +208,15 @@
               <thead>
                 <tr style="background-color: #f1f5f9; color: var(--dark);">
                   <th style="padding: 1rem; text-align: center; width: 50px;">No</th>
-                  <th style="padding: 1rem;">Nama Pengeluaran</th>
                   <th style="padding: 1rem;">Tanggal</th>
-                  <th style="padding: 1rem;">Lokasi</th>
+                  <th style="padding: 1rem;">Uraian Program</th>
+                  <th style="padding: 1rem;">Kategori</th>
                   <th style="padding: 1rem;">Jumlah</th>
-                  <th style="padding: 1rem;">Keterangan</th>
                   <th style="padding: 1rem; text-align: center;">Aksi</th>
                 </tr>
               </thead>
               <tbody id="tabel-admin-body">
-                <tr><td colspan="7" style="padding: 2rem; text-align: center;">Memuat data...</td></tr>
+                <tr><td colspan="6" style="padding: 2rem; text-align: center;">Memuat data...</td></tr>
               </tbody>
             </table>
           </div>
@@ -260,13 +260,16 @@
       return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka);
     };
 
+    // Uraian program disimpan di field 'keterangan'; data lama yang hanya punya 'nama' tetap tampil
+    const ambilUraian = (data) => data.keterangan || data.nama || '';
+
     async function loadDataAdmin() {
       try {
         const q = query(collection(db, 'expenses'));
         const snap = await getDocs(q);
 
         if (snap.empty) {
-          tbody.innerHTML = `<tr><td colspan="7" style="padding: 2rem; text-align: center; color: #64748b;">Belum ada data pengeluaran.</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="6" style="padding: 2rem; text-align: center; color: #64748b;">Belum ada data pengeluaran.</td></tr>`;
           return;
         }
 
@@ -281,13 +284,13 @@
 
       } catch (err) {
         console.error(err);
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: red;">Gagal memuat data.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: red;">Gagal memuat data.</td></tr>`;
       }
     }
 
     function renderTabelAdmin(dataArray) {
       if (dataArray.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" style="padding: 2rem; text-align: center; color: #64748b;">Data tidak ditemukan.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" style="padding: 2rem; text-align: center; color: #64748b;">Data tidak ditemukan.</td></tr>`;
         return;
       }
       let html = ''; let no = 1;
@@ -296,11 +299,10 @@
         html += `
           <tr style="border-bottom: 1px solid var(--border); background-color: ${bgRow};">
             <td style="padding: 0.85rem 1rem; text-align: center; color: #64748b;">${no++}</td>
-            <td style="padding: 0.85rem 1rem; font-weight: 600; color: var(--dark);">${data.nama}</td>
             <td style="padding: 0.85rem 1rem; color: #64748b;">${data.tanggal}</td>
-            <td style="padding: 0.85rem 1rem; color: #64748b;">${data.lokasi || '-'}</td>
+            <td style="padding: 0.85rem 1rem; font-weight: 600; color: var(--dark);">${ambilUraian(data) || '-'}</td>
+            <td style="padding: 0.85rem 1rem; color: #64748b;">${data.kategori || '-'}</td>
             <td style="padding: 0.85rem 1rem; font-weight: 600; color: #ef4444;">${formatRupiah(data.jumlah)}</td>
-            <td style="padding: 0.85rem 1rem; color: #64748b;">${data.keterangan || '-'}</td>
             <td style="padding: 0.85rem 1rem; text-align: center; white-space: nowrap;">
               <button type="button" class="btn-aksi btn-edit" data-id="${data.id}">Edit</button>
               <button type="button" class="btn-aksi btn-hapus" data-id="${data.id}">Hapus</button>
@@ -312,7 +314,7 @@
 
     inputCari.addEventListener('input', (e) => {
       const kata = e.target.value.toLowerCase();
-      const hasil = dataPengeluaranMaster.filter(item => item.nama.toLowerCase().includes(kata));
+      const hasil = dataPengeluaranMaster.filter(item => ambilUraian(item).toLowerCase().includes(kata));
       renderTabelAdmin(hasil);
     });
 
@@ -322,14 +324,13 @@
       btnSimpan.textContent = 'Menyimpan...';
 
       const editId = document.getElementById('edit-id').value;
-      const nama = document.getElementById('nama').value;
       const tanggal = document.getElementById('tanggal').value;
-      const lokasi = document.getElementById('lokasi').value;
-      const jumlah = document.getElementById('jumlah').value;
       const keterangan = document.getElementById('keterangan').value;
+      const kategori = document.getElementById('kategori').value;
+      const jumlah = document.getElementById('jumlah').value;
 
       try {
-        const dataPayload = { nama, tanggal, lokasi, jumlah: Number(jumlah), keterangan };
+        const dataPayload = { tanggal, keterangan, kategori, jumlah: Number(jumlah) };
 
         if (editId === "") {
           dataPayload.createdAt = serverTimestamp();
@@ -358,11 +359,10 @@
         const data = dataPengeluaranMaster.find(item => item.id === id);
         
         document.getElementById('edit-id').value = data.id;
-        document.getElementById('nama').value = data.nama;
         document.getElementById('tanggal').value = data.tanggal;
-        document.getElementById('lokasi').value = data.lokasi || "";
+        document.getElementById('keterangan').value = ambilUraian(data);
+        document.getElementById('kategori').value = data.kategori || "";
         document.getElementById('jumlah').value = data.jumlah;
-        document.getElementById('keterangan').value = data.keterangan || "";
         
         document.getElementById('form-title').textContent = "Edit Data Pengeluaran";
         btnSimpan.textContent = "Update Data Pengeluaran";

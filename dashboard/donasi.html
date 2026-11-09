@@ -152,27 +152,22 @@
     <!-- KONTEN UTAMA -->
     <main class="main-content">
       <div style="margin-bottom: 2rem;">
-        <h1 style="font-size: 1.5rem; color: var(--dark);">Manajemen Data Donasi</h1>
-        <p style="color: #64748b; font-size: 0.875rem;">Catat dan kelola pemasukan donasi yayasan.</p>
+        <h1 style="font-size: 1.5rem; color: var(--dark);">Manajemen Data Pendapatan dan Penerimaan</h1>
+        <p style="color: #64748b; font-size: 0.875rem;">Catat dan kelola Pendapatan dan Penerimaan yayasan.</p>
       </div>
 
       <div class="admin-layout">
         
         <!-- FORM INPUT DONASI -->
         <div class="card admin-form-container" style="background: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-          <h2 id="form-title" style="margin-bottom: 1rem; font-size: 1.25rem;">Tambah Donasi Baru</h2>
+          <h2 id="form-title" style="margin-bottom: 1rem; font-size: 1.25rem;">Tambah Pendapatan dan Penerimaan Baru</h2>
           
           <form id="form-donasi">
             <input type="hidden" id="edit-id" value="">
 
             <div class="form-field">
-              <label for="nama" style="font-size: 0.875rem; font-weight: 600; display:block; margin-bottom:0.25rem;">Nama Donatur / Sumber</label>
+              <label for="nama" style="font-size: 0.875rem; font-weight: 600; display:block; margin-bottom:0.25rem;">Penerimaan</label>
               <input type="text" id="nama" placeholder="Contoh: Hamba Allah" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 4px; margin-bottom: 1rem;">
-            </div>
-
-            <div class="form-field">
-              <label for="alamat" style="font-size: 0.875rem; font-weight: 600; display:block; margin-bottom:0.25rem;">Alamat</label>
-              <input type="text" id="alamat" placeholder="Contoh: Cipicung" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 4px; margin-bottom: 1rem;">
             </div>
 
             <div class="form-field">
@@ -210,7 +205,7 @@
         <div class="card" id="card-riwayat" style="background: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow: hidden;">
           <div style="padding: 1.5rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
             <div>
-              <h3 style="margin: 0; font-size: 1.1rem; color: var(--dark);">Riwayat Donasi</h3>
+              <h3 style="margin: 0; font-size: 1.1rem; color: var(--dark);">Riwayat Pendapatan dan Penerimaan</h3>
             </div>
             <div style="flex-grow: 1; max-width: 300px; width: 100%;">
               <input type="text" id="input-cari" placeholder="Cari nama donatur..." style="width: 100%; padding: 0.6rem 1rem; border: 1px solid var(--border); border-radius: 4px; font-size: 0.875rem;">
@@ -223,16 +218,15 @@
               <thead>
                 <tr style="background-color: #f1f5f9; color: var(--dark);">
                   <th style="padding: 1rem; text-align: center; width: 50px;">No</th>
-                  <th style="padding: 1rem;">Nama Donatur</th>
-                  <th style="padding: 1rem;">Alamat</th>
                   <th style="padding: 1rem;">Tanggal</th>
-                  <th style="padding: 1rem;">Jumlah</th>
-                  <th style="padding: 1rem;">Jenis Donasi</th>
+                  <th style="padding: 1rem;">Penerimaan</th>
+                  <th style="padding: 1rem;">Kategori</th>
+                  <th style="padding: 1rem;">Jumlah Rp</th>
                   <th style="padding: 1rem; text-align: center;">Aksi</th>
                 </tr>
               </thead>
               <tbody id="tabel-admin-body">
-                <tr><td colspan="7" style="padding: 2rem; text-align: center;">Memuat data...</td></tr>
+                <tr><td colspan="6" style="padding: 2rem; text-align: center;">Memuat data...</td></tr>
               </tbody>
             </table>
           </div>
@@ -284,6 +278,12 @@
       return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka);
     };
 
+    const formatTanggal = (tgl) => {
+  if (!tgl) return '-';
+  const [thn, bln, tg] = tgl.split('-');
+  return `${tg}/${bln}/${thn}`;
+};
+
     async function loadDataAdmin() {
       try {
         const q = query(collection(db, 'donations'));
@@ -291,7 +291,7 @@
 
         if (snap.empty) {
           dataDonasiMaster = []; pageContainer.innerHTML = '';
-          tbody.innerHTML = `<tr><td colspan="7" style="padding: 2rem; text-align: center; color: #64748b;">Belum ada data donasi.</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="6" style="padding: 2rem; text-align: center; color: #64748b;">Belum ada data donasi.</td></tr>`;
           return;
         }
 
@@ -305,14 +305,14 @@
 
       } catch (err) {
         console.error(err);
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: red;">Gagal memuat data.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: red;">Gagal memuat data.</td></tr>`;
       }
     }
 
     function renderTabelAdmin(dataArray, page = 1) {
       dataTampil = dataArray;
       if (dataArray.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" style="padding: 2rem; text-align: center; color: #64748b;">Data tidak ditemukan.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" style="padding: 2rem; text-align: center; color: #64748b;">Data tidak ditemukan.</td></tr>`;
         pageContainer.innerHTML = '';
         return;
       }
@@ -328,11 +328,10 @@
         html += `
           <tr style="border-bottom: 1px solid var(--border); background-color: ${bgRow};">
             <td style="padding: 0.85rem 1rem; text-align: center; color: #64748b;">${no++}</td>
+            <td style="padding: 0.85rem 1rem; color: #64748b;">${formatTanggal(data.tanggal)}</td>
             <td style="padding: 0.85rem 1rem; font-weight: 600; color: var(--dark);">${data.nama}</td>
-            <td style="padding: 0.85rem 1rem; color: #64748b;">${data.alamat || data.kota || '-'}</td>
-            <td style="padding: 0.85rem 1rem; color: #64748b;">${data.tanggal}</td>
-            <td style="padding: 0.85rem 1rem; font-weight: 600; color: #16a34a;">${formatRupiah(data.jumlah)}</td>
             <td style="padding: 0.85rem 1rem; color: #64748b;">${data.kategori || '-'}</td>
+            <td style="padding: 0.85rem 1rem; font-weight: 600; color: #16a34a;">${formatRupiah(data.jumlah)}</td>
             <td style="padding: 0.85rem 1rem; text-align: center; white-space: nowrap;">
               <button type="button" class="btn-aksi btn-edit" data-id="${data.id}">Edit</button>
               <button type="button" class="btn-aksi btn-hapus" data-id="${data.id}">Hapus</button>
@@ -384,13 +383,12 @@
 
       const editId = document.getElementById('edit-id').value;
       const nama = document.getElementById('nama').value;
-      const alamat = document.getElementById('alamat').value;
       const tanggal = document.getElementById('tanggal').value;
       const jumlah = document.getElementById('jumlah').value;
       const kategori = document.getElementById('kategori').value;
 
       try {
-        const dataPayload = { nama, alamat, tanggal, jumlah: Number(jumlah), kategori };
+        const dataPayload = { nama, tanggal, jumlah: Number(jumlah), kategori };
 
         if (editId === "") {
           dataPayload.createdAt = serverTimestamp();
@@ -420,7 +418,6 @@
         
         document.getElementById('edit-id').value = data.id;
         document.getElementById('nama').value = data.nama;
-        document.getElementById('alamat').value = data.alamat || data.kota || "";
         document.getElementById('tanggal').value = data.tanggal;
         document.getElementById('jumlah').value = data.jumlah;
         document.getElementById('kategori').value = data.kategori || "";
