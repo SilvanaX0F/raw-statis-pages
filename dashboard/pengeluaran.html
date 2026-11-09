@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kelola Pengeluaran | Dashboard YBU Padang Wulan</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    /* === STYLING DASAR === */
+    :root {
+      --sidebar-width: 260px;
+      --primary: #16a34a;
+      --dark: #1e293b;
+      --bg: #f8fafc;
+      --text: #334155;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+    
+    body { display: none; background-color: var(--bg); color: var(--text); overflow-x: hidden; }
+    
+    .dashboard-layout { display: flex; min-height: 100vh; width: 100%; }
+    
+    /* === MOBILE HEADER === */
+    .mobile-header {
+      display: none; position: fixed; top: 0; left: 0; right: 0;
+      background: white; height: 60px; padding: 0 1.5rem;
+      align-items: center; justify-content: space-between;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1); z-index: 999;
+    }
+    .hamburger-btn {
+      background: none; border: none; cursor: pointer; color: var(--dark);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .hamburger-btn svg { width: 28px; height: 28px; }
+    
+    /* === SIDEBAR KIRI === */
+    .sidebar {
+      width: var(--sidebar-width); background-color: var(--dark); color: white;
+      display: flex; flex-direction: column; position: fixed; height: 100vh;
+      overflow-y: auto; z-index: 1000; transition: transform 0.3s ease;
+    }
+    .sidebar-brand { padding: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); text-align: center; }
+    .sidebar-brand img { max-width: 100%; height: auto; }
+    .sidebar-nav { flex-grow: 1; padding: 1.5rem 0; }
+    .sidebar-nav a {
+      display: block; padding: 0.85rem 1.5rem; color: #cbd5e1;
+      text-decoration: none; font-weight: 500; transition: all 0.2s;
+    }
+    .sidebar-nav a:hover { background-color: rgba(255,255,255,0.05); color: white; }
+    .sidebar-nav a.active { background-color: var(--primary); color: white; border-left: 4px solid #bbf7d0; }
+    .sidebar-footer { padding: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1); }
+    .btn-logout {
+      width: 100%; padding: 0.75rem; background: transparent; border: 1px solid #ef4444; 
+      color: #ef4444; border-radius: 6px; cursor: pointer; font-weight: 600; transition: 0.2s;
+    }
+    .btn-logout:hover { background: #ef4444; color: white; }
+
+    /* OVERLAY GELAP UNTUK MOBILE */
+    .sidebar-overlay {
+      display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5); z-index: 995; opacity: 0; transition: opacity 0.3s ease;
+    }
+
+    /* === AREA KONTEN UTAMA === */
+    .main-content {
+      flex-grow: 1; margin-left: var(--sidebar-width); padding: 2rem;
+      transition: margin 0.3s ease; width: calc(100% - var(--sidebar-width));
+    }
+    .admin-layout { display: grid; grid-template-columns: 1fr; gap: 2rem; align-items: start; }
+    .admin-form-container { padding: 1.5rem; }
+    
+    @media (min-width: 992px) { 
+      .admin-layout { grid-template-columns: 350px 1fr; } 
+      .admin-form-container { position: sticky; top: 2rem; } 
+    }
+
+    /* Tombol Khusus */
+    .btn-aksi { padding: 0.35rem 0.65rem; font-size: 0.75rem; font-weight: 600; border: none; border-radius: 4px; cursor: pointer; display: inline-flex; align-items: center; transition: opacity 0.2s; }
+    .btn-aksi:hover { opacity: 0.8; }
+    .btn-edit { background: #38BDF8; color: white; margin-right: 0.25rem; }
+    .btn-hapus { background: #EF4444; color: white; }
+
+    /* ========================================= */
+    /* RESPONSIVE DESIGN (Layar HP < 768px)      */
+    /* ========================================= */
+    @media (max-width: 768px) {
+      .mobile-header { display: flex; }
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.active { transform: translateX(0); }
+      .main-content {
+        margin-left: 0; width: 100%; padding: 1rem; padding-top: 80px; 
+      }
+      .admin-layout { grid-template-columns: 1fr; }
+      .sidebar-overlay.active { display: block; opacity: 1; }
+      /* Perbesar area input untuk HP */
+      .admin-form-container input, .admin-form-container textarea { padding: 0.85rem !important; }
+      .admin-form-container button { padding: 0.85rem !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER KHUSUS MOBILE -->
+  <div class="mobile-header">
+    <img src="../images/log.png" alt="Logo" style="height: 30px;">
+    <button class="hamburger-btn" id="btn-toggle-menu" aria-label="Buka Menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+  </div>
+
+  <!-- OVERLAY GELAP -->
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <div class="dashboard-layout">
+    
+    <!-- SIDEBAR NAVIGASI -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <img src="../images/logo-footer-preview.png" alt="Yayasan Padang Wulan">
+      </div>
+      <nav class="sidebar-nav">
+        <a href="index.html">Ringkasan Utama</a>
+        <a href="donasi.html">Kelola Donasi</a>
+        <a href="pengeluaran.html" class="active">Kelola Pengeluaran</a>
+        <a href="berita.html">Kelola Berita</a>
+        <a href="galeri.html">Kelola Galeri</a>
+      </nav>
+      <div class="sidebar-footer">
+        <button type="button" class="btn-logout" onclick="window.prosesLogout()">Logout Akun</button>
+        <div style="text-align: center; margin-top: 1rem; font-size: 0.75rem; color: #94a3b8; font-weight: 500; letter-spacing: 1px;">By : Cip</div>
+      </div>
+    </aside>
+
+    <!-- KONTEN UTAMA -->
+    <main class="main-content">
+      <div style="margin-bottom: 2rem;">
+        <h1 style="font-size: 1.5rem; color: var(--dark);">Manajemen Data Pengeluaran</h1>
+        <p style="color: #64748b; font-size: 0.875rem;">Catat dan kelola semua biaya operasional yayasan.</p>
+      </div>
+
+      <div class="admin-layout">
+        
+        <!-- FORM INPUT PENGELUARAN -->
+        <div class="card admin-form-container" style="background: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+          <h2 id="form-title" style="margin-bottom: 1rem; font-size: 1.25rem;">Catat Pengeluaran Baru</h2>
+          
+          <form id="form-pengeluaran">
+            <input type="hidden" id="edit-id" value="">
+
+            <div class="form-field">
+              <label for="nama" style="font-size: 0.875rem; font-weight: 600; display:block; margin-bottom:0.25rem;">Nama / Jenis Pengeluaran</label>
+              <input type="text" id="nama" placeholder="Contoh: Pembelian Sembako" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 4px; margin-bottom: 1rem;">
+            </div>
+
+            <div class="form-field">
+              <label for="tanggal" style="font-size: 0.875rem; font-weight: 600; display:block; margin-bottom:0.25rem;">Tanggal Kegiatan</label>
+              <input type="date" id="tanggal" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 4px; margin-bottom: 1rem;">
+            </div>
+            
+            <div class="form-field">
+              <label for="lokasi" style="font-size: 0.875rem; font-weight: 600; display:block; margin-bottom:0.25rem;">Lokasi (Opsional)</label>
+              <input type="text" id="lokasi" placeholder="Contoh: Dusun Cipicung" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 4px; margin-bottom: 1rem;">
+            </div>
+
+            <div class="form-field">
+              <label for="jumlah" style="font-size: 0.875rem; font-weight: 600; display:block; margin-bottom:0.25rem;">Total Biaya (Rp)</label>
+              <input type="number" id="jumlah" placeholder="Contoh: 1500000" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 4px; margin-bottom: 1rem;">
+            </div>
+
+            <div class="form-field">
+              <label for="keterangan" style="font-size: 0.875rem; font-weight: 600; display:block; margin-bottom:0.25rem;">Keterangan Rinci (Opsional)</label>
+              <textarea id="keterangan" placeholder="Contoh: Biaya transportasi dan konsumsi" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 4px; margin-bottom: 1rem; font-family: inherit; min-height: 80px; resize: vertical;"></textarea>
+            </div>
+
+            <button type="submit" id="btn-simpan" class="btn btn-primary" style="width: 100%; padding: 0.75rem; background: #ef4444; color: white; border: none; border-radius: 4px; font-weight: 600; cursor: pointer;">
+              Simpan Data Pengeluaran
+            </button>
+            <button type="button" id="btn-batal" class="btn btn-secondary" style="width: 100%; margin-top: 0.5rem; display: none; padding: 0.75rem; background: #e2e8f0; color: var(--dark); border: none; border-radius: 4px; font-weight: 600; cursor: pointer;">
+              Batal Edit
+            </button>
+          </form>
+          <p id="pesan-status" style="margin-top: 1rem; text-align: center; font-size: 0.875rem; font-weight: 600;"></p>
+        </div>
+
+        <!-- TABEL DATA PENGELUARAN -->
+        <div class="card" style="background: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow: hidden;">
+          <div style="padding: 1.5rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+            <div>
+              <h3 style="margin: 0; font-size: 1.1rem; color: var(--dark);">Riwayat Pengeluaran</h3>
+            </div>
+            <div style="flex-grow: 1; max-width: 300px; width: 100%;">
+              <input type="text" id="input-cari" placeholder="Cari nama pengeluaran..." style="width: 100%; padding: 0.6rem 1rem; border: 1px solid var(--border); border-radius: 4px; font-size: 0.875rem;">
+            </div>
+          </div>
+          
+          <!-- Area scroll horizontal khusus tabel -->
+          <div style="overflow-x: auto; width: 100%;">
+            <table style="width: 100%; min-width: 800px; border-collapse: collapse; text-align: left; font-size: 0.875rem;">
+              <thead>
+                <tr style="background-color: #f1f5f9; color: var(--dark);">
+                  <th style="padding: 1rem; text-align: center; width: 50px;">No</th>
+                  <th style="padding: 1rem;">Nama Pengeluaran</th>
+                  <th style="padding: 1rem;">Tanggal</th>
+                  <th style="padding: 1rem;">Lokasi</th>
+                  <th style="padding: 1rem;">Jumlah</th>
+                  <th style="padding: 1rem;">Keterangan</th>
+                  <th style="padding: 1rem; text-align: center;">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="tabel-admin-body">
+                <tr><td colspan="7" style="padding: 2rem; text-align: center;">Memuat data...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- LOGIKA MENU MOBILE (HAMBURGER) -->
+  <script>
+    const btnToggle = document.getElementById('btn-toggle-menu');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+
+    function toggleMenu() {
+      sidebar.classList.toggle('active');
+      overlay.classList.toggle('active');
+    }
+
+    btnToggle.addEventListener('click', toggleMenu);
+    overlay.addEventListener('click', toggleMenu); // Tutup saat overlay di-klik
+  </script>
+
+  <script type="module" src="js/auth-guard.js"></script>
+
+  <!-- LOGIKA CRUD FIREBASE (Koleksi 'expenses') -->
+  <script type="module">
+    import { db, collection, addDoc, getDocs, query, serverTimestamp, doc, updateDoc, deleteDoc } from '../js/firebase-config.js';
+
+    const form = document.getElementById('form-pengeluaran');
+    const tbody = document.getElementById('tabel-admin-body');
+    const pesanStatus = document.getElementById('pesan-status');
+    const btnSimpan = document.getElementById('btn-simpan');
+    const btnBatal = document.getElementById('btn-batal');
+    const inputCari = document.getElementById('input-cari');
+    
+    let dataPengeluaranMaster = []; 
+
+    const formatRupiah = (angka) => {
+      return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka);
+    };
+
+    async function loadDataAdmin() {
+      try {
+        const q = query(collection(db, 'expenses'));
+        const snap = await getDocs(q);
+
+        if (snap.empty) {
+          tbody.innerHTML = `<tr><td colspan="7" style="padding: 2rem; text-align: center; color: #64748b;">Belum ada data pengeluaran.</td></tr>`;
+          return;
+        }
+
+        dataPengeluaranMaster = []; 
+        snap.forEach(doc => {
+          const data = doc.data(); data.id = doc.id; dataPengeluaranMaster.push(data);
+        });
+
+        // Urutkan berdasarkan tanggal terbaru
+        dataPengeluaranMaster.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
+        renderTabelAdmin(dataPengeluaranMaster);
+
+      } catch (err) {
+        console.error(err);
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: red;">Gagal memuat data.</td></tr>`;
+      }
+    }
+
+    function renderTabelAdmin(dataArray) {
+      if (dataArray.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="padding: 2rem; text-align: center; color: #64748b;">Data tidak ditemukan.</td></tr>`;
+        return;
+      }
+      let html = ''; let no = 1;
+      dataArray.forEach((data) => {
+        const bgRow = no % 2 === 0 ? '#f8fafc' : '#ffffff';
+        html += `
+          <tr style="border-bottom: 1px solid var(--border); background-color: ${bgRow};">
+            <td style="padding: 0.85rem 1rem; text-align: center; color: #64748b;">${no++}</td>
+            <td style="padding: 0.85rem 1rem; font-weight: 600; color: var(--dark);">${data.nama}</td>
+            <td style="padding: 0.85rem 1rem; color: #64748b;">${data.tanggal}</td>
+            <td style="padding: 0.85rem 1rem; color: #64748b;">${data.lokasi || '-'}</td>
+            <td style="padding: 0.85rem 1rem; font-weight: 600; color: #ef4444;">${formatRupiah(data.jumlah)}</td>
+            <td style="padding: 0.85rem 1rem; color: #64748b;">${data.keterangan || '-'}</td>
+            <td style="padding: 0.85rem 1rem; text-align: center; white-space: nowrap;">
+              <button type="button" class="btn-aksi btn-edit" data-id="${data.id}">Edit</button>
+              <button type="button" class="btn-aksi btn-hapus" data-id="${data.id}">Hapus</button>
+            </td>
+          </tr>`;
+      });
+      tbody.innerHTML = html;
+    }
+
+    inputCari.addEventListener('input', (e) => {
+      const kata = e.target.value.toLowerCase();
+      const hasil = dataPengeluaranMaster.filter(item => item.nama.toLowerCase().includes(kata));
+      renderTabelAdmin(hasil);
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      btnSimpan.disabled = true;
+      btnSimpan.textContent = 'Menyimpan...';
+
+      const editId = document.getElementById('edit-id').value;
+      const nama = document.getElementById('nama').value;
+      const tanggal = document.getElementById('tanggal').value;
+      const lokasi = document.getElementById('lokasi').value;
+      const jumlah = document.getElementById('jumlah').value;
+      const keterangan = document.getElementById('keterangan').value;
+
+      try {
+        const dataPayload = { nama, tanggal, lokasi, jumlah: Number(jumlah), keterangan };
+
+        if (editId === "") {
+          dataPayload.createdAt = serverTimestamp();
+          await addDoc(collection(db, 'expenses'), dataPayload);
+          pesanStatus.style.color = 'green'; pesanStatus.textContent = '✅ Pengeluaran berhasil dicatat!';
+        } else {
+          await updateDoc(doc(db, 'expenses', editId), dataPayload);
+          pesanStatus.style.color = 'green'; pesanStatus.textContent = '✅ Data pengeluaran diperbarui!';
+          resetForm();
+        }
+
+        form.reset(); loadDataAdmin();
+        setTimeout(() => { pesanStatus.textContent = ''; }, 3000);
+
+      } catch (error) {
+        pesanStatus.style.color = 'red'; pesanStatus.textContent = '❌ Gagal: ' + error.message;
+      } finally {
+        btnSimpan.disabled = false;
+        btnSimpan.textContent = document.getElementById('edit-id').value === "" ? 'Simpan Data Pengeluaran' : 'Update Data Pengeluaran';
+      }
+    });
+
+    tbody.addEventListener('click', async (e) => {
+      if (e.target.closest('.btn-edit')) {
+        const id = e.target.closest('.btn-edit').getAttribute('data-id');
+        const data = dataPengeluaranMaster.find(item => item.id === id);
+        
+        document.getElementById('edit-id').value = data.id;
+        document.getElementById('nama').value = data.nama;
+        document.getElementById('tanggal').value = data.tanggal;
+        document.getElementById('lokasi').value = data.lokasi || "";
+        document.getElementById('jumlah').value = data.jumlah;
+        document.getElementById('keterangan').value = data.keterangan || "";
+        
+        document.getElementById('form-title').textContent = "Edit Data Pengeluaran";
+        btnSimpan.textContent = "Update Data Pengeluaran";
+        btnBatal.style.display = "block";
+        window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll otomatis ke atas saat mau mengedit
+      }
+
+      if (e.target.closest('.btn-hapus')) {
+        const id = e.target.closest('.btn-hapus').getAttribute('data-id');
+        if (confirm('Yakin ingin menghapus riwayat pengeluaran ini?')) {
+          try {
+            await deleteDoc(doc(db, 'expenses', id)); 
+            loadDataAdmin();
+          } catch (error) { alert('Gagal menghapus data!'); }
+        }
+      }
+    });
+
+    btnBatal.addEventListener('click', resetForm);
+    
+    function resetForm() {
+      form.reset(); 
+      document.getElementById('edit-id').value = "";
+      document.getElementById('form-title').textContent = "Catat Pengeluaran Baru";
+      btnSimpan.textContent = "Simpan Data Pengeluaran"; 
+      btnBatal.style.display = "none";
+    }
+
+    loadDataAdmin();
+  </script>
+</body>
+</html>

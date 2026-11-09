@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Admin | Yayasan Padang Wulan</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* === STYLING DASAR === */
+    :root {
+      --sidebar-width: 260px;
+      --primary: #16a34a;
+      --dark: #1e293b;
+      --bg: #f8fafc;
+      --text: #334155;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+    
+    body { display: none; background-color: var(--bg); color: var(--text); overflow-x: hidden; }
+    
+    .dashboard-layout { display: flex; min-height: 100vh; width: 100%; }
+    
+    /* === MOBILE HEADER (Sembunyi di Desktop) === */
+    .mobile-header {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      background: white;
+      height: 60px;
+      padding: 0 1.5rem;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      z-index: 999;
+    }
+    .hamburger-btn {
+      background: none; border: none; cursor: pointer; color: var(--dark);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .hamburger-btn svg { width: 28px; height: 28px; }
+    
+    /* === SIDEBAR KIRI === */
+    .sidebar {
+      width: var(--sidebar-width);
+      background-color: var(--dark);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 1000;
+      transition: transform 0.3s ease;
+    }
+    .sidebar-brand { padding: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); text-align: center; }
+    .sidebar-brand img { max-width: 100%; height: auto; }
+    
+    .sidebar-nav { flex-grow: 1; padding: 1.5rem 0; }
+    .sidebar-nav a {
+      display: block; padding: 0.85rem 1.5rem; color: #cbd5e1;
+      text-decoration: none; font-weight: 500; transition: all 0.2s;
+    }
+    .sidebar-nav a:hover { background-color: rgba(255,255,255,0.05); color: white; }
+    .sidebar-nav a.active { background-color: var(--primary); color: white; border-left: 4px solid #bbf7d0; }
+    
+    .sidebar-footer { padding: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1); }
+    .btn-logout {
+      width: 100%; padding: 0.75rem; background: transparent; border: 1px solid #ef4444; 
+      color: #ef4444; border-radius: 6px; cursor: pointer; font-weight: 600; transition: 0.2s;
+    }
+    .btn-logout:hover { background: #ef4444; color: white; }
+
+    /* OVERLAY GELAP UNTUK MOBILE */
+    .sidebar-overlay {
+      display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5); z-index: 995; opacity: 0; transition: opacity 0.3s ease;
+    }
+
+    /* === AREA KONTEN UTAMA === */
+    .main-content {
+      flex-grow: 1;
+      margin-left: var(--sidebar-width);
+      padding: 2rem;
+      transition: margin 0.3s ease;
+      width: calc(100% - var(--sidebar-width));
+    }
+    .top-header { margin-bottom: 2rem; }
+    
+    /* === KARTU RINGKASAN === */
+    .grid-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+    .card { background: white; padding: 2rem 1.5rem; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); position: relative; overflow: hidden; }
+    .card::before { content: ""; position: absolute; top: 0; left: 0; width: 4px; height: 100%; }
+    .card.donasi::before { background-color: #16a34a; }
+    .card.pengeluaran::before { background-color: #ef4444; }
+    .card.saldo::before { background-color: #0284c7; }
+    
+    .card h3 { font-size: 0.875rem; color: #64748b; font-weight: 700; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px; }
+    .card .value { font-size: 2rem; font-weight: 800; color: var(--dark); display: flex; align-items: center; gap: 0.5rem; }
+    
+    /* Animasi Loading Spinner */
+    .spinner {
+      width: 20px; height: 20px; border: 3px solid rgba(0,0,0,0.1); border-radius: 50%;
+      border-top-color: currentColor; animation: spin 1s ease-in-out infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ========================================= */
+    /* RESPONSIVE DESIGN (Layar HP < 768px)      */
+    /* ========================================= */
+    @media (max-width: 768px) {
+      .mobile-header { display: flex; }
+      
+      /* Sidebar disembunyikan di luar layar kiri */
+      .sidebar { transform: translateX(-100%); }
+      
+      /* Kelas active untuk memunculkan sidebar */
+      .sidebar.active { transform: translateX(0); }
+      
+      /* Konten utama melebar penuh dan turun sedikit agar tidak tertutup header */
+      .main-content {
+        margin-left: 0;
+        width: 100%;
+        padding: 1.5rem;
+        padding-top: 80px; 
+      }
+      
+      /* Grid menjadi 1 kolom yang menumpuk ke bawah */
+      .grid-summary { grid-template-columns: 1fr; }
+      
+      /* Overlay aktif */
+      .sidebar-overlay.active { display: block; opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER KHUSUS MOBILE -->
+  <div class="mobile-header">
+    <img src="../images/log.png" alt="Logo" style="height: 30px;">
+    <button class="hamburger-btn" id="btn-toggle-menu" aria-label="Buka Menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+  </div>
+
+  <!-- OVERLAY GELAP -->
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <div class="dashboard-layout">
+    
+    <!-- SIDEBAR NAVIGASI -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <img src="../images/logo-footer-preview.png" alt="Yayasan Padang Wulan">
+      </div>
+      
+      <nav class="sidebar-nav">
+        <a href="index.html" class="active">Ringkasan Utama</a>
+        <a href="donasi.html">Kelola Donasi</a>
+        <a href="pengeluaran.html">Kelola Pengeluaran</a>
+        <a href="berita.html">Kelola Berita</a>
+        <a href="galeri.html">Kelola Galeri</a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button type="button" class="btn-logout" onclick="window.prosesLogout()">Logout Akun</button>
+        <div style="text-align: center; margin-top: 1rem; font-size: 0.75rem; color: #94a3b8; font-weight: 500; letter-spacing: 1px;">By : Cip</div>
+      </div>
+    </aside>
+
+    <!-- KONTEN UTAMA -->
+    <main class="main-content">
+      <div class="top-header">
+        <div>
+          <h1 style="font-size: 1.5rem;">Selamat Datang, Admin!</h1>
+          <p style="color: #64748b; font-size: 0.875rem; margin-top: 0.25rem;">Berikut adalah ringkasan keuangan sistem Yayasan Padang Wulan.</p>
+        </div>
+      </div>
+
+      <!-- Ringkasan Statistik -->
+      <div class="grid-summary">
+        <div class="card donasi">
+          <h3>Total Donasi Masuk</h3>
+          <div class="value" id="total-donasi" style="color: #16a34a;">
+            <div class="spinner"></div>
+          </div>
+        </div>
+        
+        <div class="card pengeluaran">
+          <h3>Total Pengeluaran</h3>
+          <div class="value" id="total-pengeluaran" style="color: #ef4444;">
+            <div class="spinner"></div>
+          </div>
+        </div>
+        
+        <div class="card saldo">
+          <h3>Saldo Kas Saat Ini</h3>
+          <div class="value" id="saldo-kas" style="color: #0284c7;">
+            <div class="spinner"></div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- LOGIKA MENU MOBILE (HAMBURGER) -->
+  <script>
+    const btnToggle = document.getElementById('btn-toggle-menu');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+
+    function toggleMenu() {
+      sidebar.classList.toggle('active');
+      overlay.classList.toggle('active');
+    }
+
+    btnToggle.addEventListener('click', toggleMenu);
+    
+    // Tutup menu jika area gelap di luar menu ditekan
+    overlay.addEventListener('click', toggleMenu);
+  </script>
+
+  <!-- PANGGIL SCRIPT PENJAGA KEAMANAN -->
+  <script type="module" src="js/auth-guard.js"></script>
+
+  <!-- LOGIKA PENGHITUNGAN REALTIME -->
+  <script type="module">
+    import { db, collection, getDocs } from '../js/firebase-config.js';
+
+    const formatRupiah = (angka) => {
+      return new Intl.NumberFormat('id-ID', {
+        style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0
+      }).format(angka);
+    };
+
+    async function hitungRingkasanKeuangan() {
+      const elDonasi = document.getElementById('total-donasi');
+      const elPengeluaran = document.getElementById('total-pengeluaran');
+      const elSaldo = document.getElementById('saldo-kas');
+
+      try {
+        let totalDonasi = 0;
+        const donasiSnap = await getDocs(collection(db, 'donations'));
+        donasiSnap.forEach(doc => { totalDonasi += Number(doc.data().jumlah); });
+
+        let totalPengeluaran = 0;
+        const pengeluaranSnap = await getDocs(collection(db, 'expenses'));
+        pengeluaranSnap.forEach(doc => { totalPengeluaran += Number(doc.data().jumlah); });
+
+        const saldo = totalDonasi - totalPengeluaran;
+
+        elDonasi.textContent = formatRupiah(totalDonasi);
+        elPengeluaran.textContent = formatRupiah(totalPengeluaran);
+        elSaldo.textContent = formatRupiah(saldo);
+
+      } catch (error) {
+        console.error("Gagal mengambil data ringkasan:", error);
+        elDonasi.innerHTML = `<span style="font-size:1rem; color:red;">Gagal memuat</span>`;
+        elPengeluaran.innerHTML = `<span style="font-size:1rem; color:red;">Gagal memuat</span>`;
+        elSaldo.innerHTML = `<span style="font-size:1rem; color:red;">Gagal memuat</span>`;
+      }
+    }
+
+    hitungRingkasanKeuangan();
+  </script>
+
+</body>
+</html>

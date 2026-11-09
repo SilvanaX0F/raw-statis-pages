@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Laporan Donasi | Yayasan Padang Wulan Cipicung</title>
-  <meta name="description" content="Laporan transparansi keuangan dan donasi masuk Yayasan Padang Wulan Cipicung.">
+  <title>Laporan Keuangan | Yayasan Padang Wulan Cipicung</title>
+  <meta name="description" content="Laporan transparansi keuangan, donasi masuk, dan pengeluaran Yayasan Padang Wulan Cipicung.">
   <link rel="icon" href="favicon.ico" type="image/x-icon">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,12 +18,9 @@
     <a class="skip-link" href="#main">Langsung ke konten utama</a>
     <nav class="navbar" aria-label="Navigasi utama">
       <div class="navbar__inner">
-        
-        <!-- Logo dikembalikan identik dengan halaman lain -->
         <a href="index.html" class="navbar__brand" aria-label="Yayasan Padang Wulan Cipicung — Beranda">
           <img src="images/logo-header.png" alt="Logo Yayasan Padang Wulan Cipicung" width="160" height="40">
         </a>
-
         <div class="navbar__menu" id="navbar-menu" data-nav-menu>
           <ul class="navbar__links">
             <li><a href="index.html">Beranda</a></li>
@@ -39,8 +36,6 @@
             <a href="donasi.html" class="btn btn-primary">Donasi</a>
           </div>
         </div>
-        
-        <!-- Tombol Hamburger Mobile -->
         <button type="button" class="navbar__toggle" data-nav-toggle aria-expanded="false" aria-controls="navbar-menu" aria-label="Buka menu navigasi">
           <span></span><span></span><span></span>
         </button>
@@ -50,8 +45,8 @@
 
   <main id="main">
 
-    <!-- ================= LAPORAN DONASI ================= -->
-    <section class="section" id="laporan-donasi">
+    <!-- ================= LAPORAN DONASI MASUK ================= -->
+    <section class="section" id="laporan-donasi" style="padding-bottom: 2rem;">
       <div class="container">
         <div class="flex-between mb-lg" style="align-items: flex-end; flex-wrap: wrap; gap: 1rem;">
           <div class="section-heading" style="margin-bottom: 0;">
@@ -74,12 +69,12 @@
           <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: var(--fs-sm);">
             <thead>
               <tr style="background-color: var(--dark); color: var(--white);">
-                <th class="donasi-th" style="text-align: center; width: 60px;">No</th>
-                <th class="donasi-th">Nama Donatur</th>
-                <th class="donasi-th">Alamat</th>
-                <th class="donasi-th">Tanggal</th>
-                <th class="donasi-th" style="text-align: center;">Kategori</th>
-                <th class="donasi-th" style="text-align: right;">Jumlah (Rp)</th>
+                <th class="tabel-th" style="text-align: center; width: 60px;">No</th>
+                <th class="tabel-th">Nama Donatur</th>
+                <th class="tabel-th">Alamat</th>
+                <th class="tabel-th">Tanggal</th>
+                <th class="tabel-th" style="text-align: center;">Kategori</th>
+                <th class="tabel-th" style="text-align: right;">Jumlah (Rp)</th>
               </tr>
             </thead>
             <tbody id="tabel-donasi-body">
@@ -91,27 +86,67 @@
               </tr>
             </tbody>
           </table>
-          
-          <!-- Container untuk Paginasi (Navigasi Halaman) -->
-          <div id="pagination-container" style="padding: 1rem; display: flex; justify-content: center; gap: 0.5rem; border-top: 1px solid var(--border); background: var(--white);">
-            <!-- Tombol angka halaman otomatis via JS -->
+          <div id="pagination-donasi" style="padding: 1rem; display: flex; justify-content: center; gap: 0.5rem; border-top: 1px solid var(--border); background: var(--white);"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= LAPORAN PENGELUARAN KAS ================= -->
+    <section class="section" id="laporan-pengeluaran" style="padding-top: 2rem; background-color: var(--light);">
+      <div class="container">
+        <div class="flex-between mb-lg" style="align-items: flex-end; flex-wrap: wrap; gap: 1rem;">
+          <div class="section-heading" style="margin-bottom: 0;">
+            <span class="section-heading__eyebrow">Alokasi Dana</span>
+            <h2>Laporan Pengeluaran Kas</h2>
           </div>
+        </div>
+
+        <!-- Tombol Filter Kategori Pengeluaran -->
+        <div class="gallery-filter" id="filter-pengeluaran">
+          <button type="button" class="is-active" data-filter="Semua">Semua Pengeluaran</button>
+          <button type="button" data-filter="Operasional Yayasan">Operasional</button>
+          <button type="button" data-filter="Pembangunan Fisik">Pembangunan</button>
+          <button type="button" data-filter="Sosial & Kemanusiaan">Sosial</button>
+          <button type="button" data-filter="Kegiatan Keagamaan">Keagamaan</button>
+        </div>
+
+        <!-- Tabel Pengeluaran -->
+        <div class="card" style="overflow-x: auto; padding: 0; border-radius: var(--radius-md); box-shadow: var(--shadow-sm);">
+          <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: var(--fs-sm);">
+            <thead>
+              <tr style="background-color: var(--dark); color: var(--white);">
+                <th class="tabel-th" style="text-align: center; width: 60px;">No</th>
+                <th class="tabel-th">Keterangan</th>
+                <th class="tabel-th">Lokasi</th>
+                <th class="tabel-th">Tanggal</th>
+                <th class="tabel-th" style="text-align: center;">Kategori</th>
+                <th class="tabel-th" style="text-align: right;">Jumlah (Rp)</th>
+              </tr>
+            </thead>
+            <tbody id="tabel-pengeluaran-body">
+              <tr>
+                <td colspan="6" style="padding: 3rem; text-align: center; color: var(--muted);">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 24px; height: 24px; margin-bottom: 0.5rem; animation: spin 1s linear infinite;"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg><br>
+                  Memuat data pengeluaran dari sistem...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div id="pagination-pengeluaran" style="padding: 1rem; display: flex; justify-content: center; gap: 0.5rem; border-top: 1px solid var(--border); background: var(--white);"></div>
         </div>
       </div>
     </section>
 
   </main>
 
+  <!-- ================= FOOTER ================= -->
   <footer class="footer">
     <div class="container">
       <div class="footer__grid">
-        <!-- Kolom 1: Brand & Deskripsi -->
         <div class="footer__brand">
           <img src="images/logo-footer.png" alt="Logo Yayasan Bina Umat Padang Wulan Cipicung" width="150" height="32">
           <p>Yayasan Bina Umat Padang Wulan Cipicung — berkedudukan di Kabupaten Pangandaran, berfokus pada bidang sosial, kemanusiaan, dan keagamaan untuk membangun umat yang mandiri, cerdas, dan sejahtera.</p>
         </div>
-  
-        <!-- Kolom 2: Navigasi -->
         <div>
           <h4>Navigasi</h4>
           <ul class="footer__links">
@@ -123,8 +158,6 @@
             <li><a href="publikasi.html">Publikasi</a></li>
           </ul>
         </div>
-  
-        <!-- Kolom 3: Kontak dengan Link Aktif -->
         <div>
           <h4>Kontak</h4>
           <div class="footer__contact">
@@ -142,28 +175,17 @@
             </div>
           </div>
         </div>
-  
-        <!-- Kolom 4: Ikuti Kami dengan Media Sosial -->
         <div>
           <h4>Ikuti Kami</h4>
           <p style="font-size: var(--fs-sm); margin-bottom: 0.75rem;">Pantau kegiatan terbaru kami di media sosial.</p>
           <div class="footer__social">
-            <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Facebook Yayasan Padang Wulan Cipicung">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 22v-8h2.7l.4-3.2h-3.1V8.6c0-.9.25-1.5 1.6-1.5H17V4.2C16.7 4.1 15.7 4 14.6 4c-2.4 0-4.1 1.5-4.1 4.2v2.6H7.8V13h2.7v9h3Z"/></svg>
-            </a>
-            <a href="#" target="_blank" rel="noopener noreferrer" aria-label="TikTok Yayasan Padang Wulan Cipicung">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 1 1-5.2-1.74 2.89 2.89 0 0 1 2.31-2.83V7.65a6.34 6.34 0 0 0-3.47 1 6.34 6.34 0 1 0 10.86 4.51V8.92a8.28 8.28 0 0 0 4.72 1.47V6.94a4.81 4.81 0 0 1-2-.25Z"/></svg>
-            </a>
-            <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Instagram Yayasan Padang Wulan Cipicung">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
-            </a>
-            <a href="#" target="_blank" rel="noopener noreferrer" aria-label="YouTube Yayasan Padang Wulan Cipicung">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.58 7.19a2.86 2.86 0 0 0-2.01-2.01C17.8 4.67 12 4.67 12 4.67s-5.8 0-7.57.51a2.86 2.86 0 0 0-2.01 2.01C1.9 8.97 1.9 12 1.9 12s0 3.03.52 4.81a2.86 2.86 0 0 0 2.01 2.01c1.77.51 7.57.51 7.57.51s5.8 0 7.57-.51a2.86 2.86 0 0 0 2.01-2.01c.52-1.78.52-4.81.52-4.81s0-3.03-.52-4.81zM9.8 15.46V8.54l6.1 3.46-6.1 3.46z"/></svg>
-            </a>
+            <a href="#" target="_blank" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 22v-8h2.7l.4-3.2h-3.1V8.6c0-.9.25-1.5 1.6-1.5H17V4.2C16.7 4.1 15.7 4 14.6 4c-2.4 0-4.1 1.5-4.1 4.2v2.6H7.8V13h2.7v9h3Z"/></svg></a>
+            <a href="#" target="_blank" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 1 1-5.2-1.74 2.89 2.89 0 0 1 2.31-2.83V7.65a6.34 6.34 0 0 0-3.47 1 6.34 6.34 0 1 0 10.86 4.51V8.92a8.28 8.28 0 0 0 4.72 1.47V6.94a4.81 4.81 0 0 1-2-.25Z"/></svg></a>
+            <a href="#" target="_blank" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+            <a href="#" target="_blank" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.58 7.19a2.86 2.86 0 0 0-2.01-2.01C17.8 4.67 12 4.67 12 4.67s-5.8 0-7.57.51a2.86 2.86 0 0 0-2.01 2.01C1.9 8.97 1.9 12 1.9 12s0 3.03.52 4.81a2.86 2.86 0 0 0 2.01 2.01c1.77.51 7.57.51 7.57.51s5.8 0 7.57-.51a2.86 2.86 0 0 0 2.01-2.01c.52-1.78.52-4.81.52-4.81s0-3.03-.52-4.81zM9.8 15.46V8.54l6.1 3.46-6.1 3.46z"/></svg></a>
           </div>
         </div>
       </div>
-  
       <div class="footer__bottom">
         <p>&copy; 2026 Yayasan Padang Wulan Cipicung. Semua hak cipta dilindungi.</p>
       </div>
@@ -176,217 +198,243 @@
   <style>
     @keyframes spin { 100% { transform: rotate(360deg); } }
     
-    .donasi-th { padding: 1rem 1.5rem; }
-    .donasi-td { padding: 0.85rem 1.5rem; }
-    .donasi-td-total { padding: 1.25rem 1.5rem; }
+    /* Styling Universal Tabel */
+    .tabel-th { padding: 1rem 1.5rem; }
+    .tabel-td { padding: 0.85rem 1.5rem; }
+    .tabel-td-total { padding: 1.25rem 1.5rem; }
     .kategori-badge { padding: 0.25rem 0.85rem; font-size: 0.75rem; }
 
     @media (max-width: 768px) {
-      .donasi-th {
-        padding: 0.6rem 0.5rem; 
-        font-size: var(--fs-xs); 
-        white-space: nowrap; 
-      }
-      .donasi-td {
-        padding: 0.5rem 0.5rem; 
-        font-size: var(--fs-xs);
-      }
-      .donasi-td-total {
-        padding: 0.8rem 0.5rem;
-        font-size: var(--fs-sm) !important;
-      }
-      .kategori-badge {
-        padding: 0.2rem 0.5rem;
-        font-size: 0.65rem;
-      }
+      .tabel-th { padding: 0.6rem 0.5rem; font-size: var(--fs-xs); white-space: nowrap; }
+      .tabel-td { padding: 0.5rem 0.5rem; font-size: var(--fs-xs); }
+      .tabel-td-total { padding: 0.8rem 0.5rem; font-size: var(--fs-sm) !important; }
+      .kategori-badge { padding: 0.2rem 0.5rem; font-size: 0.65rem; }
     }
 
     .page-btn {
-      padding: 0.4rem 0.8rem;
-      border: 1px solid var(--border);
-      background: var(--white);
-      color: var(--secondary);
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: var(--fs-sm);
-      font-weight: 600;
-      transition: all 0.2s ease;
+      padding: 0.4rem 0.8rem; border: 1px solid var(--border); background: var(--white);
+      color: var(--secondary); border-radius: 4px; cursor: pointer; font-size: var(--fs-sm);
+      font-weight: 600; transition: all 0.2s ease;
     }
-    
-    .page-btn:hover {
-      background: var(--light);
-      border-color: var(--secondary);
-    }
-    
-    .page-btn.active {
-      background: var(--primary);
-      color: var(--white);
-      border-color: var(--primary);
-    }
+    .page-btn:hover { background: var(--light); border-color: var(--secondary); }
+    .page-btn.active { background: var(--primary); color: var(--white); border-color: var(--primary); }
   </style>
 
-  <!-- ================= SCRIPT LOGIKA DONASI (Firebase) ================= -->
+  <!-- ================= SCRIPT LOGIKA DONASI & PENGELUARAN (Firebase) ================= -->
   <script type="module">
-    import { db, collection, getDocs, query, orderBy } from './js/firebase-config.js';
+    import { db, collection, getDocs, query } from './js/firebase-config.js';
 
-    const tbody = document.getElementById('tabel-donasi-body');
-    const paginationContainer = document.getElementById('pagination-container');
-    const filterButtons = document.querySelectorAll('#filter-donasi button');
+    // ================= 1. LOGIKA DONASI =================
+    const tbodyDonasi = document.getElementById('tabel-donasi-body');
+    const pageDonasiContainer = document.getElementById('pagination-donasi');
+    const filterBtnDonasi = document.querySelectorAll('#filter-donasi button');
     
     let dataDonasiMaster = [];
-    let currentFilterData = [];
-    
-    let currentPage = 1;
+    let currentFilterDonasi = [];
+    let currentPageDonasi = 1;
     const itemsPerPage = 10; 
 
     async function loadDonasi() {
       try {
         const q = query(collection(db, 'donations'));
-        const querySnapshot = await getDocs(q);
-
-        if (querySnapshot.empty) {
-          tbody.innerHTML = `
-            <tr>
-              <td colspan="6" style="padding: 3rem 1rem; text-align: center; color: var(--muted);">
-                <strong>Belum Ada Data Donasi</strong>
-                <p style="font-size: var(--fs-xs); margin-top: 0.25rem;">Saat ini belum ada riwayat donasi masuk yang ditampilkan.</p>
-              </td>
-            </tr>`;
-          paginationContainer.innerHTML = '';
+        const snap = await getDocs(q);
+        if (snap.empty) {
+          tbodyDonasi.innerHTML = `<tr><td colspan="6" style="padding: 3rem; text-align: center; color: var(--muted);">Belum ada riwayat donasi.</td></tr>`;
           return;
         }
-
         dataDonasiMaster = [];
-        querySnapshot.forEach((doc) => {
-          dataDonasiMaster.push(doc.data());
-        });
-
-        dataDonasiMaster.sort((a, b) => {
-          const dateA = new Date(a.tanggal);
-          const dateB = new Date(b.tanggal);
-          return dateB - dateA;
-        });
-
-        currentFilterData = [...dataDonasiMaster];
-        renderTabel(currentFilterData, currentPage);
-
+        snap.forEach(doc => dataDonasiMaster.push(doc.data()));
+        dataDonasiMaster.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
+        
+        currentFilterDonasi = [...dataDonasiMaster];
+        renderTabelDonasi(currentFilterDonasi, currentPageDonasi);
       } catch (err) {
-        console.error('Error fetching data:', err);
-        tbody.innerHTML = `<tr><td colspan="6" style="padding: 2rem; text-align: center; color: red;">Gagal memuat data donasi. Silakan muat ulang halaman.</td></tr>`;
+        tbodyDonasi.innerHTML = `<tr><td colspan="6" style="text-align: center; color: red;">Gagal memuat data donasi.</td></tr>`;
       }
     }
 
-    function renderTabel(dataArray, page = 1) {
+    function renderTabelDonasi(dataArray, page) {
       if (dataArray.length === 0) {
-        tbody.innerHTML = `
-          <tr>
-            <td colspan="6" style="padding: 3rem 1rem; text-align: center; color: var(--muted);">
-              Tidak ada riwayat donasi untuk kategori ini.
-            </td>
-          </tr>`;
-        paginationContainer.innerHTML = '';
+        tbodyDonasi.innerHTML = `<tr><td colspan="6" style="padding: 3rem; text-align: center; color: var(--muted);">Tidak ada riwayat untuk kategori ini.</td></tr>`;
+        pageDonasiContainer.innerHTML = '';
         return;
       }
-
-      const totalPages = Math.ceil(dataArray.length / itemsPerPage);
-      const startIndex = (page - 1) * itemsPerPage;
-      const endIndex = startIndex + itemsPerPage;
       
-      const dataHalamanIni = dataArray.slice(startIndex, endIndex);
-
+      const totalPages = Math.ceil(dataArray.length / itemsPerPage);
+      const start = (page - 1) * itemsPerPage;
+      const dataHalaman = dataArray.slice(start, start + itemsPerPage);
+      
       let html = '';
-      let totalNominalSeluruhnya = 0; 
-      let nomorUrut = startIndex + 1; 
+      let totalSeluruhnya = 0; 
+      let no = start + 1; 
 
-      dataArray.forEach(data => {
-        totalNominalSeluruhnya += (parseInt(data.jumlah) || 0);
-      });
+      dataArray.forEach(d => totalSeluruhnya += (parseInt(d.jumlah) || 0));
 
-      dataHalamanIni.forEach((data) => {
-        const nominal = parseInt(data.jumlah) || 0;
-        const bgRow = nomorUrut % 2 === 0 ? 'var(--light)' : 'var(--white)';
-        const jumlahFormatted = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(nominal);
+      dataHalaman.forEach((d) => {
+        const bg = no % 2 === 0 ? 'var(--light)' : 'var(--white)';
+        const nominal = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(d.jumlah);
+        const kat = d.kategori || 'Lainnya';
         
-        const kategoriDonasi = data.kategori || 'Lainnya';
-        let warnaBg = '#e3f2e8'; 
-        let warnaTeks = '#145c38';
-        
-        if(kategoriDonasi === 'Zakat') { warnaBg = '#EBF8FF'; warnaTeks = '#2B6CB0'; } 
-        else if(kategoriDonasi === 'Infaq') { warnaBg = '#FEEBC8'; warnaTeks = '#C05621'; } 
-        else if(kategoriDonasi === 'Wakaf') { warnaBg = '#FEFCBF'; warnaTeks = '#975A16'; } 
-        else if(kategoriDonasi === 'Shodaqoh') { warnaBg = '#F3E8FF'; warnaTeks = '#6B21A8'; } 
+        let wBg = '#e3f2e8', wTeks = '#145c38';
+        if(kat === 'Zakat') { wBg = '#EBF8FF'; wTeks = '#2B6CB0'; } 
+        else if(kat === 'Infaq') { wBg = '#FEEBC8'; wTeks = '#C05621'; } 
+        else if(kat === 'Wakaf') { wBg = '#FEFCBF'; wTeks = '#975A16'; } 
+        else if(kat === 'Shodaqoh') { wBg = '#F3E8FF'; wTeks = '#6B21A8'; } 
 
         html += `
-          <tr style="border-bottom: 1px solid var(--border); background-color: ${bgRow}; transition: background 0.3s;">
-            <td class="donasi-td" style="text-align: center; color: var(--muted);">${nomorUrut++}</td>
-            <td class="donasi-td" style="font-weight: 600; color: var(--secondary);">${data.nama}</td>
-            <td class="donasi-td" style="color: var(--muted);">${data.kota || data.alamat || '-'}</td>
-            <td class="donasi-td" style="color: var(--muted);">${data.tanggal}</td>
-            <td class="donasi-td" style="text-align: center;">
-              <span class="kategori-badge" style="background: ${warnaBg}; color: ${warnaTeks}; border-radius: 20px; font-weight: 700; display: inline-block;">
-                ${kategoriDonasi}
-              </span>
+          <tr style="border-bottom: 1px solid var(--border); background-color: ${bg};">
+            <td class="tabel-td" style="text-align: center; color: var(--muted);">${no++}</td>
+            <td class="tabel-td" style="font-weight: 600; color: var(--secondary);">${d.nama}</td>
+            <td class="tabel-td" style="color: var(--muted);">${d.kota || d.alamat || '-'}</td>
+            <td class="tabel-td" style="color: var(--muted);">${d.tanggal}</td>
+            <td class="tabel-td" style="text-align: center;">
+              <span class="kategori-badge" style="background: ${wBg}; color: ${wTeks}; border-radius: 20px; font-weight: 700; display: inline-block;">${kat}</span>
             </td>
-            <td class="donasi-td" style="text-align: right; font-weight: 700; color: var(--primary-dark);">${jumlahFormatted}</td>
+            <td class="tabel-td" style="text-align: right; font-weight: 700; color: var(--primary-dark);">${nominal}</td>
           </tr>`;
       });
 
-      const totalFormatted = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(totalNominalSeluruhnya);
-
+      const totalFmt = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(totalSeluruhnya);
       html += `
-        <tr style="background-color: var(--light); border-top: 2px solid var(--border); border-bottom: 2px solid transparent;">
-          <td colspan="5" class="donasi-td-total" style="text-align: right; font-weight: 800; color: var(--secondary); font-size: var(--fs-base);">TOTAL SELURUHNYA :</td>
-          <td class="donasi-td-total" style="text-align: right; font-weight: 800; color: var(--primary-dark); font-size: var(--fs-base);">${totalFormatted}</td>
-        </tr>
-      `;
+        <tr style="background-color: var(--light); border-top: 2px solid var(--border);">
+          <td colspan="5" class="tabel-td-total" style="text-align: right; font-weight: 800; color: var(--secondary);">TOTAL SELURUHNYA :</td>
+          <td class="tabel-td-total" style="text-align: right; font-weight: 800; color: var(--primary-dark);">${totalFmt}</td>
+        </tr>`;
 
-      tbody.innerHTML = html;
-      renderPagination(totalPages, page);
-    }
-
-    function renderPagination(totalPages, activePage) {
-      if (totalPages <= 1) {
-        paginationContainer.innerHTML = '';
-        return;
-      }
-
-      let pageHtml = '';
-      for (let i = 1; i <= totalPages; i++) {
-        const activeClass = i === activePage ? 'active' : '';
-        pageHtml += `<button class="page-btn ${activeClass}" data-page="${i}">${i}</button>`;
-      }
-      
-      paginationContainer.innerHTML = pageHtml;
-
-      const pageButtons = document.querySelectorAll('.page-btn');
-      pageButtons.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const pageTarget = parseInt(e.target.getAttribute('data-page'));
-          currentPage = pageTarget;
-          renderTabel(currentFilterData, currentPage); 
-        });
+      tbodyDonasi.innerHTML = html;
+      renderPagination(totalPages, page, pageDonasiContainer, (newPage) => {
+        currentPageDonasi = newPage;
+        renderTabelDonasi(currentFilterDonasi, currentPageDonasi);
       });
     }
 
-    filterButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        filterButtons.forEach(btn => btn.classList.remove('is-active'));
-        button.classList.add('is-active');
-        
-        const filterValue = button.getAttribute('data-filter');
-        currentPage = 1; 
-        
-        if (filterValue === 'Semua') {
-          currentFilterData = [...dataDonasiMaster];
-        } else {
-          currentFilterData = dataDonasiMaster.filter(item => item.kategori === filterValue);
-        }
-        
-        renderTabel(currentFilterData, currentPage); 
+    filterBtnDonasi.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtnDonasi.forEach(b => b.classList.remove('is-active'));
+        btn.classList.add('is-active');
+        const fVal = btn.getAttribute('data-filter');
+        currentPageDonasi = 1; 
+        currentFilterDonasi = fVal === 'Semua' ? [...dataDonasiMaster] : dataDonasiMaster.filter(i => i.kategori === fVal);
+        renderTabelDonasi(currentFilterDonasi, currentPageDonasi); 
       });
     });
 
+    // ================= 2. LOGIKA PENGELUARAN =================
+    const tbodyPengeluaran = document.getElementById('tabel-pengeluaran-body');
+    const pagePengeluaranContainer = document.getElementById('pagination-pengeluaran');
+    const filterBtnPengeluaran = document.querySelectorAll('#filter-pengeluaran button');
+    
+    let dataPengeluaranMaster = [];
+    let currentFilterPengeluaran = [];
+    let currentPagePengeluaran = 1;
+
+    async function loadPengeluaran() {
+      try {
+        const q = query(collection(db, 'expenses'));
+        const snap = await getDocs(q);
+        if (snap.empty) {
+          tbodyPengeluaran.innerHTML = `<tr><td colspan="6" style="padding: 3rem; text-align: center; color: var(--muted);">Belum ada riwayat pengeluaran.</td></tr>`;
+          return;
+        }
+        dataPengeluaranMaster = [];
+        snap.forEach(doc => dataPengeluaranMaster.push(doc.data()));
+        dataPengeluaranMaster.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
+        
+        currentFilterPengeluaran = [...dataPengeluaranMaster];
+        renderTabelPengeluaran(currentFilterPengeluaran, currentPagePengeluaran);
+      } catch (err) {
+        tbodyPengeluaran.innerHTML = `<tr><td colspan="6" style="text-align: center; color: red;">Gagal memuat data pengeluaran.</td></tr>`;
+      }
+    }
+
+    function renderTabelPengeluaran(dataArray, page) {
+      if (dataArray.length === 0) {
+        tbodyPengeluaran.innerHTML = `<tr><td colspan="6" style="padding: 3rem; text-align: center; color: var(--muted);">Tidak ada riwayat untuk kategori ini.</td></tr>`;
+        pagePengeluaranContainer.innerHTML = '';
+        return;
+      }
+      
+      const totalPages = Math.ceil(dataArray.length / itemsPerPage);
+      const start = (page - 1) * itemsPerPage;
+      const dataHalaman = dataArray.slice(start, start + itemsPerPage);
+      
+      let html = '';
+      let totalSeluruhnya = 0; 
+      let no = start + 1; 
+
+      dataArray.forEach(d => totalSeluruhnya += (parseInt(d.jumlah) || 0));
+
+      dataHalaman.forEach((d) => {
+        const bg = no % 2 === 0 ? 'var(--light)' : 'var(--white)';
+        const nominal = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(d.jumlah);
+        const kat = d.kategori || 'Lainnya';
+        
+        let wBg = '#f1f5f9', wTeks = '#475569';
+        if(kat === 'Operasional Yayasan') { wBg = '#e2e8f0'; wTeks = '#334155'; } 
+        else if(kat === 'Pembangunan Fisik') { wBg = '#e0e7ff'; wTeks = '#4338ca'; } 
+        else if(kat === 'Sosial & Kemanusiaan') { wBg = '#ccfbf1'; wTeks = '#0f766e'; } 
+        else if(kat === 'Kegiatan Keagamaan') { wBg = '#ffe4e6'; wTeks = '#be123c'; } 
+
+        const lokasiText = d.lokasi && d.lokasi !== '-' ? d.lokasi : '-';
+
+        html += `
+          <tr style="border-bottom: 1px solid var(--border); background-color: ${bg};">
+            <td class="tabel-td" style="text-align: center; color: var(--muted);">${no++}</td>
+            <td class="tabel-td" style="font-weight: 600; color: var(--secondary); white-space: pre-wrap;">${d.keterangan}</td>
+            <td class="tabel-td" style="color: var(--muted);">${lokasiText}</td>
+            <td class="tabel-td" style="color: var(--muted);">${d.tanggal}</td>
+            <td class="tabel-td" style="text-align: center;">
+              <span class="kategori-badge" style="background: ${wBg}; color: ${wTeks}; border-radius: 20px; font-weight: 700; display: inline-block;">${kat}</span>
+            </td>
+            <!-- Teks nominal warna merah menandakan minus/keluar -->
+            <td class="tabel-td" style="text-align: right; font-weight: 700; color: #ef4444;">- ${nominal}</td>
+          </tr>`;
+      });
+
+      const totalFmt = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(totalSeluruhnya);
+      html += `
+        <tr style="background-color: var(--light); border-top: 2px solid var(--border);">
+          <td colspan="5" class="tabel-td-total" style="text-align: right; font-weight: 800; color: var(--secondary);">TOTAL KELUAR :</td>
+          <td class="tabel-td-total" style="text-align: right; font-weight: 800; color: #ef4444;">- ${totalFmt}</td>
+        </tr>`;
+
+      tbodyPengeluaran.innerHTML = html;
+      renderPagination(totalPages, page, pagePengeluaranContainer, (newPage) => {
+        currentPagePengeluaran = newPage;
+        renderTabelPengeluaran(currentFilterPengeluaran, currentPagePengeluaran);
+      });
+    }
+
+    filterBtnPengeluaran.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtnPengeluaran.forEach(b => b.classList.remove('is-active'));
+        btn.classList.add('is-active');
+        const fVal = btn.getAttribute('data-filter');
+        currentPagePengeluaran = 1; 
+        currentFilterPengeluaran = fVal === 'Semua' ? [...dataPengeluaranMaster] : dataPengeluaranMaster.filter(i => i.kategori === fVal);
+        renderTabelPengeluaran(currentFilterPengeluaran, currentPagePengeluaran); 
+      });
+    });
+
+    // ================= 3. FUNGSI PAGINASI UMUM =================
+    function renderPagination(totalPages, activePage, container, callback) {
+      if (totalPages <= 1) { container.innerHTML = ''; return; }
+      let html = '';
+      for (let i = 1; i <= totalPages; i++) {
+        const active = i === activePage ? 'active' : '';
+        html += `<button class="page-btn ${active}" data-page="${i}">${i}</button>`;
+      }
+      container.innerHTML = html;
+      container.querySelectorAll('.page-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          callback(parseInt(e.target.getAttribute('data-page')));
+        });
+      });
+    }
+
+    // Jalankan Kedua Fungsi saat Halaman Dimuat
     loadDonasi();
+    loadPengeluaran();
   </script>
 
   <!-- ================= SCRIPT UTAMA (HAMBURGER & BACK-TO-TOP) ================= -->

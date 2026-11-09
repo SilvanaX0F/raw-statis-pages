@@ -1,19 +1,10 @@
-// Import fungsi Firebase SDK versi modular via CDN
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { 
-  getFirestore, 
-  collection, 
-  addDoc, 
-  getDocs, 
-  query, 
-  orderBy, 
-  serverTimestamp,
-  doc,
-  updateDoc,
-  deleteDoc
-} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, query, orderBy, serverTimestamp, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-// Konfigurasi Firebase dari proyek Anda
+// === TAMBAHAN BARU: Import Firebase Storage ===
+import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+
 const firebaseConfig = {
   apiKey: "AIzaSyAAQK1Ne1tGHgpbaPr74Ow_NNaYdJo12wY",
   authDomain: "yayasan-padang-wulan.firebaseapp.com",
@@ -24,9 +15,10 @@ const firebaseConfig = {
   measurementId: "G-H23MVN8DPC"
 };
 
-// Inisialisasi Firebase & Firestore
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth(app);
+const storage = getStorage(app); // Inisialisasi Storage
 
-// Export semua module yang dibutuhkan termasuk untuk fitur Edit & Hapus
-export { db, collection, addDoc, getDocs, query, orderBy, serverTimestamp, doc, updateDoc, deleteDoc };
+// Export semua modul
+export { db, auth, storage, ref, uploadBytesResumable, getDownloadURL, deleteObject, collection, addDoc, getDocs, query, orderBy, serverTimestamp, doc, updateDoc, deleteDoc };

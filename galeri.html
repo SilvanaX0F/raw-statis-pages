@@ -63,73 +63,20 @@
     <!-- Gallery -->
     <section class="section">
       <div class="container">
-        <div class="gallery-filter" role="group" aria-label="Filter kategori galeri">
-          <button type="button" data-filter="semua" class="is-active" aria-pressed="true">Semua</button>
-          <button type="button" data-filter="kegiatan" aria-pressed="false">Kegiatan</button>
-          <button type="button" data-filter="program" aria-pressed="false">Program</button>
-          <button type="button" data-filter="sosial" aria-pressed="false">Sosial</button>
-          <button type="button" data-filter="dokumentasi" aria-pressed="false">Dokumentasi</button>
+        <!-- Filter Kategori Dinamis -->
+        <div class="gallery-filter" role="group" aria-label="Filter kategori galeri" id="filter-container">
+          <button type="button" data-filter="Semua" class="is-active" aria-pressed="true">Semua</button>
+          <button type="button" data-filter="Sosial" aria-pressed="false">Sosial</button>
+          <button type="button" data-filter="Kemanusiaan" aria-pressed="false">Kemanusiaan</button>
+          <button type="button" data-filter="Lainnya" aria-pressed="false">Lainnya</button>
         </div>
-        <div class="gallery-grid">
-          <button type="button" class="gallery-item" data-category="kegiatan" data-caption="Dokumentasi Kegiatan — Foto 1" data-reveal>
-            <img src="images/gallery/galeri-1.jpeg" alt="Dokumentasi Kegiatan 1" width="480" height="480" loading="lazy">
-            <span class="gallery-item__overlay">Kegiatan</span>
-          </button>
-
-          <button type="button" class="gallery-item" data-category="program" data-caption="Dokumentasi Program — Foto 2" data-reveal>
-            <img src="images/gallery/galeri-2.jpeg" alt="Dokumentasi Program 2" width="480" height="480" loading="lazy">
-            <span class="gallery-item__overlay">Program</span>
-          </button>
-
-          <button type="button" class="gallery-item" data-category="sosial" data-caption="Dokumentasi Sosial — Foto 3" data-reveal>
-            <img src="images/gallery/galeri-3.jpg" alt="Dokumentasi Sosial 3" width="480" height="480" loading="lazy">
-            <span class="gallery-item__overlay">Sosial</span>
-          </button>
-
-          <button type="button" class="gallery-item" data-category="dokumentasi" data-caption="Dokumentasi Dokumentasi — Foto 4" data-reveal>
-            <img src="images/gallery/galeri-4.jpg" alt="Dokumentasi Dokumentasi 4" width="480" height="480" loading="lazy">
-            <span class="gallery-item__overlay">Dokumentasi</span>
-          </button>
-
-          <button type="button" class="gallery-item" data-category="kegiatan" data-caption="Dokumentasi Kegiatan — Foto 5" data-reveal>
-            <img src="images/gallery/galeri-5.jpg" alt="Dokumentasi Kegiatan 5" width="480" height="480" loading="lazy">
-            <span class="gallery-item__overlay">Kegiatan</span>
-          </button>
-
-          <button type="button" class="gallery-item" data-category="program" data-caption="Dokumentasi Program — Foto 6" data-reveal>
-            <img src="images/gallery/galeri-6.jpg" alt="Dokumentasi Program 6" width="480" height="480" loading="lazy">
-            <span class="gallery-item__overlay">Program</span>
-          </button>
-
-          <button type="button" class="gallery-item" data-category="sosial" data-caption="Dokumentasi Sosial — Foto 7" data-reveal>
-            <img src="images/gallery/galeri-7.jpg" alt="Dokumentasi Sosial 7" width="480" height="480" loading="lazy">
-            <span class="gallery-item__overlay">Sosial</span>
-          </button>
-
-          <button type="button" class="gallery-item" data-category="dokumentasi" data-caption="Dokumentasi Dokumentasi — Foto 8" data-reveal>
-            <img src="images/gallery/galeri-8.jpg" alt="Dokumentasi Dokumentasi 8" width="480" height="480" loading="lazy">
-            <span class="gallery-item__overlay">Dokumentasi</span>
-          </button>
-
-          <button type="button" class="gallery-item" data-category="kegiatan" data-caption="Dokumentasi Kegiatan — Foto 9" data-reveal>
-            <img src="images/gallery/galeri-9.jpg" alt="Dokumentasi Kegiatan 9" width="480" height="480" loading="lazy">
-            <span class="gallery-item__overlay">Kegiatan</span>
-          </button>
-
-          <button type="button" class="gallery-item" data-category="program" data-caption="Dokumentasi Program — Foto 10" data-reveal>
-            <img src="images/gallery/galeri-10.jpg" alt="Dokumentasi Program 10" width="480" height="480" loading="lazy">
-            <span class="gallery-item__overlay">Program</span>
-          </button>
-
-          <button type="button" class="gallery-item" data-category="sosial" data-caption="Dokumentasi Sosial — Foto 11" data-reveal>
-            <img src="images/gallery/galeri-11.jpg" alt="Dokumentasi Sosial 11" width="480" height="480" loading="lazy">
-            <span class="gallery-item__overlay">Sosial</span>
-          </button>
-
-          <button type="button" class="gallery-item" data-category="dokumentasi" data-caption="Dokumentasi Dokumentasi — Foto 12" data-reveal>
-            <img src="images/gallery/galeri-12.jpg" alt="Dokumentasi Dokumentasi 12" width="480" height="480" loading="lazy">
-            <span class="gallery-item__overlay">Dokumentasi</span>
-          </button>
+        
+        <!-- Wadah Grid Galeri -->
+        <div class="gallery-grid" id="galeri-publik-grid">
+          <div style="grid-column: 1 / -1; padding: 4rem 0; text-align: center; color: var(--muted);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 24px; height: 24px; margin-bottom: 0.5rem; animation: spin 1s linear infinite;"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg><br>
+            Memuat foto dari server...
+          </div>
         </div>
       </div>
     </section>
@@ -137,79 +84,58 @@
   </main>
 
   <footer class="footer">
-  <div class="container">
-    <div class="footer__grid">
-      <!-- Kolom 1: Brand & Deskripsi -->
-      <div class="footer__brand">
-        <img src="images/logo-footer.png" alt="Logo Yayasan Bina Umat Padang Wulan Cipicung" width="150" height="32">
-        <p>Yayasan Bina Umat Padang Wulan Cipicung — berkedudukan di Kabupaten Pangandaran, berfokus pada bidang sosial, kemanusiaan, dan keagamaan untuk membangun umat yang mandiri, cerdas, dan sejahtera.</p>
-      </div>
-
-      <!-- Kolom 2: Navigasi -->
-      <div>
-        <h4>Navigasi</h4>
-        <ul class="footer__links">
-          <li><a href="index.html">Beranda</a></li>
-          <li><a href="tentang.html">Tentang Kami</a></li>
-          <li><a href="program.html">Program</a></li>
-          <li><a href="berita.html">Berita</a></li>
-          <li><a href="galeri.html">Galeri</a></li>
-          <li><a href="publikasi.html">Publikasi</a></li>
-        </ul>
-      </div>
-
-      <!-- Kolom 3: Kontak dengan Link Aktif -->
-      <div>
-        <h4>Kontak</h4>
-        <div class="footer__contact">
-          <div class="footer__contact-item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12Z"/><circle cx="12" cy="9" r="2.5"/></svg>
-            <span>Alamat Lengkap :<br>Dusun Cipicung RT. 015 RW. 008, Karangsari, Padaherang, Kab. Pangandaran, Jawa Barat</span>
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <img src="images/logo-footer.png" alt="Logo Yayasan Bina Umat Padang Wulan Cipicung" width="150" height="32">
+          <p>Yayasan Bina Umat Padang Wulan Cipicung — berkedudukan di Kabupaten Pangandaran, berfokus pada bidang sosial, kemanusiaan, dan keagamaan untuk membangun umat yang mandiri, cerdas, dan sejahtera.</p>
+        </div>
+        <div>
+          <h4>Navigasi</h4>
+          <ul class="footer__links">
+            <li><a href="index.html">Beranda</a></li>
+            <li><a href="tentang.html">Tentang Kami</a></li>
+            <li><a href="program.html">Program</a></li>
+            <li><a href="berita.html">Berita</a></li>
+            <li><a href="galeri.html">Galeri</a></li>
+            <li><a href="publikasi.html">Publikasi</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Kontak</h4>
+          <div class="footer__contact">
+            <div class="footer__contact-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12Z"/><circle cx="12" cy="9" r="2.5"/></svg>
+              <span>Alamat Lengkap :<br>Dusun Cipicung RT. 015 RW. 008, Karangsari, Padaherang, Kab. Pangandaran, Jawa Barat</span>
+            </div>
+            <div class="footer__contact-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.68 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.32 1.85.55 2.81.68A2 2 0 0 1 22 16.92Z"/></svg>
+              <a href="https://wa.me/6282312345153" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;">+62 823-1234-5153</a>
+            </div>
+            <div class="footer__contact-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
+              <a href="mailto:info@ybu-padangwulan.or.id" style="color: inherit; text-decoration: underline;">info@ybu-padangwulan.or.id</a>
+            </div>
           </div>
-          <div class="footer__contact-item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.68 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.32 1.85.55 2.81.68A2 2 0 0 1 22 16.92Z"/></svg>
-            <a href="https://wa.me/6282312345153" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;">+62 823-1234-5153</a>
-          </div>
-          <div class="footer__contact-item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
-            <a href="mailto:info@ybu-padangwulan.or.id" style="color: inherit; text-decoration: underline;">info@ybu-padangwulan.or.id</a>
+        </div>
+        <div>
+          <h4>Ikuti Kami</h4>
+          <p style="font-size: var(--fs-sm); margin-bottom: 0.75rem;">Pantau kegiatan terbaru kami di media sosial.</p>
+          <div class="footer__social">
+            <a href="#" target="_blank" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 22v-8h2.7l.4-3.2h-3.1V8.6c0-.9.25-1.5 1.6-1.5H17V4.2C16.7 4.1 15.7 4 14.6 4c-2.4 0-4.1 1.5-4.1 4.2v2.6H7.8V13h2.7v9h3Z"/></svg></a>
+            <a href="#" target="_blank" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 1 1-5.2-1.74 2.89 2.89 0 0 1 2.31-2.83V7.65a6.34 6.34 0 0 0-3.47 1 6.34 6.34 0 1 0 10.86 4.51V8.92a8.28 8.28 0 0 0 4.72 1.47V6.94a4.81 4.81 0 0 1-2-.25Z"/></svg></a>
+            <a href="#" target="_blank" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+            <a href="#" target="_blank" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.58 7.19a2.86 2.86 0 0 0-2.01-2.01C17.8 4.67 12 4.67 12 4.67s-5.8 0-7.57.51a2.86 2.86 0 0 0-2.01 2.01C1.9 8.97 1.9 12 1.9 12s0 3.03.52 4.81a2.86 2.86 0 0 0 2.01 2.01c1.77.51 7.57.51 7.57.51s5.8 0 7.57-.51a2.86 2.86 0 0 0 2.01-2.01c.52-1.78.52-4.81.52-4.81s0-3.03-.52-4.81zM9.8 15.46V8.54l6.1 3.46-6.1 3.46z"/></svg></a>
           </div>
         </div>
       </div>
-
-      <!-- Kolom 4: Ikuti Kami dengan Media Sosial -->
-      <div>
-        <h4>Ikuti Kami</h4>
-        <p style="font-size: var(--fs-sm); margin-bottom: 0.75rem;">Pantau kegiatan terbaru kami di media sosial.</p>
-        <div class="footer__social">
-          <!-- Facebook -->
-          <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Facebook Yayasan Padang Wulan Cipicung">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 22v-8h2.7l.4-3.2h-3.1V8.6c0-.9.25-1.5 1.6-1.5H17V4.2C16.7 4.1 15.7 4 14.6 4c-2.4 0-4.1 1.5-4.1 4.2v2.6H7.8V13h2.7v9h3Z"/></svg>
-          </a>
-          <!-- TikTok -->
-          <a href="#" target="_blank" rel="noopener noreferrer" aria-label="TikTok Yayasan Padang Wulan Cipicung">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 1 1-5.2-1.74 2.89 2.89 0 0 1 2.31-2.83V7.65a6.34 6.34 0 0 0-3.47 1 6.34 6.34 0 1 0 10.86 4.51V8.92a8.28 8.28 0 0 0 4.72 1.47V6.94a4.81 4.81 0 0 1-2-.25Z"/></svg>
-          </a>
-          <!-- Instagram -->
-          <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Instagram Yayasan Padang Wulan Cipicung">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
-          </a>
-          <!-- YouTube -->
-          <a href="#" target="_blank" rel="noopener noreferrer" aria-label="YouTube Yayasan Padang Wulan Cipicung">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.58 7.19a2.86 2.86 0 0 0-2.01-2.01C17.8 4.67 12 4.67 12 4.67s-5.8 0-7.57.51a2.86 2.86 0 0 0-2.01 2.01C1.9 8.97 1.9 12 1.9 12s0 3.03.52 4.81a2.86 2.86 0 0 0 2.01 2.01c1.77.51 7.57.51 7.57.51s5.8 0 7.57-.51a2.86 2.86 0 0 0 2.01-2.01c.52-1.78.52-4.81.52-4.81s0-3.03-.52-4.81zM9.8 15.46V8.54l6.1 3.46-6.1 3.46z"/></svg>
-          </a>
-        </div>
+      <div class="footer__bottom">
+        <p>&copy; 2026 Yayasan Padang Wulan Cipicung. Semua hak cipta dilindungi.</p>
       </div>
     </div>
+  </footer>
 
-    <!-- Bottom Footer (Hanya Copyright) -->
-    <div class="footer__bottom">
-      <p>&copy; 2026 Yayasan Padang Wulan Cipicung. Semua hak cipta dilindungi.</p>
-    </div>
-  </div>
-</footer>
-
-  <!-- Lightbox galeri (dipakai di halaman yang memuat galeri) -->
+  <!-- Lightbox galeri -->
   <div class="lightbox" data-lightbox aria-hidden="true">
     <div class="lightbox__content">
       <img src="" alt="" data-lightbox-img>
@@ -222,6 +148,146 @@
 
   <button type="button" class="back-to-top" data-back-to-top aria-label="Kembali ke atas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg></button>
 
+  <style>
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+  </style>
+
   <script src="js/main.js"></script>
+
+  <!-- ================= LOGIKA TARIK DATA GALERI (FIREBASE) ================= -->
+  <script type="module">
+    import { db, collection, getDocs, query } from './js/firebase-config.js';
+
+    const gridContainer = document.getElementById('galeri-publik-grid');
+    const filterButtons = document.querySelectorAll('#filter-container button');
+    
+    let dataGaleriMaster = [];
+    
+    async function loadGaleriPublic() {
+      try {
+        const q = query(collection(db, 'gallery'));
+        const snap = await getDocs(q);
+
+        if (snap.empty) {
+          gridContainer.innerHTML = `
+            <div style="grid-column: 1 / -1; padding: 4rem 0; text-align: center;">
+              <h3 style="color: var(--secondary);">Belum Ada Foto</h3>
+              <p style="color: var(--muted);">Galeri foto akan segera diperbarui.</p>
+            </div>`;
+          return;
+        }
+
+        snap.forEach(doc => {
+          dataGaleriMaster.push(doc.data());
+        });
+
+        dataGaleriMaster.sort((a, b) => {
+          const timeA = a.createdAt ? a.createdAt.toMillis() : 0;
+          const timeB = b.createdAt ? b.createdAt.toMillis() : 0;
+          return timeB - timeA;
+        });
+        
+        renderGridPublik(dataGaleriMaster);
+
+      } catch (err) {
+        console.error("Gagal memuat galeri:", err);
+        gridContainer.innerHTML = `
+          <div style="grid-column: 1 / -1; padding: 4rem 0; text-align: center; color: red;">
+            <p>Gagal memuat galeri. Silakan muat ulang halaman.</p>
+          </div>`;
+      }
+    }
+
+    function renderGridPublik(dataArray) {
+      if (dataArray.length === 0) {
+        gridContainer.innerHTML = `
+          <div style="grid-column: 1 / -1; padding: 4rem 0; text-align: center; color: var(--muted);">
+            <p>Tidak ada foto untuk kategori ini.</p>
+          </div>`;
+        return;
+      }
+      
+      let html = '';
+      dataArray.forEach((data) => {
+        const imgSrc = data.imageUrl || 'https://via.placeholder.com/480x480?text=No+Image';
+        const kategori = data.kategori || 'Lainnya';
+        
+        html += `
+          <button type="button" class="gallery-item" data-category="${kategori}" data-caption="${data.judul} (${data.tanggal || '-'})" style="opacity: 1 !important; visibility: visible !important; transform: none !important; transition: opacity 0.5s ease;">
+            <img src="${imgSrc}" alt="${data.judul}" width="480" height="480" loading="lazy" style="object-fit: cover;">
+            <span class="gallery-item__overlay">${kategori}</span>
+          </button>
+        `;
+      });
+      
+      gridContainer.innerHTML = html;
+
+      // ==========================================
+      // PERBAIKAN FITUR LIGHTBOX (BUKA & TUTUP)
+      // ==========================================
+      const galleryItems = document.querySelectorAll('.gallery-item');
+      const lightbox = document.querySelector('.lightbox');
+      const lightboxImg = document.querySelector('[data-lightbox-img]');
+      const lightboxCaption = document.querySelector('[data-lightbox-caption]');
+      const btnClose = document.querySelector('.lightbox__close');
+
+      if (lightbox && lightboxImg) {
+        // 1. Fungsi Membuka Lightbox
+        galleryItems.forEach(item => {
+          item.addEventListener('click', function() {
+            const img = this.querySelector('img').src;
+            const caption = this.getAttribute('data-caption');
+            lightboxImg.src = img;
+            if (lightboxCaption) lightboxCaption.textContent = caption;
+            
+            lightbox.setAttribute('aria-hidden', 'false');
+            lightbox.style.display = 'flex'; // Tampilkan pop-up
+          });
+        });
+
+        // 2. Fungsi Menutup Lightbox (Klik tombol X)
+        if (btnClose) {
+          btnClose.onclick = function() {
+            lightbox.setAttribute('aria-hidden', 'true');
+            lightbox.style.display = 'none'; // Sembunyikan pop-up
+          };
+        }
+
+        // 3. Fungsi Menutup Lightbox (Klik area gelap di luar foto)
+        lightbox.onclick = function(e) {
+          if (e.target === lightbox) {
+            lightbox.setAttribute('aria-hidden', 'true');
+            lightbox.style.display = 'none';
+          }
+        };
+      }
+    }
+
+    // === LOGIKA FILTER BUTTON ===
+    filterButtons.forEach(button => {
+      button.addEventListener('click', (e) => {
+        filterButtons.forEach(btn => {
+          btn.classList.remove('is-active');
+          btn.setAttribute('aria-pressed', 'false');
+        });
+        
+        const btn = e.target;
+        btn.classList.add('is-active');
+        btn.setAttribute('aria-pressed', 'true');
+        
+        const kategoriDipilih = btn.getAttribute('data-filter');
+        if (kategoriDipilih === 'Semua') {
+          renderGridPublik(dataGaleriMaster);
+        } else {
+          const hasilFilter = dataGaleriMaster.filter(item => item.kategori === kategoriDipilih);
+          renderGridPublik(hasilFilter);
+        }
+      });
+    });
+
+    // Jalankan fungsi
+    loadGaleriPublic();
+  </script>
+
 </body>
 </html>

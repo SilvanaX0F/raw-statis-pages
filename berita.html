@@ -14,6 +14,28 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  
+  <style>
+    /* Styling Paginasi */
+    .pagination-container {
+      display: flex; justify-content: center; gap: 0.5rem; margin-top: 3rem;
+    }
+    .page-btn {
+      padding: 0.5rem 1rem; border: 1px solid var(--border); background: var(--white);
+      color: var(--secondary); border-radius: 4px; cursor: pointer; font-size: var(--fs-sm);
+      font-weight: 600; transition: all 0.2s ease;
+    }
+    .page-btn:hover { background: var(--light); border-color: var(--secondary); }
+    .page-btn.active { background: var(--primary); color: var(--white); border-color: var(--primary); }
+    
+    /* Membatasi teks deskripsi panjang agar rapi */
+    .text-truncate {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -46,7 +68,6 @@
   </header>
 
   <main id="main">
-
     <!-- Page Banner -->
     <section class="page-banner">
       <div class="container">
@@ -60,192 +81,216 @@
       </div>
     </section>
 
-    <!-- Featured Article -->
-<section class="section section--sm">
-  <div class="container">
-    <article class="card news-featured" data-reveal>
-      <div class="news-card__media">
-        <span class="news-card__category">Kegiatan Sosial</span>
-        <img src="images/news/kegiatan1.jpg" alt="Kegiatan Guyub Rukun dan Kerja Bakti" width="640" height="420" loading="eager" style="object-fit: cover;">
+    <!-- KONTAINER DINAMIS UNTUK FEATURED ARTICLE & GRID BERITA -->
+    <div id="berita-container">
+      <div class="container" style="padding: 4rem 0; text-align: center;">
+        <p style="color: var(--muted);">Memuat berita terbaru...</p>
       </div>
-      <div class="news-card__body">
-        <span class="news-card__date">November 2026</span>
-        <h3 style="font-size: 1.5rem; line-height: 1.4; margin-bottom: 0.5rem;">Kegiatan Guyub Rukun dan Kerja Bakti</h3>
-        <p>Kegiatan ini dilakukan untuk menguatkan rasa kebersamaan dan kekeluargaan di masyarakat, juga meningkatkan serta menanamkan gerakan gotong royong berbasis kerakyatan.</p>
-      </div>
-    </article>
-  </div>
-</section>
-
-    <!-- News Grid -->
-    <section class="section section--sm">
-      <div class="container">
-        <div class="grid grid-3">
-
-          <article class="card news-card" data-reveal>
-            <div class="news-card__media">
-              <span class="news-card__category">Pendidikan</span>
-              <img src="images/news/berita-2.svg" alt="Dokumentasi Program Beasiswa Tahap Pertama Resmi Dibuka" width="480" height="320" loading="lazy">
-            </div>
-            <div class="news-card__body">
-              <span class="news-card__date">-</span>
-              <h3>Saat ini belum ada kegiatan</h3>
-              <p>Belum ada informasi kegiatan atau berita terbaru yang ditampilkan untuk saat ini.</p>
-            </div>
-          </article>
-
-          <article class="card news-card" data-reveal>
-            <div class="news-card__media">
-              <span class="news-card__category">Pemberdayaan</span>
-              <img src="images/news/berita-3.svg" alt="Dokumentasi Pelatihan Keterampilan Untuk Ibu Rumah Tangga" width="480" height="320" loading="lazy">
-            </div>
-            <div class="news-card__body">
-              <span class="news-card__date">-</span>
-              <h3>Saat ini belum ada kegiatan</h3>
-              <p>Belum ada informasi kegiatan atau berita terbaru yang ditampilkan untuk saat ini.</p>
-            </div>
-          </article>
-
-          <article class="card news-card" data-reveal>
-            <div class="news-card__media">
-              <span class="news-card__category">Sosial</span>
-              <img src="images/news/berita-4.svg" alt="Dokumentasi Aksi Bersih Lingkungan Bersama Warga" width="480" height="320" loading="lazy">
-            </div>
-            <div class="news-card__body">
-              <span class="news-card__date">-</span>
-              <h3>Saat ini belum ada kegiatan</h3>
-              <p>Belum ada informasi kegiatan atau berita terbaru yang ditampilkan untuk saat ini.</p>
-            </div>
-          </article>
-
-          <article class="card news-card" data-reveal>
-            <div class="news-card__media">
-              <span class="news-card__category">Kemanusiaan</span>
-              <img src="images/news/berita-1.svg" alt="Dokumentasi Penyaluran Bantuan Sembako Untuk Warga Terdampak" width="480" height="320" loading="lazy">
-            </div>
-            <div class="news-card__body">
-              <span class="news-card__date">-</span>
-              <h3>Saat ini belum ada kegiatan</h3>
-              <p>Belum ada informasi kegiatan atau berita terbaru yang ditampilkan untuk saat ini.</p>
-            </div>
-          </article>
-
-          <article class="card news-card" data-reveal>
-            <div class="news-card__media">
-              <span class="news-card__category">Kegiatan</span>
-              <img src="images/news/berita-2.svg" alt="Dokumentasi Peresmian Ruang Belajar Komunitas" width="480" height="320" loading="lazy">
-            </div>
-            <div class="news-card__body">
-              <span class="news-card__date">-</span>
-              <h3>Saat ini belum ada kegiatan</h3>
-              <p>Belum ada informasi kegiatan atau berita terbaru yang ditampilkan untuk saat ini.</p>
-            </div>
-          </article>
-
-          <article class="card news-card" data-reveal>
-            <div class="news-card__media">
-              <span class="news-card__category">Pendidikan</span>
-              <img src="images/news/berita-3.svg" alt="Dokumentasi Kelas Literasi Digital Untuk Anak Sekolah Dasar" width="480" height="320" loading="lazy">
-            </div>
-            <div class="news-card__body">
-              <span class="news-card__date">-</span>
-              <h3>Saat ini belum ada kegiatan</h3>
-              <p>Belum ada informasi kegiatan atau berita terbaru yang ditampilkan untuk saat ini.</p>
-            </div>
-          </article>
-
-        </div>
-      </div>
-    </section>
-
+    </div>
   </main>
 
   <footer class="footer">
-  <div class="container">
-    <div class="footer__grid">
-      <!-- Kolom 1: Brand & Deskripsi -->
-      <div class="footer__brand">
-        <img src="images/logo-footer.png" alt="Logo Yayasan Bina Umat Padang Wulan Cipicung" width="150" height="32">
-        <p>Yayasan Bina Umat Padang Wulan Cipicung — berkedudukan di Kabupaten Pangandaran, berfokus pada bidang sosial, kemanusiaan, dan keagamaan untuk membangun umat yang mandiri, cerdas, dan sejahtera.</p>
-      </div>
-
-      <!-- Kolom 2: Navigasi -->
-      <div>
-        <h4>Navigasi</h4>
-        <ul class="footer__links">
-          <li><a href="index.html">Beranda</a></li>
-          <li><a href="tentang.html">Tentang Kami</a></li>
-          <li><a href="program.html">Program</a></li>
-          <li><a href="berita.html">Berita</a></li>
-          <li><a href="galeri.html">Galeri</a></li>
-          <li><a href="publikasi.html">Publikasi</a></li>
-        </ul>
-      </div>
-
-      <!-- Kolom 3: Kontak dengan Link Aktif -->
-      <div>
-        <h4>Kontak</h4>
-        <div class="footer__contact">
-          <div class="footer__contact-item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12Z"/><circle cx="12" cy="9" r="2.5"/></svg>
-            <span>Alamat Lengkap :<br>Dusun Cipicung RT. 015 RW. 008, Karangsari, Padaherang, Kab. Pangandaran, Jawa Barat</span>
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <img src="images/logo-footer.png" alt="Logo Yayasan Bina Umat Padang Wulan Cipicung" width="150" height="32">
+          <p>Yayasan Bina Umat Padang Wulan Cipicung — berkedudukan di Kabupaten Pangandaran, berfokus pada bidang sosial, kemanusiaan, dan keagamaan untuk membangun umat yang mandiri, cerdas, dan sejahtera.</p>
+        </div>
+        <div>
+          <h4>Navigasi</h4>
+          <ul class="footer__links">
+            <li><a href="index.html">Beranda</a></li>
+            <li><a href="tentang.html">Tentang Kami</a></li>
+            <li><a href="program.html">Program</a></li>
+            <li><a href="berita.html">Berita</a></li>
+            <li><a href="galeri.html">Galeri</a></li>
+            <li><a href="publikasi.html">Publikasi</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Kontak</h4>
+          <div class="footer__contact">
+            <div class="footer__contact-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12Z"/><circle cx="12" cy="9" r="2.5"/></svg>
+              <span>Alamat Lengkap :<br>Dusun Cipicung RT. 015 RW. 008, Karangsari, Padaherang, Kab. Pangandaran, Jawa Barat</span>
+            </div>
+            <div class="footer__contact-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.68 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.32 1.85.55 2.81.68A2 2 0 0 1 22 16.92Z"/></svg>
+              <a href="https://wa.me/6282312345153" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;">+62 823-1234-5153</a>
+            </div>
+            <div class="footer__contact-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
+              <a href="mailto:info@ybu-padangwulan.or.id" style="color: inherit; text-decoration: underline;">info@ybu-padangwulan.or.id</a>
+            </div>
           </div>
-          <div class="footer__contact-item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.68 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.32 1.85.55 2.81.68A2 2 0 0 1 22 16.92Z"/></svg>
-            <a href="https://wa.me/6282312345153" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;">+62 823-1234-5153</a>
-          </div>
-          <div class="footer__contact-item">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
-            <a href="mailto:info@ybu-padangwulan.or.id" style="color: inherit; text-decoration: underline;">info@ybu-padangwulan.or.id</a>
+        </div>
+        <div>
+          <h4>Ikuti Kami</h4>
+          <p style="font-size: var(--fs-sm); margin-bottom: 0.75rem;">Pantau kegiatan terbaru kami di media sosial.</p>
+          <div class="footer__social">
+            <a href="#" target="_blank" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 22v-8h2.7l.4-3.2h-3.1V8.6c0-.9.25-1.5 1.6-1.5H17V4.2C16.7 4.1 15.7 4 14.6 4c-2.4 0-4.1 1.5-4.1 4.2v2.6H7.8V13h2.7v9h3Z"/></svg></a>
+            <a href="#" target="_blank" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 1 1-5.2-1.74 2.89 2.89 0 0 1 2.31-2.83V7.65a6.34 6.34 0 0 0-3.47 1 6.34 6.34 0 1 0 10.86 4.51V8.92a8.28 8.28 0 0 0 4.72 1.47V6.94a4.81 4.81 0 0 1-2-.25Z"/></svg></a>
+            <a href="#" target="_blank" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+            <a href="#" target="_blank" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.58 7.19a2.86 2.86 0 0 0-2.01-2.01C17.8 4.67 12 4.67 12 4.67s-5.8 0-7.57.51a2.86 2.86 0 0 0-2.01 2.01C1.9 8.97 1.9 12 1.9 12s0 3.03.52 4.81a2.86 2.86 0 0 0 2.01 2.01c1.77.51 7.57.51 7.57.51s5.8 0 7.57-.51a2.86 2.86 0 0 0 2.01-2.01c.52-1.78.52-4.81.52-4.81s0-3.03-.52-4.81zM9.8 15.46V8.54l6.1 3.46-6.1 3.46z"/></svg></a>
           </div>
         </div>
       </div>
-
-      <!-- Kolom 4: Ikuti Kami dengan Media Sosial -->
-      <div>
-        <h4>Ikuti Kami</h4>
-        <p style="font-size: var(--fs-sm); margin-bottom: 0.75rem;">Pantau kegiatan terbaru kami di media sosial.</p>
-        <div class="footer__social">
-          <!-- Facebook -->
-          <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Facebook Yayasan Padang Wulan Cipicung">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 22v-8h2.7l.4-3.2h-3.1V8.6c0-.9.25-1.5 1.6-1.5H17V4.2C16.7 4.1 15.7 4 14.6 4c-2.4 0-4.1 1.5-4.1 4.2v2.6H7.8V13h2.7v9h3Z"/></svg>
-          </a>
-          <!-- TikTok -->
-          <a href="#" target="_blank" rel="noopener noreferrer" aria-label="TikTok Yayasan Padang Wulan Cipicung">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 1 1-5.2-1.74 2.89 2.89 0 0 1 2.31-2.83V7.65a6.34 6.34 0 0 0-3.47 1 6.34 6.34 0 1 0 10.86 4.51V8.92a8.28 8.28 0 0 0 4.72 1.47V6.94a4.81 4.81 0 0 1-2-.25Z"/></svg>
-          </a>
-          <!-- Instagram -->
-          <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Instagram Yayasan Padang Wulan Cipicung">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
-          </a>
-          <!-- YouTube -->
-          <a href="#" target="_blank" rel="noopener noreferrer" aria-label="YouTube Yayasan Padang Wulan Cipicung">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.58 7.19a2.86 2.86 0 0 0-2.01-2.01C17.8 4.67 12 4.67 12 4.67s-5.8 0-7.57.51a2.86 2.86 0 0 0-2.01 2.01C1.9 8.97 1.9 12 1.9 12s0 3.03.52 4.81a2.86 2.86 0 0 0 2.01 2.01c1.77.51 7.57.51 7.57.51s5.8 0 7.57-.51a2.86 2.86 0 0 0 2.01-2.01c.52-1.78.52-4.81.52-4.81s0-3.03-.52-4.81zM9.8 15.46V8.54l6.1 3.46-6.1 3.46z"/></svg>
-          </a>
-        </div>
+      <div class="footer__bottom">
+        <p>&copy; 2026 Yayasan Padang Wulan Cipicung. Semua hak cipta dilindungi.</p>
       </div>
     </div>
-
-    <!-- Bottom Footer (Hanya Copyright) -->
-    <div class="footer__bottom">
-      <p>&copy; 2026 Yayasan Padang Wulan Cipicung. Semua hak cipta dilindungi.</p>
-    </div>
-  </div>
-</footer>
-
-  <!-- Lightbox galeri (dipakai di halaman yang memuat galeri) -->
-  <div class="lightbox" data-lightbox aria-hidden="true">
-    <div class="lightbox__content">
-      <img src="" alt="" data-lightbox-img>
-      <p class="lightbox__caption" data-lightbox-caption></p>
-    </div>
-    <button type="button" class="lightbox__close" aria-label="Tutup lightbox"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m18 6-12 12M6 6l12 12"/></svg></button>
-    <button type="button" class="lightbox__prev" aria-label="Foto sebelumnya"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
-    <button type="button" class="lightbox__next" aria-label="Foto berikutnya"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
-  </div>
+  </footer>
 
   <button type="button" class="back-to-top" data-back-to-top aria-label="Kembali ke atas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg></button>
 
   <script src="js/main.js"></script>
+
+  <!-- ================= LOGIKA TARIK DATA BERITA (FIREBASE) ================= -->
+  <script type="module">
+    import { db, collection, getDocs, query } from './js/firebase-config.js';
+
+    const beritaContainer = document.getElementById('berita-container');
+    
+    let allNews = [];
+    let currentPage = 1;
+    const itemsPerPage = 6; // Menampilkan 6 card berita per halaman (di bawah featured)
+
+    async function loadNewsPublic() {
+      try {
+        const q = query(collection(db, 'news'));
+        const snap = await getDocs(q);
+
+        if (snap.empty) {
+          beritaContainer.innerHTML = `
+            <div class="container" style="padding: 4rem 0; text-align: center;">
+              <h3 style="color: var(--secondary);">Belum Ada Berita</h3>
+              <p style="color: var(--muted);">Nantikan pembaruan informasi dari kami segera.</p>
+            </div>`;
+          return;
+        }
+
+        snap.forEach(doc => {
+          allNews.push(doc.data());
+        });
+
+        // Urutkan dari yang terbaru ke terlama
+        allNews.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
+        
+        renderPage(1);
+
+      } catch (err) {
+        console.error("Gagal memuat berita publik:", err);
+        beritaContainer.innerHTML = `
+          <div class="container" style="padding: 4rem 0; text-align: center; color: red;">
+            <p>Gagal memuat berita. Silakan muat ulang halaman.</p>
+          </div>`;
+      }
+    }
+
+    function renderPage(pageNumber) {
+      if (allNews.length === 0) return;
+
+      currentPage = pageNumber;
+      let htmlContent = '';
+
+      // BERITA PERTAMA (SELALU JADI FEATURED ARTICLE DI ATAS)
+      const featured = allNews[0];
+      const featuredImg = featured.imageUrl || 'https://via.placeholder.com/640x420?text=No+Image';
+      
+      htmlContent += `
+        <section class="section section--sm">
+          <div class="container">
+            <article class="card news-featured" style="box-shadow: var(--shadow-md); border-radius: var(--radius-lg); overflow: hidden;">
+              <div class="news-card__media">
+                <span class="news-card__category" style="position: absolute; top: 1rem; left: 1rem; background: var(--primary); color: white; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700; z-index: 2;">${featured.kategori || 'Berita'}</span>
+                <img src="${featuredImg}" alt="${featured.judul}" style="width: 100%; height: auto; max-height: 450px; object-fit: cover;">
+              </div>
+              <div class="news-card__body" style="padding: 2rem;">
+                <span class="news-card__date" style="color: var(--muted); font-size: var(--fs-sm); display: block; margin-bottom: 0.5rem;">${featured.tanggal}</span>
+                <h3 style="font-size: 1.75rem; color: var(--secondary); margin-bottom: 1rem; line-height: 1.3;">${featured.judul}</h3>
+                <p style="color: var(--muted); line-height: 1.6;" class="text-truncate">${featured.isi}</p>
+              </div>
+            </article>
+          </div>
+        </section>
+      `;
+
+      // Jika hanya ada 1 berita (featured), tidak perlu render grid
+      if (allNews.length > 1) {
+        
+        // Buat array baru yang membuang index 0 (karena sudah masuk featured)
+        const gridNews = allNews.slice(1);
+        
+        const totalPages = Math.ceil(gridNews.length / itemsPerPage);
+        const startIndex = (pageNumber - 1) * itemsPerPage;
+        const currentGridItems = gridNews.slice(startIndex, startIndex + itemsPerPage);
+
+        htmlContent += `
+          <section class="section section--sm">
+            <div class="container">
+              <div class="grid grid-3">
+        `;
+
+        // LOOPING CARD KECIL
+        currentGridItems.forEach(item => {
+          const imgSrc = item.imageUrl || 'https://via.placeholder.com/480x320?text=No+Image';
+          htmlContent += `
+            <article class="card news-card" style="box-shadow: var(--shadow-sm); border-radius: var(--radius-md); overflow: hidden; display: flex; flex-direction: column;">
+              <div class="news-card__media" style="position: relative;">
+                <span class="news-card__category" style="position: absolute; top: 1rem; left: 1rem; background: var(--white); color: var(--secondary); padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700; z-index: 2;">${item.kategori || 'Berita'}</span>
+                <img src="${imgSrc}" alt="${item.judul}" style="width: 100%; height: 220px; object-fit: cover;">
+              </div>
+              <div class="news-card__body" style="padding: 1.5rem; flex-grow: 1;">
+                <span class="news-card__date" style="color: var(--muted); font-size: var(--fs-xs); display: block; margin-bottom: 0.5rem;">${item.tanggal}</span>
+                <h3 style="font-size: 1.15rem; color: var(--secondary); margin-bottom: 0.75rem; line-height: 1.4;">${item.judul}</h3>
+                <p style="color: var(--muted); font-size: var(--fs-sm); line-height: 1.5;" class="text-truncate">${item.isi}</p>
+              </div>
+            </article>
+          `;
+        });
+
+        htmlContent += `
+              </div>
+              
+              <!-- WADAH PAGINATION (TOMBOL HALAMAN) -->
+              <div class="pagination-container" id="pagination-controls">
+              </div>
+
+            </div>
+          </section>
+        `;
+
+        beritaContainer.innerHTML = htmlContent;
+
+        // Render Tombol Paginasi jika halaman > 1
+        if (totalPages > 1) {
+          const paginationControls = document.getElementById('pagination-controls');
+          let btnHtml = '';
+          for (let i = 1; i <= totalPages; i++) {
+            const activeClass = i === currentPage ? 'active' : '';
+            btnHtml += `<button class="page-btn ${activeClass}" data-page="${i}">${i}</button>`;
+          }
+          paginationControls.innerHTML = btnHtml;
+
+          // Tambah event click ke masing-masing tombol
+          paginationControls.querySelectorAll('.page-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              const targetPage = parseInt(e.target.getAttribute('data-page'));
+              renderPage(targetPage);
+              // Scroll kembali ke awal grid
+              document.querySelector('.page-banner').scrollIntoView({ behavior: 'smooth' });
+            });
+          });
+        }
+
+      } else {
+        // Jika hanya 1 berita
+        beritaContainer.innerHTML = htmlContent;
+      }
+    }
+
+    // Jalankan Fungsi
+    loadNewsPublic();
+  </script>
 </body>
 </html>

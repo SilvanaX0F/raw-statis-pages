@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Admin | Yayasan Padang Wulan</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body {
+      background-color: var(--light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .login-card {
+      background: var(--white);
+      padding: 2.5rem;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-md);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+    .login-card img {
+      margin-bottom: 1.5rem;
+    }
+    .form-field {
+      text-align: left;
+      margin-bottom: 1rem;
+    }
+    .pesan-error {
+      color: #EF4444;
+      font-size: var(--fs-sm);
+      margin-top: 1rem;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-card">
+    <!-- Ganti src dengan logo berwarna Anda jika perlu -->
+    <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 1.5rem;">
+      <img src="images/log.png" alt="Logo Yayasan" width="180" style="display: block; margin: 0 auto; max-width: 100%; height: auto;">
+    </div>
+    <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem;">Masuk ke Dashboard</h2>
+    <p style="color: var(--muted); font-size: var(--fs-sm); margin-bottom: 2rem;">Silakan masukkan kredensial pengurus Anda.</p>
+
+    <form id="login-form">
+      <div class="form-field">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="admin@yayasan.com" required>
+      </div>
+      
+      <div class="form-field">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="••••••••" required>
+      </div>
+
+      <button type="submit" id="btn-login" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+        Masuk Sekarang
+      </button>
+    </form>
+
+    <p id="pesan-error" class="pesan-error">Email atau Password salah!</p>
+    
+    <div style="margin-top: 2rem;">
+      <a href="index.html" style="font-size: var(--fs-sm); color: var(--secondary); text-decoration: underline;">&larr; Kembali ke Beranda Utama</a>
+    </div>
+  </div>
+
+  <!-- SCRIPT PROSES LOGIN -->
+  <script type="module">
+    import { auth } from './js/firebase-config.js';
+    import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+    const form = document.getElementById('login-form');
+    const btnLogin = document.getElementById('btn-login');
+    const pesanError = document.getElementById('pesan-error');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      btnLogin.disabled = true;
+      btnLogin.textContent = 'Memeriksa...';
+      pesanError.style.display = 'none';
+
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      try {
+        // Mencoba login ke Firebase
+        await signInWithEmailAndPassword(auth, email, password);
+        
+        // Jika berhasil, arahkan ke folder dashboard (nanti kita buat file ini)
+        btnLogin.textContent = 'Berhasil! Mengalihkan...';
+        window.location.href = 'dashboard/index.html'; 
+
+      } catch (error) {
+        console.error("Gagal login:", error.message);
+        pesanError.textContent = "Email atau Password tidak valid.";
+        pesanError.style.display = 'block';
+        btnLogin.disabled = false;
+        btnLogin.textContent = 'Masuk Sekarang';
+      }
+    });
+  </script>
+
+</body>
+</html>
