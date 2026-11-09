@@ -68,7 +68,7 @@
           <button type="button" data-filter="Semua" class="is-active" aria-pressed="true">Semua</button>
           <button type="button" data-filter="Sosial" aria-pressed="false">Sosial</button>
           <button type="button" data-filter="Kemanusiaan" aria-pressed="false">Kemanusiaan</button>
-          <button type="button" data-filter="Lainnya" aria-pressed="false">Lainnya</button>
+          <button type="button" data-filter="Keagamaan" aria-pressed="false">Keagamaan</button>
         </div>
         
         <!-- Wadah Grid Galeri -->
@@ -162,6 +162,52 @@
     const filterButtons = document.querySelectorAll('#filter-container button');
     
     let dataGaleriMaster = [];
+
+    // === FITUR GESER FOTO LIGHTBOX (SEBELUMNYA / BERIKUTNYA) ===
+    let lbItems = [];   // daftar foto yang sedang tampil (mengikuti filter kategori)
+    let lbIndex = 0;    // posisi foto yang sedang dibuka
+    const lbEl = document.querySelector('.lightbox');
+    const lbImg = document.querySelector('[data-lightbox-img]');
+    const lbCaption = document.querySelector('[data-lightbox-caption]');
+    const lbPrev = document.querySelector('.lightbox__prev');
+    const lbNext = document.querySelector('.lightbox__next');
+
+    function geserFoto(arah) {
+      if (!lbItems.length || !lbImg) return;
+      // Berputar: dari foto terakhir lanjut ke pertama, dan sebaliknya
+      lbIndex = (lbIndex + arah + lbItems.length) % lbItems.length;
+      const item = lbItems[lbIndex];
+      lbImg.src = item.querySelector('img').src;
+      if (lbCaption) lbCaption.textContent = item.getAttribute('data-caption');
+    }
+
+    // Tombol panah kiri (-1) dan kanan (+1)
+    [[lbPrev, -1], [lbNext, 1]].forEach(([btn, arah]) => {
+      if (!btn) return;
+      btn.addEventListener('click', (e) => {
+        e.stopImmediatePropagation(); // cegah handler lain di main.js ikut berjalan
+        geserFoto(arah);
+      }, true);
+    });
+
+    // Keyboard: panah kiri / kanan (saat lightbox terbuka)
+    document.addEventListener('keydown', (e) => {
+      if (!lbEl || lbEl.getAttribute('aria-hidden') !== 'false') return;
+      if (e.key === 'ArrowLeft') geserFoto(-1);
+      if (e.key === 'ArrowRight') geserFoto(1);
+    });
+
+    // Layar sentuh: geser jari ke kiri / kanan
+    let touchStartX = 0;
+    if (lbEl) {
+      lbEl.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].clientX;
+      }, { passive: true });
+      lbEl.addEventListener('touchend', (e) => {
+        const selisih = e.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(selisih) > 50) geserFoto(selisih < 0 ? 1 : -1);
+      }, { passive: true });
+    }
     
     async function loadGaleriPublic() {
       try {
@@ -210,7 +256,7 @@
       let html = '';
       dataArray.forEach((data) => {
         const imgSrc = data.imageUrl || 'https://via.placeholder.com/480x480?text=No+Image';
-        const kategori = data.kategori || 'Lainnya';
+        const kategori = data.kategori || 'Keagamaan';
         
         html += `
           <button type="button" class="gallery-item" data-category="${kategori}" data-caption="${data.judul} (${data.tanggal || '-'})" style="opacity: 1 !important; visibility: visible !important; transform: none !important; transition: opacity 0.5s ease;">
@@ -232,11 +278,15 @@
       const btnClose = document.querySelector('.lightbox__close');
 
       if (lightbox && lightboxImg) {
+        // Simpan daftar foto yang sedang tampil untuk fitur geser
+        lbItems = Array.from(galleryItems);
+
         // 1. Fungsi Membuka Lightbox
-        galleryItems.forEach(item => {
+        galleryItems.forEach((item, index) => {
           item.addEventListener('click', function() {
             const img = this.querySelector('img').src;
             const caption = this.getAttribute('data-caption');
+            lbIndex = index; // catat posisi foto yang dibuka
             lightboxImg.src = img;
             if (lightboxCaption) lightboxCaption.textContent = caption;
             

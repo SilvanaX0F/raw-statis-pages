@@ -44,11 +44,12 @@
     .sidebar-brand img { max-width: 100%; height: auto; }
     .sidebar-nav { flex-grow: 1; padding: 1.5rem 0; }
     .sidebar-nav a {
-      display: block; padding: 0.85rem 1.5rem; color: #cbd5e1;
+      display: flex; align-items: center; gap: 0.75rem; padding: 0.85rem 1.5rem; color: #cbd5e1;
       text-decoration: none; font-weight: 500; transition: all 0.2s;
     }
     .sidebar-nav a:hover { background-color: rgba(255,255,255,0.05); color: white; }
     .sidebar-nav a.active { background-color: var(--primary); color: white; border-left: 4px solid #bbf7d0; }
+    .sidebar-nav a svg { width: 20px; height: 20px; flex-shrink: 0; } /* icon menu */
     .sidebar-footer { padding: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1); flex-shrink: 0; }
     .btn-logout {
       width: 100%; padding: 0.75rem; background: transparent; border: 1px solid #ef4444; 
@@ -126,11 +127,11 @@
         </a>
       </div>
       <nav class="sidebar-nav">
-        <a href="index.html">Ringkasan Utama</a>
-        <a href="donasi.html" class="active">Kelola Donasi</a>
-        <a href="pengeluaran.html">Kelola Pengeluaran</a>
-        <a href="berita.html">Kelola Berita</a>
-        <a href="galeri.html">Kelola Galeri</a>
+        <a href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Ringkasan Utama</a>
+        <a href="donasi.html" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>Kelola Donasi</a>
+        <a href="pengeluaran.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Kelola Pengeluaran</a>
+        <a href="berita.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>Kelola Berita</a>
+        <a href="galeri.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Kelola Galeri</a>
       </nav>
       <div class="sidebar-footer">
         <button type="button" class="btn-logout" onclick="window.prosesLogout()">Logout Akun</button>
