@@ -161,6 +161,11 @@
             </div>
 
             <div class="form-field">
+              <label for="alamat" style="font-size: 0.875rem; font-weight: 600; display:block; margin-bottom:0.25rem;">Alamat</label>
+              <input type="text" id="alamat" placeholder="Contoh: Cipicung" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 4px; margin-bottom: 1rem;">
+            </div>
+
+            <div class="form-field">
               <label for="tanggal" style="font-size: 0.875rem; font-weight: 600; display:block; margin-bottom:0.25rem;">Tanggal Masuk</label>
               <input type="date" id="tanggal" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 4px; margin-bottom: 1rem;">
             </div>
@@ -204,11 +209,12 @@
           
           <!-- Area scroll horizontal khusus tabel -->
           <div style="overflow-x: auto; width: 100%;">
-            <table style="width: 100%; min-width: 700px; border-collapse: collapse; text-align: left; font-size: 0.875rem;">
+            <table style="width: 100%; min-width: 800px; border-collapse: collapse; text-align: left; font-size: 0.875rem;">
               <thead>
                 <tr style="background-color: #f1f5f9; color: var(--dark);">
                   <th style="padding: 1rem; text-align: center; width: 50px;">No</th>
                   <th style="padding: 1rem;">Nama Donatur</th>
+                  <th style="padding: 1rem;">Alamat</th>
                   <th style="padding: 1rem;">Tanggal</th>
                   <th style="padding: 1rem;">Jumlah</th>
                   <th style="padding: 1rem;">Jenis Donasi</th>
@@ -216,7 +222,7 @@
                 </tr>
               </thead>
               <tbody id="tabel-admin-body">
-                <tr><td colspan="6" style="padding: 2rem; text-align: center;">Memuat data...</td></tr>
+                <tr><td colspan="7" style="padding: 2rem; text-align: center;">Memuat data...</td></tr>
               </tbody>
             </table>
           </div>
@@ -266,7 +272,7 @@
         const snap = await getDocs(q);
 
         if (snap.empty) {
-          tbody.innerHTML = `<tr><td colspan="6" style="padding: 2rem; text-align: center; color: #64748b;">Belum ada data donasi.</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="7" style="padding: 2rem; text-align: center; color: #64748b;">Belum ada data donasi.</td></tr>`;
           return;
         }
 
@@ -280,13 +286,13 @@
 
       } catch (err) {
         console.error(err);
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: red;">Gagal memuat data.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: red;">Gagal memuat data.</td></tr>`;
       }
     }
 
     function renderTabelAdmin(dataArray) {
       if (dataArray.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" style="padding: 2rem; text-align: center; color: #64748b;">Data tidak ditemukan.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" style="padding: 2rem; text-align: center; color: #64748b;">Data tidak ditemukan.</td></tr>`;
         return;
       }
       let html = ''; let no = 1;
@@ -296,6 +302,7 @@
           <tr style="border-bottom: 1px solid var(--border); background-color: ${bgRow};">
             <td style="padding: 0.85rem 1rem; text-align: center; color: #64748b;">${no++}</td>
             <td style="padding: 0.85rem 1rem; font-weight: 600; color: var(--dark);">${data.nama}</td>
+            <td style="padding: 0.85rem 1rem; color: #64748b;">${data.alamat || data.kota || '-'}</td>
             <td style="padding: 0.85rem 1rem; color: #64748b;">${data.tanggal}</td>
             <td style="padding: 0.85rem 1rem; font-weight: 600; color: #16a34a;">${formatRupiah(data.jumlah)}</td>
             <td style="padding: 0.85rem 1rem; color: #64748b;">${data.kategori || '-'}</td>
@@ -321,12 +328,13 @@
 
       const editId = document.getElementById('edit-id').value;
       const nama = document.getElementById('nama').value;
+      const alamat = document.getElementById('alamat').value;
       const tanggal = document.getElementById('tanggal').value;
       const jumlah = document.getElementById('jumlah').value;
       const kategori = document.getElementById('kategori').value;
 
       try {
-        const dataPayload = { nama, tanggal, jumlah: Number(jumlah), kategori };
+        const dataPayload = { nama, alamat, tanggal, jumlah: Number(jumlah), kategori };
 
         if (editId === "") {
           dataPayload.createdAt = serverTimestamp();
@@ -356,6 +364,7 @@
         
         document.getElementById('edit-id').value = data.id;
         document.getElementById('nama').value = data.nama;
+        document.getElementById('alamat').value = data.alamat || data.kota || "";
         document.getElementById('tanggal').value = data.tanggal;
         document.getElementById('jumlah').value = data.jumlah;
         document.getElementById('kategori').value = data.kategori || "";
