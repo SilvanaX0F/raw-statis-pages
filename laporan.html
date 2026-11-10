@@ -46,12 +46,35 @@
   <main id="main">
 
     <!-- ================= LAPORAN DONASI MASUK ================= -->
-    <section class="section page-first-section" id="laporan-donasi" style="padding-bottom: 2rem;">
+    <section class="section page-first-section" id="laporan-donasi" style="padding-bottom: 2.5rem;">
       <div class="container">
+
+        <!-- KARTU RINGKASAN KEUANGAN YAYASAN -->
+        <div class="summary-cards-grid">
+          <div class="summary-card summary-card--donasi">
+            <span class="summary-card__label">TOTAL DONASI MASUK</span>
+            <div class="summary-card__value" id="ringkasan-total-donasi">
+              <span class="summary-loading">Memuat...</span>
+            </div>
+          </div>
+          <div class="summary-card summary-card--pengeluaran">
+            <span class="summary-card__label">TOTAL PENYALURAN</span>
+            <div class="summary-card__value" id="ringkasan-total-pengeluaran">
+              <span class="summary-loading">Memuat...</span>
+            </div>
+          </div>
+          <div class="summary-card summary-card--saldo">
+            <span class="summary-card__label">SALDO KAS SAAT INI</span>
+            <div class="summary-card__value" id="ringkasan-saldo-kas">
+              <span class="summary-loading">Memuat...</span>
+            </div>
+          </div>
+        </div>
+
         <div class="flex-between mb-lg" style="align-items: flex-end; flex-wrap: wrap; gap: 1rem;">
           <div class="section-heading" style="margin-bottom: 0;">
             <span class="section-heading__eyebrow">Keuangan</span>
-            <h2>LAPORAN PENDAPATAN DAN PENERIMAAN</h2>
+            <h2 class="report-heading">LAPORAN PENDAPATAN DAN PENERIMAAN</h2>
           </div>
         </div>
 
@@ -71,6 +94,7 @@
               <option value="Infaq Sosial">Infaq Sosial</option>
               <option value="Infaq Pendidikan">Infaq Pendidikan</option>
               <option value="Infaq Operasional">Infaq Operasional</option>
+              <option value="Infaq PHBI">Infaq PHBI</option>
               <option value="Shodaqoh">Shodaqoh</option>
               <option value="Wakaf">Wakaf</option>
             </select>
@@ -104,12 +128,12 @@
     </section>
 
     <!-- ================= LAPORAN PENYALURAN PROGRAM ================= -->
-    <section class="section" id="laporan-pengeluaran" style="padding-top: 2rem; background-color: var(--light);">
+    <section class="section" id="laporan-pengeluaran" style="padding-top: 2.75rem; background-color: var(--light);">
       <div class="container">
         <div class="flex-between mb-lg" style="align-items: flex-end; flex-wrap: wrap; gap: 1rem;">
           <div class="section-heading" style="margin-bottom: 0;">
             <span class="section-heading__eyebrow">Alokasi Dana</span>
-            <h2>LAPORAN PENYALURAN PROGRAM</h2>
+            <h2 class="report-heading">LAPORAN PENYALURAN PROGRAM</h2>
           </div>
         </div>
 
@@ -307,6 +331,93 @@
         width: 100%;
       }
     }
+
+    /* === KARTU RINGKASAN KAS (SUMMARY CARDS) === */
+    .summary-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      margin-bottom: 2.75rem;
+    }
+    .summary-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.35rem 1.5rem;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .summary-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    .summary-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 5px;
+      height: 100%;
+    }
+    .summary-card--donasi::before { background-color: var(--primary); }
+    .summary-card--pengeluaran::before { background-color: #e11d48; }
+    .summary-card--saldo::before { background-color: #0284c7; }
+
+    .summary-card__label {
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.45rem;
+    }
+    .summary-card__value {
+      font-size: clamp(1.4rem, 2.2vw, 1.85rem);
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      line-height: 1.15;
+      white-space: nowrap;
+    }
+    .summary-card--donasi .summary-card__value { color: var(--primary); }
+    .summary-card--pengeluaran .summary-card__value { color: #e11d48; }
+    .summary-card--saldo .summary-card__value { color: #0284c7; }
+
+    .summary-loading {
+      font-size: 1rem;
+      color: var(--muted);
+      font-weight: 600;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+
+    /* Penyesuaian Heading Laporan */
+    .report-heading {
+      font-size: clamp(1.35rem, 2.2vw, 1.75rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--secondary);
+      margin: 0.2rem 0 0 0;
+      line-height: 1.25;
+    }
+
+    @media (max-width: 860px) {
+      .summary-cards-grid {
+        grid-template-columns: 1fr;
+        gap: 0.85rem;
+        margin-bottom: 2rem;
+      }
+      .summary-card {
+        padding: 1.15rem 1.25rem;
+      }
+    }
   </style>
 
   <!-- ================= SCRIPT LOGIKA DONASI & PENGELUARAN (Firebase) ================= -->
@@ -323,6 +434,28 @@
     let currentPageDonasi = 1;
     const itemsPerPage = 10; 
 
+    // Variabel Global untuk Ringkasan Finansial Kas
+    let totalDonasiMasukGlobal = 0;
+    let totalPenyaluranGlobal = 0;
+
+    function perbaruiRingkasanFinansial() {
+      const elDonasi = document.getElementById('ringkasan-total-donasi');
+      const elPengeluaran = document.getElementById('ringkasan-total-pengeluaran');
+      const elSaldo = document.getElementById('ringkasan-saldo-kas');
+
+      const formatRupiahRingkas = (angka) => {
+        return new Intl.NumberFormat('id-ID', {
+          style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0
+        }).format(angka);
+      };
+
+      const saldo = totalDonasiMasukGlobal - totalPenyaluranGlobal;
+
+      if (elDonasi) elDonasi.textContent = formatRupiahRingkas(totalDonasiMasukGlobal);
+      if (elPengeluaran) elPengeluaran.textContent = formatRupiahRingkas(totalPenyaluranGlobal);
+      if (elSaldo) elSaldo.textContent = formatRupiahRingkas(saldo);
+    }
+
     // Ubah format tanggal
     const formatTanggal = (t) => {
       if (!t) return '-';
@@ -336,9 +469,12 @@
         const snap = await getDocs(q);
         if (snap.empty) {
           tbodyDonasi.innerHTML = `<tr><td colspan="5" style="padding: 3rem; text-align: center; color: var(--muted);">Belum ada riwayat donasi.</td></tr>`;
+          totalDonasiMasukGlobal = 0;
+          perbaruiRingkasanFinansial();
           return;
         }
         dataDonasiMaster = [];
+        totalDonasiMasukGlobal = 0;
         snap.forEach(doc => {
           const d = doc.data();
           // Normalisasi riwayat donasi kategori Infaq -> Infaq Pembangunan
@@ -346,9 +482,11 @@
             d.kategori = 'Infaq Pembangunan';
           }
           dataDonasiMaster.push(d);
+          totalDonasiMasukGlobal += (parseInt(d.jumlah) || 0);
         });
         dataDonasiMaster.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
         
+        perbaruiRingkasanFinansial();
         currentFilterDonasi = [...dataDonasiMaster];
         renderTabelDonasi(currentFilterDonasi, currentPageDonasi);
       } catch (err) {
@@ -389,6 +527,8 @@
           wBg = '#E6FFFA'; wTeks = '#234E52'; 
         } else if (kat === 'Infaq Operasional') { 
           wBg = '#F1F5F9'; wTeks = '#334155'; 
+        } else if (kat === 'Infaq PHBI') { 
+          wBg = '#FEF3C7'; wTeks = '#92400E'; 
         } else if (kat.startsWith('Infaq')) { 
           wBg = '#FEEBC8'; wTeks = '#C05621'; 
         } else if (kat === 'Wakaf') { 
@@ -447,12 +587,20 @@
         const snap = await getDocs(q);
         if (snap.empty) {
           tbodyPengeluaran.innerHTML = `<tr><td colspan="5" style="padding: 3rem; text-align: center; color: var(--muted);">Belum ada riwayat penyaluran.</td></tr>`;
+          totalPenyaluranGlobal = 0;
+          perbaruiRingkasanFinansial();
           return;
         }
         dataPengeluaranMaster = [];
-        snap.forEach(doc => dataPengeluaranMaster.push(doc.data()));
+        totalPenyaluranGlobal = 0;
+        snap.forEach(doc => {
+          const d = doc.data();
+          dataPengeluaranMaster.push(d);
+          totalPenyaluranGlobal += (parseInt(d.jumlah) || 0);
+        });
         dataPengeluaranMaster.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
         
+        perbaruiRingkasanFinansial();
         currentFilterPengeluaran = [...dataPengeluaranMaster];
         renderTabelPengeluaran(currentFilterPengeluaran, currentPagePengeluaran);
       } catch (err) {
