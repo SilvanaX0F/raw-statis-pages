@@ -75,7 +75,7 @@
 
             <div class="form-field">
               <label for="jumlah">Jumlah (Rp)</label>
-              <input type="number" id="jumlah" placeholder="Contoh: 500000" required>
+              <input type="text" id="jumlah" inputmode="numeric" autocomplete="off" placeholder="Contoh: 500.000" required>
             </div>
 
             <div class="form-field">
@@ -162,6 +162,7 @@
   <!-- LOGIKA CRUD FIREBASE -->
   <script type="module">
     import { db, collection, addDoc, getDocs, query, serverTimestamp, doc, updateDoc, deleteDoc } from '../js/firebase-config.js';
+    import { formatRibuanTitik, parseAngkaDariFormat, pasangFormatInputRibuan } from './js/nominal-input.js';
 
     const form = document.getElementById('form-donasi');
     const tbody = document.getElementById('tabel-admin-body');
@@ -169,6 +170,9 @@
     const btnSimpan = document.getElementById('btn-simpan');
     const btnBatal = document.getElementById('btn-batal');
     const inputCari = document.getElementById('input-cari');
+    const inputJumlah = document.getElementById('jumlah');
+
+    pasangFormatInputRibuan(inputJumlah);
     
     let dataDonasiMaster = []; 
 
@@ -307,17 +311,25 @@
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      btnSimpan.disabled = true;
-      btnSimpan.textContent = 'Menyimpan...';
 
       const editId = document.getElementById('edit-id').value;
       const nama = document.getElementById('nama').value;
       const tanggal = document.getElementById('tanggal').value;
-      const jumlah = document.getElementById('jumlah').value;
+      const jumlah = parseAngkaDariFormat(inputJumlah.value);
       const kategori = document.getElementById('kategori').value;
 
+      if (jumlah <= 0) {
+        pesanStatus.style.color = 'var(--accent-red)';
+        pesanStatus.textContent = '❌ Masukkan nominal jumlah yang valid!';
+        inputJumlah.focus();
+        return;
+      }
+
+      btnSimpan.disabled = true;
+      btnSimpan.textContent = 'Menyimpan...';
+
       try {
-        const dataPayload = { nama, tanggal, jumlah: Number(jumlah), kategori };
+        const dataPayload = { nama, tanggal, jumlah, kategori };
 
         if (editId === "") {
           dataPayload.createdAt = serverTimestamp();
@@ -348,7 +360,7 @@
         document.getElementById('edit-id').value = data.id;
         document.getElementById('nama').value = data.nama;
         document.getElementById('tanggal').value = data.tanggal;
-        document.getElementById('jumlah').value = data.jumlah;
+        inputJumlah.value = formatRibuanTitik(data.jumlah);
 
         const selectKategori = document.getElementById('kategori');
         selectKategori.querySelectorAll('.opt-legacy').forEach(opt => opt.remove());

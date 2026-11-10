@@ -107,7 +107,7 @@
 
             <div class="form-field">
               <label for="jumlah">Jumlah (Rp)</label>
-              <input type="number" id="jumlah" placeholder="Contoh: 1500000" required>
+              <input type="text" id="jumlah" inputmode="numeric" autocomplete="off" placeholder="Contoh: 1.500.000" required>
             </div>
 
             <button type="submit" id="btn-simpan" class="btn btn-primary" style="width: 100%; padding: 0.85rem; margin-top: 0.5rem; background: var(--accent-red); box-shadow: 0 2px 6px rgba(225, 29, 72, 0.25);">
@@ -176,6 +176,7 @@
   <!-- LOGIKA CRUD FIREBASE (Koleksi 'expenses') -->
   <script type="module">
     import { db, collection, addDoc, getDocs, query, serverTimestamp, doc, updateDoc, deleteDoc } from '../js/firebase-config.js';
+    import { formatRibuanTitik, parseAngkaDariFormat, pasangFormatInputRibuan } from './js/nominal-input.js';
 
     const form = document.getElementById('form-pengeluaran');
     const tbody = document.getElementById('tabel-admin-body');
@@ -185,6 +186,9 @@
     const btnSimpan = document.getElementById('btn-simpan');
     const btnBatal = document.getElementById('btn-batal');
     const inputCari = document.getElementById('input-cari');
+    const inputJumlah = document.getElementById('jumlah');
+
+    pasangFormatInputRibuan(inputJumlah);
     
     let dataPengeluaranMaster = [];
     let dataTampil = [];
@@ -331,17 +335,25 @@
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      btnSimpan.disabled = true;
-      btnSimpan.textContent = 'Menyimpan...';
 
       const editId = document.getElementById('edit-id').value;
       const tanggal = document.getElementById('tanggal').value;
       const keterangan = document.getElementById('keterangan').value;
       const sumberDana = document.getElementById('sumber-dana').value;
-      const jumlah = document.getElementById('jumlah').value;
+      const jumlah = parseAngkaDariFormat(inputJumlah.value);
+
+      if (jumlah <= 0) {
+        pesanStatus.style.color = 'var(--accent-red)';
+        pesanStatus.textContent = '❌ Masukkan nominal jumlah yang valid!';
+        inputJumlah.focus();
+        return;
+      }
+
+      btnSimpan.disabled = true;
+      btnSimpan.textContent = 'Menyimpan...';
 
       try {
-        const dataPayload = { tanggal, keterangan, sumberDana, jumlah: Number(jumlah) };
+        const dataPayload = { tanggal, keterangan, sumberDana, jumlah };
 
         if (editId === "") {
           dataPayload.createdAt = serverTimestamp();
@@ -390,7 +402,7 @@
         document.getElementById('tanggal').value = data.tanggal;
         setSelectValueWithLegacy(document.getElementById('keterangan'), ambilUraian(data), 'Data Lama');
         setSelectValueWithLegacy(document.getElementById('sumber-dana'), normalisasiSumberDana(data.sumberDana), 'Data Lama');
-        document.getElementById('jumlah').value = data.jumlah;
+        inputJumlah.value = formatRibuanTitik(data.jumlah);
         
         document.getElementById('form-title').textContent = "Edit Data Pengeluaran";
         btnSimpan.textContent = "Update Data Pengeluaran";
