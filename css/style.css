@@ -692,24 +692,46 @@ header {
 }
 
 /* 7) PAGE BANNER (untuk halaman selain beranda) -------------------------- */
-.page-banner {
+.page-banner,
+.page-banner--proportional {
   background: linear-gradient(155deg, var(--secondary) 0%, var(--secondary-dark) 100%);
-  padding-block: var(--space-xl) var(--space-lg);
+  padding-block: 2.25rem 2.25rem;
   color: var(--white);
 }
 
-.page-banner h1 {
+.page-banner h1,
+.page-banner--proportional h1 {
   color: var(--white);
   font-size: var(--fs-2xl);
-  margin-top: var(--space-sm);
+  margin-top: 0.75rem;
   max-width: 42ch;
 }
 
-.page-banner p {
+.page-banner p,
+.page-banner--proportional p {
   color: rgba(255, 255, 255, 0.78);
-  margin-top: 0.6rem;
+  margin-top: 0.5rem;
   max-width: 55ch;
   font-size: var(--fs-base);
+}
+
+/* Jarak proposional judul untuk halaman tanpa banner (program.html & laporan.html) */
+.page-first-section {
+  padding-top: 2.75rem !important;
+}
+
+@media (max-width: 768px) {
+  .page-banner,
+  .page-banner--proportional {
+    padding-block: 1.25rem 1.5rem;
+  }
+  .page-banner h1,
+  .page-banner--proportional h1 {
+    margin-top: 0.5rem;
+  }
+  .page-first-section {
+    padding-top: 1.5rem !important;
+  }
 }
 
 /* 8) CARDS ---------------------------------------------------------------- */
