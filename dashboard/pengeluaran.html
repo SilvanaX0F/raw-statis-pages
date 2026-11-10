@@ -106,16 +106,6 @@
             </div>
 
             <div class="form-field">
-              <label for="kategori">Kategori</label>
-              <select id="kategori" required>
-                <option value="" disabled selected>Pilih kategori</option>
-                <option value="Sosial">Sosial</option>
-                <option value="Kemanusiaan">Kemanusiaan</option>
-                <option value="Keagamaan">Keagamaan</option>
-              </select>
-            </div>
-
-            <div class="form-field">
               <label for="jumlah">Jumlah (Rp)</label>
               <input type="number" id="jumlah" placeholder="Contoh: 1500000" required>
             </div>
@@ -143,20 +133,19 @@
           
           <!-- Area scroll horizontal khusus tabel -->
           <div class="table-responsive">
-            <table class="admin-table" style="min-width: 920px;">
+            <table class="admin-table" style="min-width: 820px;">
               <thead>
                 <tr>
                   <th style="text-align: center; width: 50px;">No</th>
                   <th>Tanggal</th>
                   <th>Uraian Program</th>
                   <th>Dana Diambil Dari</th>
-                  <th>Kategori</th>
                   <th>Jumlah</th>
                   <th style="text-align: center;">Aksi</th>
                 </tr>
               </thead>
               <tbody id="tabel-admin-body">
-                <tr><td colspan="7" style="padding: 2rem; text-align: center; color: var(--text-muted);">Memuat data...</td></tr>
+                <tr><td colspan="6" style="padding: 2rem; text-align: center; color: var(--text-muted);">Memuat data...</td></tr>
               </tbody>
             </table>
           </div>
@@ -243,7 +232,7 @@
 
         if (snap.empty) {
           dataPengeluaranMaster = []; pageContainer.innerHTML = '';
-          tbody.innerHTML = `<tr><td colspan="7" style="padding: 2rem; text-align: center; color: var(--text-muted);">Belum ada data pengeluaran.</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="6" style="padding: 2rem; text-align: center; color: var(--text-muted);">Belum ada data pengeluaran.</td></tr>`;
           return;
         }
 
@@ -263,14 +252,14 @@
 
       } catch (err) {
         console.error(err);
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--accent-red);">Gagal memuat data.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--accent-red);">Gagal memuat data.</td></tr>`;
       }
     }
 
     function renderTabelAdmin(dataArray, page = 1) {
       dataTampil = dataArray;
       if (dataArray.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" style="padding: 2rem; text-align: center; color: var(--text-muted);">Data tidak ditemukan.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" style="padding: 2rem; text-align: center; color: var(--text-muted);">Data tidak ditemukan.</td></tr>`;
         pageContainer.innerHTML = '';
         return;
       }
@@ -293,7 +282,6 @@
             <td style="padding: 0.85rem 1rem; color: var(--text-muted); font-size: 0.85rem; white-space: nowrap;">${formatTanggal(data.tanggal)}</td>
             <td style="padding: 0.85rem 1rem; font-weight: 600; color: var(--text-dark);">${ambilUraian(data) || '-'}</td>
             <td style="padding: 0.85rem 1rem;">${sumberBadge}</td>
-            <td style="padding: 0.85rem 1rem;"><span class="badge-kat" style="background: var(--accent-red-light); color: var(--accent-red); border-color: rgba(225,29,72,0.2);">${data.kategori || '-'}</span></td>
             <td style="padding: 0.85rem 1rem; font-weight: 700; color: var(--accent-red); font-size: 0.9rem; white-space: nowrap;">${formatRupiah(data.jumlah)}</td>
             <td style="padding: 0.85rem 1rem; text-align: center; white-space: nowrap;">
               <button type="button" class="btn-aksi btn-edit" data-id="${data.id}">Edit</button>
@@ -336,8 +324,7 @@
       const kata = e.target.value.toLowerCase();
       const hasil = dataPengeluaranMaster.filter(item =>
         ambilUraian(item).toLowerCase().includes(kata) ||
-        (item.sumberDana || '').toLowerCase().includes(kata) ||
-        (item.kategori || '').toLowerCase().includes(kata)
+        (item.sumberDana || '').toLowerCase().includes(kata)
       );
       renderTabelAdmin(hasil, 1);
     });
@@ -351,11 +338,10 @@
       const tanggal = document.getElementById('tanggal').value;
       const keterangan = document.getElementById('keterangan').value;
       const sumberDana = document.getElementById('sumber-dana').value;
-      const kategori = document.getElementById('kategori').value;
       const jumlah = document.getElementById('jumlah').value;
 
       try {
-        const dataPayload = { tanggal, keterangan, sumberDana, kategori, jumlah: Number(jumlah) };
+        const dataPayload = { tanggal, keterangan, sumberDana, jumlah: Number(jumlah) };
 
         if (editId === "") {
           dataPayload.createdAt = serverTimestamp();
@@ -404,7 +390,6 @@
         document.getElementById('tanggal').value = data.tanggal;
         setSelectValueWithLegacy(document.getElementById('keterangan'), ambilUraian(data), 'Data Lama');
         setSelectValueWithLegacy(document.getElementById('sumber-dana'), normalisasiSumberDana(data.sumberDana), 'Data Lama');
-        document.getElementById('kategori').value = data.kategori || '';
         document.getElementById('jumlah').value = data.jumlah;
         
         document.getElementById('form-title').textContent = "Edit Data Pengeluaran";
