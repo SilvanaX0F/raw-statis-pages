@@ -48,24 +48,53 @@
     <section class="section page-first-section" id="laporan-donasi" style="padding-bottom: 2.5rem;">
       <div class="container">
 
-        <!-- KARTU RINGKASAN KEUANGAN YAYASAN -->
+        <!-- KARTU RINGKASAN KEUANGAN YAYASAN PER POS DANA -->
         <div class="summary-cards-grid">
+          <!-- Kartu 1: Total Donasi Masuk per Pos -->
           <div class="summary-card summary-card--donasi">
-            <span class="summary-card__label">TOTAL DONASI MASUK</span>
-            <div class="summary-card__value" id="ringkasan-total-donasi">
-              <span class="summary-loading">Memuat...</span>
+            <div class="summary-card__head">
+              <span class="summary-card__badge">Rincian Donasi Masuk</span>
+            </div>
+            <div class="summary-breakdown" id="list-ringkasan-donasi">
+              <div class="summary-loading">Memuat rincian...</div>
+            </div>
+            <div class="summary-card__footer">
+              <span class="summary-card__label">TOTAL DONASI MASUK</span>
+              <div class="summary-card__value" id="ringkasan-total-donasi">
+                <span class="summary-loading">...</span>
+              </div>
             </div>
           </div>
+
+          <!-- Kartu 2: Total Penyaluran per Pos -->
           <div class="summary-card summary-card--pengeluaran">
-            <span class="summary-card__label">TOTAL PENYALURAN</span>
-            <div class="summary-card__value" id="ringkasan-total-pengeluaran">
-              <span class="summary-loading">Memuat...</span>
+            <div class="summary-card__head">
+              <span class="summary-card__badge">Rincian Penyaluran</span>
+            </div>
+            <div class="summary-breakdown" id="list-ringkasan-pengeluaran">
+              <div class="summary-loading">Memuat rincian...</div>
+            </div>
+            <div class="summary-card__footer">
+              <span class="summary-card__label">TOTAL PENYALURAN</span>
+              <div class="summary-card__value" id="ringkasan-total-pengeluaran">
+                <span class="summary-loading">...</span>
+              </div>
             </div>
           </div>
+
+          <!-- Kartu 3: Saldo Kas Saat Ini per Pos -->
           <div class="summary-card summary-card--saldo">
-            <span class="summary-card__label">SALDO KAS SAAT INI</span>
-            <div class="summary-card__value" id="ringkasan-saldo-kas">
-              <span class="summary-loading">Memuat...</span>
+            <div class="summary-card__head">
+              <span class="summary-card__badge">Rincian Sisa Saldo</span>
+            </div>
+            <div class="summary-breakdown" id="list-ringkasan-saldo">
+              <div class="summary-loading">Memuat rincian...</div>
+            </div>
+            <div class="summary-card__footer">
+              <span class="summary-card__label">SALDO KAS SAAT INI</span>
+              <div class="summary-card__value" id="ringkasan-saldo-kas">
+                <span class="summary-loading">...</span>
+              </div>
             </div>
           </div>
         </div>
@@ -192,6 +221,30 @@
               </select>
             </div>
           </div>
+          <div class="filter-group">
+            <label for="filter-sumber-dana-select" class="filter-label">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>
+              </svg>
+              <span>Sumber Dana:</span>
+            </label>
+            <div class="filter-select-wrapper">
+              <select id="filter-sumber-dana-select" class="filter-select" aria-label="Pilih Sumber Dana">
+                <option value="Semua">Semua Sumber Dana</option>
+                <option value="Zakat Mal">Zakat Mal</option>
+                <option value="Zakat Fitrah">Zakat Fitrah</option>
+                <option value="Infaq Pembangunan">Infaq Pembangunan</option>
+                <option value="Infaq Sosial (Kematian)">Infaq Sosial (Kematian)</option>
+                <option value="Infaq Pendidikan (TPQ)">Infaq Pendidikan (TPQ)</option>
+                <option value="Infaq Operasional (DKM)">Infaq Operasional (DKM)</option>
+                <option value="Infaq PHBI">Infaq PHBI</option>
+                <option value="Infaq Majlis Taklim">Infaq Majlis Taklim</option>
+                <option value="Infaq Sampah">Infaq Sampah</option>
+                <option value="Shodaqoh">Shodaqoh</option>
+                <option value="Wakaf">Wakaf</option>
+              </select>
+            </div>
+          </div>
         </div>
 
         <!-- Tabel Pengeluaran -->
@@ -202,13 +255,14 @@
                 <th class="tabel-th" style="text-align: center; width: 60px;">No</th>
                 <th class="tabel-th">Tanggal</th>
                 <th class="tabel-th">Uraian Program</th>
+                <th class="tabel-th" style="text-align: center;">Sumber Dana</th>
                 <th class="tabel-th" style="text-align: center;">Kategori</th>
                 <th class="tabel-th" style="text-align: right;">Jumlah (Rp)</th>
               </tr>
             </thead>
             <tbody id="tabel-pengeluaran-body">
               <tr>
-                <td colspan="5" style="padding: 3rem; text-align: center; color: var(--muted);">
+                <td colspan="6" style="padding: 3rem; text-align: center; color: var(--muted);">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 24px; height: 24px; margin-bottom: 0.5rem; animation: spin 1s linear infinite;"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg><br>
                   Memuat data penyaluran dari sistem...
                 </td>
@@ -328,7 +382,7 @@
     }
     .filter-select-wrapper {
       position: relative;
-      min-width: 270px;
+      min-width: 220px;
       max-width: 100%;
     }
     .filter-select {
@@ -389,24 +443,25 @@
       }
     }
 
-    /* === KARTU RINGKASAN KAS (SUMMARY CARDS) === */
+    /* === KARTU RINGKASAN KAS PER POS (SUMMARY CARDS) === */
     .summary-cards-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 1.25rem;
       margin-bottom: 2.75rem;
+      align-items: stretch;
     }
     .summary-card {
       background: var(--white);
       border: 1px solid var(--border);
       border-radius: var(--radius-md);
-      padding: 1.35rem 1.5rem;
+      padding: 1.25rem 1.35rem;
       box-shadow: var(--shadow-sm);
       position: relative;
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: space-between;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
     .summary-card:hover {
@@ -425,27 +480,99 @@
     .summary-card--pengeluaran::before { background-color: #e11d48; }
     .summary-card--saldo::before { background-color: #0284c7; }
 
-    .summary-card__label {
-      font-size: 0.75rem;
+    .summary-card__head {
+      padding-bottom: 0.65rem;
+      margin-bottom: 0.65rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .summary-card__badge {
+      display: inline-block;
+      font-size: 0.72rem;
       font-weight: 800;
-      color: var(--muted);
       text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 0.45rem;
+      letter-spacing: 0.05em;
+      padding: 0.25rem 0.7rem;
+      border-radius: 999px;
+    }
+    .summary-card--donasi .summary-card__badge { background: var(--primary-light); color: var(--primary-dark); }
+    .summary-card--pengeluaran .summary-card__badge { background: #ffe4e6; color: #be123c; }
+    .summary-card--saldo .summary-card__badge { background: #e0f2fe; color: #0369a1; }
+
+    .summary-breakdown {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+      flex: 1;
+    }
+    .breakdown-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(95px, auto);
+      align-items: baseline;
+      column-gap: 0.4rem;
+      padding: 0.3rem 0;
+      border-bottom: 1px dashed #e9eef2;
+      font-size: 0.8rem;
+      line-height: 1.35;
+    }
+    .breakdown-row:last-child {
+      border-bottom: none;
+    }
+    .breakdown-row__name {
+      color: var(--text);
+      font-weight: 600;
+      overflow-wrap: break-word;
+    }
+    .breakdown-row__colon {
+      color: var(--muted);
+      font-weight: 600;
+    }
+    .breakdown-row__val {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+      font-weight: 700;
+    }
+    .breakdown-row__val.is-zero {
+      color: #94a3b8;
+      font-weight: 500;
+    }
+    .breakdown-row__val.is-donasi { color: var(--primary); }
+    .breakdown-row__val.is-pengeluaran { color: #e11d48; }
+    .breakdown-row__val.is-saldo { color: #0284c7; }
+    .breakdown-row__val.is-deficit { color: #e11d48; }
+
+    .summary-card__footer {
+      margin-top: 0.85rem;
+      padding-top: 0.85rem;
+      border-top: 2px solid var(--border);
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .summary-card__label {
+      font-size: 0.76rem;
+      font-weight: 800;
+      color: var(--secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin: 0;
     }
     .summary-card__value {
-      font-size: clamp(1.4rem, 2.2vw, 1.85rem);
+      font-size: clamp(1.18rem, 1.6vw, 1.4rem);
       font-weight: 800;
-      letter-spacing: -0.025em;
-      line-height: 1.15;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
       white-space: nowrap;
+      font-variant-numeric: tabular-nums;
     }
     .summary-card--donasi .summary-card__value { color: var(--primary); }
     .summary-card--pengeluaran .summary-card__value { color: #e11d48; }
     .summary-card--saldo .summary-card__value { color: #0284c7; }
 
     .summary-loading {
-      font-size: 1rem;
+      font-size: 0.9rem;
       color: var(--muted);
       font-weight: 600;
       animation: pulse 1.5s ease-in-out infinite;
@@ -465,14 +592,24 @@
       line-height: 1.25;
     }
 
-    @media (max-width: 860px) {
+    @media (max-width: 1020px) {
       .summary-cards-grid {
         grid-template-columns: 1fr;
-        gap: 0.85rem;
+        gap: 1rem;
         margin-bottom: 2rem;
       }
       .summary-card {
         padding: 1.15rem 1.25rem;
+      }
+      .summary-card__value {
+        font-size: 1.35rem;
+      }
+    }
+    @media (max-width: 480px) {
+      .breakdown-row {
+        grid-template-columns: minmax(0, 1fr) auto minmax(82px, auto);
+        font-size: 0.74rem;
+        column-gap: 0.3rem;
       }
     }
   </style>
@@ -491,26 +628,118 @@
     let currentPageDonasi = 1;
     const itemsPerPage = 10; 
 
-    // Variabel Global untuk Ringkasan Finansial Kas
-    let totalDonasiMasukGlobal = 0;
-    let totalPenyaluranGlobal = 0;
+    // Daftar 11 Pos Dana Utama Yayasan (urutan konsisten di form & ringkasan)
+    const DAFTAR_POS_DANA = [
+      'Zakat Mal',
+      'Zakat Fitrah',
+      'Infaq Pembangunan',
+      'Infaq Sosial (Kematian)',
+      'Infaq Pendidikan (TPQ)',
+      'Infaq Operasional (DKM)',
+      'Infaq PHBI',
+      'Infaq Majlis Taklim',
+      'Infaq Sampah',
+      'Shodaqoh',
+      'Wakaf',
+    ];
+
+    const formatRupiahRingkas = (angka) => {
+      return new Intl.NumberFormat('id-ID', {
+        style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0
+      }).format(angka);
+    };
+
+    function renderRincianPos(containerEl, items, variant) {
+      if (!containerEl) return;
+      containerEl.innerHTML = items.map(({ nama, nilai }) => {
+        let cls = 'is-zero';
+        let teksNilai = 'Rp 0';
+        if (nilai !== 0) {
+          if (variant === 'donasi') {
+            cls = 'is-donasi';
+            teksNilai = formatRupiahRingkas(nilai);
+          } else if (variant === 'pengeluaran') {
+            cls = 'is-pengeluaran';
+            teksNilai = `- ${formatRupiahRingkas(Math.abs(nilai))}`;
+          } else {
+            cls = nilai < 0 ? 'is-deficit' : 'is-saldo';
+            teksNilai = formatRupiahRingkas(nilai);
+          }
+        }
+        return `
+          <div class="breakdown-row">
+            <span class="breakdown-row__name">${nama}</span>
+            <span class="breakdown-row__colon">:</span>
+            <span class="breakdown-row__val ${cls}">${teksNilai}</span>
+          </div>`;
+      }).join('');
+    }
 
     function perbaruiRingkasanFinansial() {
       const elDonasi = document.getElementById('ringkasan-total-donasi');
       const elPengeluaran = document.getElementById('ringkasan-total-pengeluaran');
       const elSaldo = document.getElementById('ringkasan-saldo-kas');
+      const listDonasi = document.getElementById('list-ringkasan-donasi');
+      const listPengeluaran = document.getElementById('list-ringkasan-pengeluaran');
+      const listSaldo = document.getElementById('list-ringkasan-saldo');
 
-      const formatRupiahRingkas = (angka) => {
-        return new Intl.NumberFormat('id-ID', {
-          style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0
-        }).format(angka);
-      };
+      const masukPerPos = {};
+      const keluarPerPos = {};
+      DAFTAR_POS_DANA.forEach(pos => {
+        masukPerPos[pos] = 0;
+        keluarPerPos[pos] = 0;
+      });
 
-      const saldo = totalDonasiMasukGlobal - totalPenyaluranGlobal;
+      let totalDonasiMasuk = 0;
+      let masukLainnya = 0;
+      dataDonasiMaster.forEach(d => {
+        const nom = parseInt(d.jumlah) || 0;
+        const pos = d.kategori;
+        totalDonasiMasuk += nom;
+        if (Object.prototype.hasOwnProperty.call(masukPerPos, pos)) {
+          masukPerPos[pos] += nom;
+        } else {
+          masukLainnya += nom;
+        }
+      });
 
-      if (elDonasi) elDonasi.textContent = formatRupiahRingkas(totalDonasiMasukGlobal);
-      if (elPengeluaran) elPengeluaran.textContent = formatRupiahRingkas(totalPenyaluranGlobal);
-      if (elSaldo) elSaldo.textContent = formatRupiahRingkas(saldo);
+      let totalPenyaluran = 0;
+      let keluarLainnya = 0;
+      dataPengeluaranMaster.forEach(d => {
+        const nom = parseInt(d.jumlah) || 0;
+        const pos = d.sumberDana || '';
+        totalPenyaluran += nom;
+        if (pos && Object.prototype.hasOwnProperty.call(keluarPerPos, pos)) {
+          keluarPerPos[pos] += nom;
+        } else {
+          keluarLainnya += nom;
+        }
+      });
+
+      const itemsDonasi = DAFTAR_POS_DANA.map(pos => ({ nama: pos, nilai: masukPerPos[pos] }));
+      const itemsPengeluaran = DAFTAR_POS_DANA.map(pos => ({ nama: pos, nilai: keluarPerPos[pos] }));
+      const itemsSaldo = DAFTAR_POS_DANA.map(pos => ({ nama: pos, nilai: masukPerPos[pos] - keluarPerPos[pos] }));
+
+      // Tampilkan baris penyesuaian jika ada data lama di luar 11 pos agar rincian selalu klop dengan total
+      if (masukLainnya !== 0) itemsDonasi.push({ nama: 'Lainnya (Data Lama)', nilai: masukLainnya });
+      if (keluarLainnya !== 0) itemsPengeluaran.push({ nama: 'Umum / Belum Dipilih', nilai: keluarLainnya });
+      if (masukLainnya !== 0 || keluarLainnya !== 0) {
+        itemsSaldo.push({ nama: 'Lainnya / Umum', nilai: masukLainnya - keluarLainnya });
+      }
+
+      renderRincianPos(listDonasi, itemsDonasi, 'donasi');
+      renderRincianPos(listPengeluaran, itemsPengeluaran, 'pengeluaran');
+      renderRincianPos(listSaldo, itemsSaldo, 'saldo');
+
+      const saldo = totalDonasiMasuk - totalPenyaluran;
+      if (elDonasi) elDonasi.textContent = formatRupiahRingkas(totalDonasiMasuk);
+      if (elPengeluaran) {
+        elPengeluaran.textContent = totalPenyaluran > 0 ? `- ${formatRupiahRingkas(totalPenyaluran)}` : 'Rp 0';
+      }
+      if (elSaldo) {
+        elSaldo.textContent = formatRupiahRingkas(saldo);
+        elSaldo.style.color = saldo < 0 ? '#e11d48' : '';
+      }
     }
 
     // Ubah format tanggal
@@ -569,17 +798,15 @@
         const snap = await getDocs(q);
         if (snap.empty) {
           tbodyDonasi.innerHTML = `<tr><td colspan="5" style="padding: 3rem; text-align: center; color: var(--muted);">Belum ada riwayat donasi.</td></tr>`;
-          totalDonasiMasukGlobal = 0;
+          dataDonasiMaster = [];
           perbaruiRingkasanFinansial();
           return;
         }
         dataDonasiMaster = [];
-        totalDonasiMasukGlobal = 0;
         snap.forEach(doc => {
           const d = doc.data();
           d.kategori = normalisasiKategoriDonasi(d.kategori);
           dataDonasiMaster.push(d);
-          totalDonasiMasukGlobal += (parseInt(d.jumlah) || 0);
         });
         dataDonasiMaster.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
         
@@ -654,6 +881,7 @@
     const pagePengeluaranContainer = document.getElementById('pagination-pengeluaran');
     const selectFilterPengeluaran = document.getElementById('filter-pengeluaran-select');
     const selectFilterUraian = document.getElementById('filter-uraian-select');
+    const selectFilterSumberDana = document.getElementById('filter-sumber-dana-select');
     
     let dataPengeluaranMaster = [];
     let currentFilterPengeluaran = [];
@@ -667,17 +895,18 @@
         const q = query(collection(db, 'expenses'));
         const snap = await getDocs(q);
         if (snap.empty) {
-          tbodyPengeluaran.innerHTML = `<tr><td colspan="5" style="padding: 3rem; text-align: center; color: var(--muted);">Belum ada riwayat penyaluran.</td></tr>`;
-          totalPenyaluranGlobal = 0;
+          tbodyPengeluaran.innerHTML = `<tr><td colspan="6" style="padding: 3rem; text-align: center; color: var(--muted);">Belum ada riwayat penyaluran.</td></tr>`;
+          dataPengeluaranMaster = [];
           perbaruiRingkasanFinansial();
           return;
         }
         dataPengeluaranMaster = [];
-        totalPenyaluranGlobal = 0;
         snap.forEach(doc => {
           const d = doc.data();
+          if (d.sumberDana) {
+            d.sumberDana = normalisasiKategoriDonasi(d.sumberDana);
+          }
           dataPengeluaranMaster.push(d);
-          totalPenyaluranGlobal += (parseInt(d.jumlah) || 0);
         });
         dataPengeluaranMaster.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
         
@@ -685,13 +914,13 @@
         currentFilterPengeluaran = [...dataPengeluaranMaster];
         renderTabelPengeluaran(currentFilterPengeluaran, currentPagePengeluaran);
       } catch (err) {
-        tbodyPengeluaran.innerHTML = `<tr><td colspan="5" style="text-align: center; color: red;">Gagal memuat data penyaluran.</td></tr>`;
+        tbodyPengeluaran.innerHTML = `<tr><td colspan="6" style="text-align: center; color: red;">Gagal memuat data penyaluran.</td></tr>`;
       }
     }
 
     function renderTabelPengeluaran(dataArray, page) {
       if (dataArray.length === 0) {
-        tbodyPengeluaran.innerHTML = `<tr><td colspan="5" style="padding: 3rem; text-align: center; color: var(--muted);">Tidak ada riwayat untuk filter ini.</td></tr>`;
+        tbodyPengeluaran.innerHTML = `<tr><td colspan="6" style="padding: 3rem; text-align: center; color: var(--muted);">Tidak ada riwayat untuk filter ini.</td></tr>`;
         pagePengeluaranContainer.innerHTML = '';
         return;
       }
@@ -711,6 +940,11 @@
         const nominal = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(d.jumlah);
         const kat = d.kategori || 'Lainnya';
         const uraian = ambilUraianPengeluaran(d) || '-';
+        const sumber = d.sumberDana || '';
+        const sumberStyle = sumber ? getDonasiBadgeStyle(sumber) : null;
+        const sumberHtml = sumber
+          ? `<span class="kategori-badge" style="background: ${sumberStyle.bg}; color: ${sumberStyle.text}; border-radius: 20px; font-weight: 700; display: inline-block;">${sumber}</span>`
+          : `<span style="color: var(--muted);">-</span>`;
         
         let wBg = '#f1f5f9', wTeks = '#475569';
         if (kat === 'Sosial') { 
@@ -724,21 +958,22 @@
         html += `
           <tr style="border-bottom: 1px solid var(--border); background-color: ${bg};">
             <td class="tabel-td" style="text-align: center; color: var(--muted);">${no++}</td>
-            <td class="tabel-td" style="color: var(--muted);">${formatTanggal(d.tanggal)}</td>
+            <td class="tabel-td tabel-tanggal" style="color: var(--muted);">${formatTanggal(d.tanggal)}</td>
             <td class="tabel-td" style="font-weight: 600; color: var(--secondary); white-space: pre-wrap;">${uraian}</td>
+            <td class="tabel-td" style="text-align: center;">${sumberHtml}</td>
             <td class="tabel-td" style="text-align: center;">
               <span class="kategori-badge" style="background: ${wBg}; color: ${wTeks}; border-radius: 20px; font-weight: 700; display: inline-block;">${kat}</span>
             </td>
             <!-- Teks nominal warna merah menandakan minus/keluar -->
-            <td class="tabel-td" style="text-align: right; font-weight: 700; color: #ef4444;">- ${nominal}</td>
+            <td class="tabel-td" style="text-align: right; font-weight: 700; color: #ef4444; white-space: nowrap;">- ${nominal}</td>
           </tr>`;
       });
 
       const totalFmt = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(totalSeluruhnya);
       html += `
         <tr style="background-color: var(--light); border-top: 2px solid var(--border);">
-          <td colspan="4" class="tabel-td-total" style="text-align: right; font-weight: 800; color: var(--secondary);">TOTAL KELUAR :</td>
-          <td class="tabel-td-total" style="text-align: right; font-weight: 800; color: #ef4444;">- ${totalFmt}</td>
+          <td colspan="5" class="tabel-td-total" style="text-align: right; font-weight: 800; color: var(--secondary);">TOTAL KELUAR :</td>
+          <td class="tabel-td-total" style="text-align: right; font-weight: 800; color: #ef4444; white-space: nowrap;">- ${totalFmt}</td>
         </tr>`;
 
       tbodyPengeluaran.innerHTML = html;
@@ -751,11 +986,13 @@
     function terapkanFilterPengeluaran() {
       const katVal = selectFilterPengeluaran ? selectFilterPengeluaran.value : 'Semua';
       const uraianVal = selectFilterUraian ? selectFilterUraian.value : 'Semua';
+      const sumberVal = selectFilterSumberDana ? selectFilterSumberDana.value : 'Semua';
       currentPagePengeluaran = 1;
       currentFilterPengeluaran = dataPengeluaranMaster.filter(item => {
         const cocokKat = katVal === 'Semua' || item.kategori === katVal;
         const cocokUraian = uraianVal === 'Semua' || ambilUraianPengeluaran(item) === uraianVal;
-        return cocokKat && cocokUraian;
+        const cocokSumber = sumberVal === 'Semua' || (item.sumberDana || '') === sumberVal;
+        return cocokKat && cocokUraian && cocokSumber;
       });
       renderTabelPengeluaran(currentFilterPengeluaran, currentPagePengeluaran);
     }
@@ -765,6 +1002,9 @@
     }
     if (selectFilterUraian) {
       selectFilterUraian.addEventListener('change', terapkanFilterPengeluaran);
+    }
+    if (selectFilterSumberDana) {
+      selectFilterSumberDana.addEventListener('change', terapkanFilterPengeluaran);
     }
 
     // ================= 3. FUNGSI PAGINASI UMUM =================

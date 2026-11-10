@@ -88,6 +88,24 @@
             </div>
 
             <div class="form-field">
+              <label for="sumber-dana">Dana diambil dari</label>
+              <select id="sumber-dana" required>
+                <option value="" disabled selected>Pilih sumber dana</option>
+                <option value="Zakat Mal">Zakat Mal</option>
+                <option value="Zakat Fitrah">Zakat Fitrah</option>
+                <option value="Infaq Pembangunan">Infaq Pembangunan</option>
+                <option value="Infaq Sosial (Kematian)">Infaq Sosial (Kematian)</option>
+                <option value="Infaq Pendidikan (TPQ)">Infaq Pendidikan (TPQ)</option>
+                <option value="Infaq Operasional (DKM)">Infaq Operasional (DKM)</option>
+                <option value="Infaq PHBI">Infaq PHBI</option>
+                <option value="Infaq Majlis Taklim">Infaq Majlis Taklim</option>
+                <option value="Infaq Sampah">Infaq Sampah</option>
+                <option value="Shodaqoh">Shodaqoh</option>
+                <option value="Wakaf">Wakaf</option>
+              </select>
+            </div>
+
+            <div class="form-field">
               <label for="kategori">Kategori</label>
               <select id="kategori" required>
                 <option value="" disabled selected>Pilih kategori</option>
@@ -113,34 +131,36 @@
         </div>
 
         <!-- TABEL DATA PENGELUARAN -->
-        <div class="card">
+        <div class="card" id="card-riwayat">
           <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
             <div>
               <h3 style="margin: 0; font-size: 1.05rem; font-weight: 700; color: var(--text-dark); letter-spacing: -0.01em;">Riwayat Penyaluran Program</h3>
             </div>
             <div style="flex-grow: 1; max-width: 300px; width: 100%;">
-              <input type="text" id="input-cari" placeholder="Cari uraian program..." style="width: 100%; padding: 0.6rem 0.95rem; border: 1px solid var(--border); border-radius: var(--radius-md); font-size: 0.875rem; background: #ffffff;">
+              <input type="text" id="input-cari" placeholder="Cari uraian / sumber dana..." style="width: 100%; padding: 0.6rem 0.95rem; border: 1px solid var(--border); border-radius: var(--radius-md); font-size: 0.875rem; background: #ffffff;">
             </div>
           </div>
           
           <!-- Area scroll horizontal khusus tabel -->
           <div class="table-responsive">
-            <table class="admin-table" style="min-width: 800px;">
+            <table class="admin-table" style="min-width: 920px;">
               <thead>
                 <tr>
                   <th style="text-align: center; width: 50px;">No</th>
                   <th>Tanggal</th>
                   <th>Uraian Program</th>
+                  <th>Dana Diambil Dari</th>
                   <th>Kategori</th>
                   <th>Jumlah</th>
                   <th style="text-align: center;">Aksi</th>
                 </tr>
               </thead>
               <tbody id="tabel-admin-body">
-                <tr><td colspan="6" style="padding: 2rem; text-align: center; color: var(--text-muted);">Memuat data...</td></tr>
+                <tr><td colspan="7" style="padding: 2rem; text-align: center; color: var(--text-muted);">Memuat data...</td></tr>
               </tbody>
             </table>
           </div>
+          <div id="pagination-pengeluaran" class="pagination"></div>
         </div>
 
       </div>
@@ -170,12 +190,17 @@
 
     const form = document.getElementById('form-pengeluaran');
     const tbody = document.getElementById('tabel-admin-body');
+    const cardRiwayat = document.getElementById('card-riwayat');
+    const pageContainer = document.getElementById('pagination-pengeluaran');
     const pesanStatus = document.getElementById('pesan-status');
     const btnSimpan = document.getElementById('btn-simpan');
     const btnBatal = document.getElementById('btn-batal');
     const inputCari = document.getElementById('input-cari');
     
-    let dataPengeluaranMaster = []; 
+    let dataPengeluaranMaster = [];
+    let dataTampil = [];
+    let halamanAktif = 1;
+    const itemsPerPage = 10;
 
     const formatRupiah = (angka) => {
       return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka);
@@ -191,46 +216,85 @@
     // Uraian program disimpan di field 'keterangan'; data lama yang hanya punya 'nama' tetap tampil
     const ambilUraian = (data) => data.keterangan || data.nama || '';
 
+    const MAP_SUMBER_DANA = {
+      'infaq': 'Infaq Pembangunan',
+      'infaq pembangunan': 'Infaq Pembangunan',
+      'infaq sosial': 'Infaq Sosial (Kematian)',
+      'infaq sosial (kematian)': 'Infaq Sosial (Kematian)',
+      'infaq pendidikan': 'Infaq Pendidikan (TPQ)',
+      'infaq pendidikan (tpq)': 'Infaq Pendidikan (TPQ)',
+      'infaq operasional': 'Infaq Operasional (DKM)',
+      'infaq operasional (dkm)': 'Infaq Operasional (DKM)',
+      'infaq phbi': 'Infaq PHBI',
+      'infaq majlis taklim': 'Infaq Majlis Taklim',
+      'infaq sampah': 'Infaq Sampah',
+    };
+
+    const normalisasiSumberDana = (val) => {
+      if (!val) return '';
+      const trimmed = String(val).trim().replace(/\s+/g, ' ');
+      return MAP_SUMBER_DANA[trimmed.toLowerCase()] || trimmed;
+    };
+
     async function loadDataAdmin() {
       try {
         const q = query(collection(db, 'expenses'));
         const snap = await getDocs(q);
 
         if (snap.empty) {
-          tbody.innerHTML = `<tr><td colspan="6" style="padding: 2rem; text-align: center; color: var(--text-muted);">Belum ada data pengeluaran.</td></tr>`;
+          dataPengeluaranMaster = []; pageContainer.innerHTML = '';
+          tbody.innerHTML = `<tr><td colspan="7" style="padding: 2rem; text-align: center; color: var(--text-muted);">Belum ada data pengeluaran.</td></tr>`;
           return;
         }
 
         dataPengeluaranMaster = []; 
         snap.forEach(doc => {
-          const data = doc.data(); data.id = doc.id; dataPengeluaranMaster.push(data);
+          const data = doc.data();
+          data.id = doc.id;
+          if (data.sumberDana) {
+            data.sumberDana = normalisasiSumberDana(data.sumberDana);
+          }
+          dataPengeluaranMaster.push(data);
         });
 
         // Urutkan berdasarkan tanggal terbaru
         dataPengeluaranMaster.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
-        renderTabelAdmin(dataPengeluaranMaster);
+        renderTabelAdmin(dataPengeluaranMaster, halamanAktif);
 
       } catch (err) {
         console.error(err);
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--accent-red);">Gagal memuat data.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--accent-red);">Gagal memuat data.</td></tr>`;
       }
     }
 
-    function renderTabelAdmin(dataArray) {
+    function renderTabelAdmin(dataArray, page = 1) {
+      dataTampil = dataArray;
       if (dataArray.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" style="padding: 2rem; text-align: center; color: var(--text-muted);">Data tidak ditemukan.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" style="padding: 2rem; text-align: center; color: var(--text-muted);">Data tidak ditemukan.</td></tr>`;
+        pageContainer.innerHTML = '';
         return;
       }
-      let html = ''; let no = 1;
-      dataArray.forEach((data) => {
+
+      const totalPages = Math.ceil(dataArray.length / itemsPerPage);
+      halamanAktif = Math.min(Math.max(page, 1), totalPages);
+      const start = (halamanAktif - 1) * itemsPerPage;
+      const dataHalaman = dataArray.slice(start, start + itemsPerPage);
+
+      let html = ''; let no = start + 1;
+      dataHalaman.forEach((data) => {
         const bgRow = no % 2 === 0 ? 'var(--bg-canvas)' : '#ffffff';
+        const sumberBadge = data.sumberDana
+          ? `<span class="badge-kat">${data.sumberDana}</span>`
+          : `<span style="color: var(--text-muted); font-size: 0.8rem;">-</span>`;
+
         html += `
           <tr style="border-bottom: 1px solid var(--border); background-color: ${bgRow};">
             <td style="padding: 0.85rem 1rem; text-align: center; color: var(--text-muted); font-size: 0.8rem; font-weight: 600;">${no++}</td>
-            <td style="padding: 0.85rem 1rem; color: var(--text-muted); font-size: 0.85rem;">${formatTanggal(data.tanggal)}</td>
+            <td style="padding: 0.85rem 1rem; color: var(--text-muted); font-size: 0.85rem; white-space: nowrap;">${formatTanggal(data.tanggal)}</td>
             <td style="padding: 0.85rem 1rem; font-weight: 600; color: var(--text-dark);">${ambilUraian(data) || '-'}</td>
+            <td style="padding: 0.85rem 1rem;">${sumberBadge}</td>
             <td style="padding: 0.85rem 1rem;"><span class="badge-kat" style="background: var(--accent-red-light); color: var(--accent-red); border-color: rgba(225,29,72,0.2);">${data.kategori || '-'}</span></td>
-            <td style="padding: 0.85rem 1rem; font-weight: 700; color: var(--accent-red); font-size: 0.9rem;">${formatRupiah(data.jumlah)}</td>
+            <td style="padding: 0.85rem 1rem; font-weight: 700; color: var(--accent-red); font-size: 0.9rem; white-space: nowrap;">${formatRupiah(data.jumlah)}</td>
             <td style="padding: 0.85rem 1rem; text-align: center; white-space: nowrap;">
               <button type="button" class="btn-aksi btn-edit" data-id="${data.id}">Edit</button>
               <button type="button" class="btn-aksi btn-hapus" data-id="${data.id}">Hapus</button>
@@ -238,12 +302,44 @@
           </tr>`;
       });
       tbody.innerHTML = html;
+      renderPagination(totalPages);
     }
+
+    function renderPagination(totalPages) {
+      if (totalPages <= 1) { pageContainer.innerHTML = ''; return; }
+
+      const daftar = [];
+      for (let i = 1; i <= totalPages; i++) {
+        if (i === 1 || i === totalPages || Math.abs(i - halamanAktif) <= 1) daftar.push(i);
+      }
+
+      let html = `<button type="button" class="pg-btn" data-page="${halamanAktif - 1}" ${halamanAktif === 1 ? 'disabled' : ''} aria-label="Halaman sebelumnya">&laquo;</button>`;
+      let sebelumnya = 0;
+      daftar.forEach((i) => {
+        if (i - sebelumnya > 1) html += `<span class="pg-dots">&hellip;</span>`;
+        html += `<button type="button" class="pg-btn ${i === halamanAktif ? 'active' : ''}" data-page="${i}">${i}</button>`;
+        sebelumnya = i;
+      });
+      html += `<button type="button" class="pg-btn" data-page="${halamanAktif + 1}" ${halamanAktif === totalPages ? 'disabled' : ''} aria-label="Halaman berikutnya">&raquo;</button>`;
+
+      pageContainer.innerHTML = html;
+    }
+
+    pageContainer.addEventListener('click', (e) => {
+      const btn = e.target.closest('.pg-btn');
+      if (!btn || btn.disabled) return;
+      renderTabelAdmin(dataTampil, parseInt(btn.getAttribute('data-page')));
+      cardRiwayat.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
 
     inputCari.addEventListener('input', (e) => {
       const kata = e.target.value.toLowerCase();
-      const hasil = dataPengeluaranMaster.filter(item => ambilUraian(item).toLowerCase().includes(kata));
-      renderTabelAdmin(hasil);
+      const hasil = dataPengeluaranMaster.filter(item =>
+        ambilUraian(item).toLowerCase().includes(kata) ||
+        (item.sumberDana || '').toLowerCase().includes(kata) ||
+        (item.kategori || '').toLowerCase().includes(kata)
+      );
+      renderTabelAdmin(hasil, 1);
     });
 
     form.addEventListener('submit', async (e) => {
@@ -254,11 +350,12 @@
       const editId = document.getElementById('edit-id').value;
       const tanggal = document.getElementById('tanggal').value;
       const keterangan = document.getElementById('keterangan').value;
+      const sumberDana = document.getElementById('sumber-dana').value;
       const kategori = document.getElementById('kategori').value;
       const jumlah = document.getElementById('jumlah').value;
 
       try {
-        const dataPayload = { tanggal, keterangan, kategori, jumlah: Number(jumlah) };
+        const dataPayload = { tanggal, keterangan, sumberDana, kategori, jumlah: Number(jumlah) };
 
         if (editId === "") {
           dataPayload.createdAt = serverTimestamp();
@@ -270,7 +367,9 @@
           resetForm();
         }
 
-        form.reset(); loadDataAdmin();
+        form.reset();
+        document.getElementById('keterangan').querySelectorAll('.opt-legacy').forEach(opt => opt.remove());
+        loadDataAdmin();
         setTimeout(() => { pesanStatus.textContent = ''; }, 3000);
 
       } catch (error) {
@@ -281,28 +380,31 @@
       }
     });
 
+    // Helper untuk mengisi select beserta fallback opsi sementara jika data lama belum ada di daftar
+    function setSelectValueWithLegacy(selectEl, value, legacySuffix) {
+      selectEl.querySelectorAll('.opt-legacy').forEach(opt => opt.remove());
+      const adaDiOpsi = Array.from(selectEl.options).some(opt => opt.value === value);
+      if (value && !adaDiOpsi) {
+        const optLegacy = document.createElement('option');
+        optLegacy.value = value;
+        optLegacy.textContent = `${value} (${legacySuffix})`;
+        optLegacy.className = 'opt-legacy';
+        selectEl.appendChild(optLegacy);
+      }
+      selectEl.value = value || '';
+    }
+
     tbody.addEventListener('click', async (e) => {
       if (e.target.closest('.btn-edit')) {
         const id = e.target.closest('.btn-edit').getAttribute('data-id');
         const data = dataPengeluaranMaster.find(item => item.id === id);
+        if (!data) return;
         
         document.getElementById('edit-id').value = data.id;
         document.getElementById('tanggal').value = data.tanggal;
-
-        const selectKeterangan = document.getElementById('keterangan');
-        selectKeterangan.querySelectorAll('.opt-legacy').forEach(opt => opt.remove());
-        const nilaiUraian = ambilUraian(data);
-        const adaDiOpsi = Array.from(selectKeterangan.options).some(opt => opt.value === nilaiUraian);
-        if (nilaiUraian && !adaDiOpsi) {
-          const optLegacy = document.createElement('option');
-          optLegacy.value = nilaiUraian;
-          optLegacy.textContent = `${nilaiUraian} (Data Lama)`;
-          optLegacy.className = 'opt-legacy';
-          selectKeterangan.appendChild(optLegacy);
-        }
-        selectKeterangan.value = nilaiUraian;
-
-        document.getElementById('kategori').value = data.kategori || "";
+        setSelectValueWithLegacy(document.getElementById('keterangan'), ambilUraian(data), 'Data Lama');
+        setSelectValueWithLegacy(document.getElementById('sumber-dana'), normalisasiSumberDana(data.sumberDana), 'Data Lama');
+        document.getElementById('kategori').value = data.kategori || '';
         document.getElementById('jumlah').value = data.jumlah;
         
         document.getElementById('form-title').textContent = "Edit Data Pengeluaran";
@@ -327,6 +429,7 @@
     function resetForm() {
       form.reset(); 
       document.getElementById('keterangan').querySelectorAll('.opt-legacy').forEach(opt => opt.remove());
+      document.getElementById('sumber-dana').querySelectorAll('.opt-legacy').forEach(opt => opt.remove());
       document.getElementById('edit-id').value = "";
       document.getElementById('form-title').textContent = "Catat Pengeluaran Baru";
       btnSimpan.textContent = "Simpan Data Pengeluaran"; 
