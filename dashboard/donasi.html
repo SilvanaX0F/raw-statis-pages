@@ -83,7 +83,10 @@
               <select id="kategori" required>
                 <option value="" disabled selected>Pilih kategori donasi</option>
                 <option value="Zakat">Zakat</option>
-                <option value="Infaq">Infaq</option>
+                <option value="Infaq Pembangunan">Infaq Pembangunan</option>
+                <option value="Infaq Sosial">Infaq Sosial</option>
+                <option value="Infaq Pendidikan">Infaq Pendidikan</option>
+                <option value="Infaq Operasional">Infaq Operasional</option>
                 <option value="Shodaqoh">Shodaqoh</option>
                 <option value="Wakaf">Wakaf</option>
               </select>
@@ -195,7 +198,13 @@
 
         dataDonasiMaster = []; 
         snap.forEach(doc => {
-          const data = doc.data(); data.id = doc.id; dataDonasiMaster.push(data);
+          const data = doc.data(); 
+          data.id = doc.id; 
+          // Normalisasi riwayat donasi kategori Infaq -> Infaq Pembangunan
+          if (data.kategori === 'Infaq' || data.kategori === 'infaq') {
+            data.kategori = 'Infaq Pembangunan';
+          }
+          dataDonasiMaster.push(data);
         });
 
         dataDonasiMaster.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
@@ -318,7 +327,9 @@
         document.getElementById('nama').value = data.nama;
         document.getElementById('tanggal').value = data.tanggal;
         document.getElementById('jumlah').value = data.jumlah;
-        document.getElementById('kategori').value = data.kategori || "";
+        let kat = data.kategori || "";
+        if (kat === 'Infaq' || kat === 'infaq') kat = 'Infaq Pembangunan';
+        document.getElementById('kategori').value = kat;
         
         document.getElementById('form-title').textContent = "Edit Data Donasi";
         btnSimpan.textContent = "Update Data Donasi";
