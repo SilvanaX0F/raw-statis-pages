@@ -88,12 +88,15 @@
           <div class="filter-select-wrapper">
             <select id="filter-donasi-select" class="filter-select" aria-label="Pilih Kategori Donasi">
               <option value="Semua">Semua Pendapatan dan Penerimaan</option>
-              <option value="Zakat">Zakat</option>
+              <option value="Zakat Mal">Zakat Mal</option>
+              <option value="Zakat Fitrah">Zakat Fitrah</option>
               <option value="Infaq Pembangunan">Infaq Pembangunan</option>
-              <option value="Infaq Sosial">Infaq Sosial</option>
-              <option value="Infaq Pendidikan">Infaq Pendidikan</option>
-              <option value="Infaq Operasional">Infaq Operasional</option>
+              <option value="Infaq Sosial (Kematian)">Infaq Sosial (Kematian)</option>
+              <option value="Infaq Pendidikan (TPQ)">Infaq Pendidikan (TPQ)</option>
+              <option value="Infaq Operasional (DKM)">Infaq Operasional (DKM)</option>
               <option value="Infaq PHBI">Infaq PHBI</option>
+              <option value="Infaq Majlis Taklim">Infaq Majlis Taklim</option>
+              <option value="Infaq Sampah">Infaq Sampah</option>
               <option value="Shodaqoh">Shodaqoh</option>
               <option value="Wakaf">Wakaf</option>
             </select>
@@ -136,21 +139,58 @@
           </div>
         </div>
 
-        <!-- Filter Kategori Penyaluran Program (Dropdown) -->
-        <div class="filter-bar">
-          <label for="filter-pengeluaran-select" class="filter-label">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
-            </svg>
-            <span>Filter Kategori:</span>
-          </label>
-          <div class="filter-select-wrapper">
-            <select id="filter-pengeluaran-select" class="filter-select" aria-label="Pilih Kategori Penyaluran">
-              <option value="Semua">Semua Penyaluran</option>
-              <option value="Sosial">Sosial</option>
-              <option value="Kemanusiaan">Kemanusiaan</option>
-              <option value="Keagamaan">Keagamaan</option>
-            </select>
+        <!-- Filter Kategori & Uraian Penyaluran Program (Dropdown) -->
+        <div class="filter-bar filter-bar--multi">
+          <div class="filter-group">
+            <label for="filter-pengeluaran-select" class="filter-label">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+              </svg>
+              <span>Filter Kategori:</span>
+            </label>
+            <div class="filter-select-wrapper">
+              <select id="filter-pengeluaran-select" class="filter-select" aria-label="Pilih Kategori Penyaluran">
+                <option value="Semua">Semua Penyaluran</option>
+                <option value="Sosial">Sosial</option>
+                <option value="Kemanusiaan">Kemanusiaan</option>
+                <option value="Keagamaan">Keagamaan</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <label for="filter-uraian-select" class="filter-label">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="8" y1="6" x2="21" y2="6"></line>
+                <line x1="8" y1="12" x2="21" y2="12"></line>
+                <line x1="8" y1="18" x2="21" y2="18"></line>
+                <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                <line x1="3" y1="18" x2="3.01" y2="18"></line>
+              </svg>
+              <span>Filter Uraian:</span>
+            </label>
+            <div class="filter-select-wrapper">
+              <select id="filter-uraian-select" class="filter-select" aria-label="Pilih Uraian Program">
+                <option value="Semua">Semua Uraian Program</option>
+                <option value="Belanja Pegawai">Belanja Pegawai</option>
+                <option value="Belanja ATK">Belanja ATK</option>
+                <option value="Belanja Alat Kelistrikan">Belanja Alat Kelistrikan</option>
+                <option value="Belanja Alat Kebersihan">Belanja Alat Kebersihan</option>
+                <option value="Belanja Konsumsi">Belanja Konsumsi</option>
+                <option value="Belanja Pakaian">Belanja Pakaian</option>
+                <option value="Belanja Pemeliharaan">Belanja Pemeliharaan</option>
+                <option value="Belanja Jasa/Upah">Belanja Jasa/Upah</option>
+                <option value="Belanja Honorarium">Belanja Honorarium</option>
+                <option value="Belanja Bahan Bangunan">Belanja Bahan Bangunan</option>
+                <option value="Belanja Mesin">Belanja Mesin</option>
+                <option value="Belanja Tanah">Belanja Tanah</option>
+                <option value="Belanja Operasional">Belanja Operasional</option>
+                <option value="Belanja Tak Terduga">Belanja Tak Terduga</option>
+                <option value="Belanja Lain-lain">Belanja Lain-lain</option>
+                <option value="Uang yang diserahkan">Uang yang diserahkan</option>
+              </select>
+            </div>
           </div>
         </div>
 
@@ -319,11 +359,29 @@
       border-color: var(--primary);
       box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15);
     }
+    .filter-bar--multi {
+      gap: 1.25rem;
+    }
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
     @media (max-width: 640px) {
       .filter-bar {
         flex-direction: column;
         align-items: stretch;
         gap: 0.5rem;
+      }
+      .filter-bar--multi {
+        gap: 0.85rem;
+      }
+      .filter-group {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.45rem;
+        width: 100%;
       }
       .filter-select-wrapper {
         min-width: 100%;
@@ -462,6 +520,49 @@
       return (thn && bln && tgl) ? `${tgl}-${bln}-${thn}` : t;
     };
 
+    // Normalisasi penamaan kategori lama -> penamaan kategori terbaru
+    const MAP_KATEGORI_DONASI = {
+      'infaq': 'Infaq Pembangunan',
+      'infaq pembangunan': 'Infaq Pembangunan',
+      'infaq sosial': 'Infaq Sosial (Kematian)',
+      'infaq sosial (kematian)': 'Infaq Sosial (Kematian)',
+      'infaq pendidikan': 'Infaq Pendidikan (TPQ)',
+      'infaq pendidikan (tpq)': 'Infaq Pendidikan (TPQ)',
+      'infaq operasional': 'Infaq Operasional (DKM)',
+      'infaq operasional (dkm)': 'Infaq Operasional (DKM)',
+      'infaq phbi': 'Infaq PHBI',
+      'infaq majlis taklim': 'Infaq Majlis Taklim',
+      'infaq sampah': 'Infaq Sampah',
+    };
+
+    const normalisasiKategoriDonasi = (kat) => {
+      if (!kat) return 'Lainnya';
+      const trimmed = String(kat).trim().replace(/\s+/g, ' ');
+      return MAP_KATEGORI_DONASI[trimmed.toLowerCase()] || trimmed;
+    };
+
+    const DONASI_BADGE_COLORS = {
+      'Zakat Mal': { bg: '#EBF8FF', text: '#1E40AF' },
+      'Zakat Fitrah': { bg: '#DBEAFE', text: '#1D4ED8' },
+      'Zakat': { bg: '#EBF8FF', text: '#2B6CB0' },
+      'Infaq Pembangunan': { bg: '#FEEBC8', text: '#C05621' },
+      'Infaq Sosial (Kematian)': { bg: '#E0F2FE', text: '#0369A1' },
+      'Infaq Pendidikan (TPQ)': { bg: '#E6FFFA', text: '#234E52' },
+      'Infaq Operasional (DKM)': { bg: '#F1F5F9', text: '#334155' },
+      'Infaq PHBI': { bg: '#FEF3C7', text: '#92400E' },
+      'Infaq Majlis Taklim': { bg: '#FCE7F3', text: '#9D174D' },
+      'Infaq Sampah': { bg: '#ECFDF5', text: '#047857' },
+      'Shodaqoh': { bg: '#F3E8FF', text: '#6B21A8' },
+      'Sodaqoh': { bg: '#F3E8FF', text: '#6B21A8' },
+      'Wakaf': { bg: '#FEFCBF', text: '#975A16' },
+    };
+
+    const getDonasiBadgeStyle = (kat) => {
+      if (DONASI_BADGE_COLORS[kat]) return DONASI_BADGE_COLORS[kat];
+      if (kat.startsWith('Infaq')) return { bg: '#FEEBC8', text: '#C05621' };
+      return { bg: '#e3f2e8', text: '#145c38' };
+    };
+
     async function loadDonasi() {
       try {
         const q = query(collection(db, 'donations'));
@@ -476,10 +577,7 @@
         totalDonasiMasukGlobal = 0;
         snap.forEach(doc => {
           const d = doc.data();
-          // Normalisasi riwayat donasi kategori Infaq -> Infaq Pembangunan
-          if (d.kategori === 'Infaq' || d.kategori === 'infaq') {
-            d.kategori = 'Infaq Pembangunan';
-          }
+          d.kategori = normalisasiKategoriDonasi(d.kategori);
           dataDonasiMaster.push(d);
           totalDonasiMasukGlobal += (parseInt(d.jumlah) || 0);
         });
@@ -514,27 +612,7 @@
         const bg = no % 2 === 0 ? 'var(--light)' : 'var(--white)';
         const nominal = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(d.jumlah);
         const kat = d.kategori || 'Lainnya';
-        
-        let wBg = '#e3f2e8', wTeks = '#145c38';
-        if (kat === 'Zakat') { 
-          wBg = '#EBF8FF'; wTeks = '#2B6CB0'; 
-        } else if (kat === 'Infaq Pembangunan') { 
-          wBg = '#FEEBC8'; wTeks = '#C05621'; 
-        } else if (kat === 'Infaq Sosial') { 
-          wBg = '#E0F2FE'; wTeks = '#0369A1'; 
-        } else if (kat === 'Infaq Pendidikan') { 
-          wBg = '#E6FFFA'; wTeks = '#234E52'; 
-        } else if (kat === 'Infaq Operasional') { 
-          wBg = '#F1F5F9'; wTeks = '#334155'; 
-        } else if (kat === 'Infaq PHBI') { 
-          wBg = '#FEF3C7'; wTeks = '#92400E'; 
-        } else if (kat.startsWith('Infaq')) { 
-          wBg = '#FEEBC8'; wTeks = '#C05621'; 
-        } else if (kat === 'Wakaf') { 
-          wBg = '#FEFCBF'; wTeks = '#975A16'; 
-        } else if (kat === 'Shodaqoh' || kat === 'Sodaqoh') { 
-          wBg = '#F3E8FF'; wTeks = '#6B21A8'; 
-        }
+        const { bg: wBg, text: wTeks } = getDonasiBadgeStyle(kat);
 
         html += `
           <tr style="border-bottom: 1px solid var(--border); background-color: ${bg};">
@@ -575,10 +653,14 @@
     const tbodyPengeluaran = document.getElementById('tabel-pengeluaran-body');
     const pagePengeluaranContainer = document.getElementById('pagination-pengeluaran');
     const selectFilterPengeluaran = document.getElementById('filter-pengeluaran-select');
+    const selectFilterUraian = document.getElementById('filter-uraian-select');
     
     let dataPengeluaranMaster = [];
     let currentFilterPengeluaran = [];
     let currentPagePengeluaran = 1;
+
+    // Uraian program disimpan di field 'keterangan'; data lama yang memakai 'nama' tetap terbaca
+    const ambilUraianPengeluaran = (d) => (d.keterangan || d.nama || '').trim();
 
     async function loadPengeluaran() {
       try {
@@ -609,7 +691,7 @@
 
     function renderTabelPengeluaran(dataArray, page) {
       if (dataArray.length === 0) {
-        tbodyPengeluaran.innerHTML = `<tr><td colspan="5" style="padding: 3rem; text-align: center; color: var(--muted);">Tidak ada riwayat untuk kategori ini.</td></tr>`;
+        tbodyPengeluaran.innerHTML = `<tr><td colspan="5" style="padding: 3rem; text-align: center; color: var(--muted);">Tidak ada riwayat untuk filter ini.</td></tr>`;
         pagePengeluaranContainer.innerHTML = '';
         return;
       }
@@ -628,6 +710,7 @@
         const bg = no % 2 === 0 ? 'var(--light)' : 'var(--white)';
         const nominal = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(d.jumlah);
         const kat = d.kategori || 'Lainnya';
+        const uraian = ambilUraianPengeluaran(d) || '-';
         
         let wBg = '#f1f5f9', wTeks = '#475569';
         if (kat === 'Sosial') { 
@@ -642,7 +725,7 @@
           <tr style="border-bottom: 1px solid var(--border); background-color: ${bg};">
             <td class="tabel-td" style="text-align: center; color: var(--muted);">${no++}</td>
             <td class="tabel-td" style="color: var(--muted);">${formatTanggal(d.tanggal)}</td>
-            <td class="tabel-td" style="font-weight: 600; color: var(--secondary); white-space: pre-wrap;">${d.keterangan}</td>
+            <td class="tabel-td" style="font-weight: 600; color: var(--secondary); white-space: pre-wrap;">${uraian}</td>
             <td class="tabel-td" style="text-align: center;">
               <span class="kategori-badge" style="background: ${wBg}; color: ${wTeks}; border-radius: 20px; font-weight: 700; display: inline-block;">${kat}</span>
             </td>
@@ -665,13 +748,23 @@
       });
     }
 
-    if (selectFilterPengeluaran) {
-      selectFilterPengeluaran.addEventListener('change', (e) => {
-        const fVal = e.target.value;
-        currentPagePengeluaran = 1; 
-        currentFilterPengeluaran = fVal === 'Semua' ? [...dataPengeluaranMaster] : dataPengeluaranMaster.filter(i => i.kategori === fVal);
-        renderTabelPengeluaran(currentFilterPengeluaran, currentPagePengeluaran); 
+    function terapkanFilterPengeluaran() {
+      const katVal = selectFilterPengeluaran ? selectFilterPengeluaran.value : 'Semua';
+      const uraianVal = selectFilterUraian ? selectFilterUraian.value : 'Semua';
+      currentPagePengeluaran = 1;
+      currentFilterPengeluaran = dataPengeluaranMaster.filter(item => {
+        const cocokKat = katVal === 'Semua' || item.kategori === katVal;
+        const cocokUraian = uraianVal === 'Semua' || ambilUraianPengeluaran(item) === uraianVal;
+        return cocokKat && cocokUraian;
       });
+      renderTabelPengeluaran(currentFilterPengeluaran, currentPagePengeluaran);
+    }
+
+    if (selectFilterPengeluaran) {
+      selectFilterPengeluaran.addEventListener('change', terapkanFilterPengeluaran);
+    }
+    if (selectFilterUraian) {
+      selectFilterUraian.addEventListener('change', terapkanFilterPengeluaran);
     }
 
     // ================= 3. FUNGSI PAGINASI UMUM =================

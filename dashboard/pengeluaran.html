@@ -66,7 +66,25 @@
 
             <div class="form-field">
               <label for="keterangan">Uraian Program</label>
-              <textarea id="keterangan" placeholder="Contoh: Pembelian Sembako untuk Dhuafa" required style="min-height: 80px; resize: vertical;"></textarea>
+              <select id="keterangan" required>
+                <option value="" disabled selected>Pilih uraian program</option>
+                <option value="Belanja Pegawai">Belanja Pegawai</option>
+                <option value="Belanja ATK">Belanja ATK</option>
+                <option value="Belanja Alat Kelistrikan">Belanja Alat Kelistrikan</option>
+                <option value="Belanja Alat Kebersihan">Belanja Alat Kebersihan</option>
+                <option value="Belanja Konsumsi">Belanja Konsumsi</option>
+                <option value="Belanja Pakaian">Belanja Pakaian</option>
+                <option value="Belanja Pemeliharaan">Belanja Pemeliharaan</option>
+                <option value="Belanja Jasa/Upah">Belanja Jasa/Upah</option>
+                <option value="Belanja Honorarium">Belanja Honorarium</option>
+                <option value="Belanja Bahan Bangunan">Belanja Bahan Bangunan</option>
+                <option value="Belanja Mesin">Belanja Mesin</option>
+                <option value="Belanja Tanah">Belanja Tanah</option>
+                <option value="Belanja Operasional">Belanja Operasional</option>
+                <option value="Belanja Tak Terduga">Belanja Tak Terduga</option>
+                <option value="Belanja Lain-lain">Belanja Lain-lain</option>
+                <option value="Uang yang diserahkan">Uang yang diserahkan</option>
+              </select>
             </div>
 
             <div class="form-field">
@@ -270,7 +288,20 @@
         
         document.getElementById('edit-id').value = data.id;
         document.getElementById('tanggal').value = data.tanggal;
-        document.getElementById('keterangan').value = ambilUraian(data);
+
+        const selectKeterangan = document.getElementById('keterangan');
+        selectKeterangan.querySelectorAll('.opt-legacy').forEach(opt => opt.remove());
+        const nilaiUraian = ambilUraian(data);
+        const adaDiOpsi = Array.from(selectKeterangan.options).some(opt => opt.value === nilaiUraian);
+        if (nilaiUraian && !adaDiOpsi) {
+          const optLegacy = document.createElement('option');
+          optLegacy.value = nilaiUraian;
+          optLegacy.textContent = `${nilaiUraian} (Data Lama)`;
+          optLegacy.className = 'opt-legacy';
+          selectKeterangan.appendChild(optLegacy);
+        }
+        selectKeterangan.value = nilaiUraian;
+
         document.getElementById('kategori').value = data.kategori || "";
         document.getElementById('jumlah').value = data.jumlah;
         
@@ -295,6 +326,7 @@
     
     function resetForm() {
       form.reset(); 
+      document.getElementById('keterangan').querySelectorAll('.opt-legacy').forEach(opt => opt.remove());
       document.getElementById('edit-id').value = "";
       document.getElementById('form-title').textContent = "Catat Pengeluaran Baru";
       btnSimpan.textContent = "Simpan Data Pengeluaran"; 

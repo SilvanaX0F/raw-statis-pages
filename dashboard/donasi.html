@@ -82,12 +82,15 @@
               <label for="kategori">Kategori Donasi</label>
               <select id="kategori" required>
                 <option value="" disabled selected>Pilih kategori donasi</option>
-                <option value="Zakat">Zakat</option>
+                <option value="Zakat Mal">Zakat Mal</option>
+                <option value="Zakat Fitrah">Zakat Fitrah</option>
                 <option value="Infaq Pembangunan">Infaq Pembangunan</option>
-                <option value="Infaq Sosial">Infaq Sosial</option>
-                <option value="Infaq Pendidikan">Infaq Pendidikan</option>
-                <option value="Infaq Operasional">Infaq Operasional</option>
+                <option value="Infaq Sosial (Kematian)">Infaq Sosial (Kematian)</option>
+                <option value="Infaq Pendidikan (TPQ)">Infaq Pendidikan (TPQ)</option>
+                <option value="Infaq Operasional (DKM)">Infaq Operasional (DKM)</option>
                 <option value="Infaq PHBI">Infaq PHBI</option>
+                <option value="Infaq Majlis Taklim">Infaq Majlis Taklim</option>
+                <option value="Infaq Sampah">Infaq Sampah</option>
                 <option value="Shodaqoh">Shodaqoh</option>
                 <option value="Wakaf">Wakaf</option>
               </select>
@@ -186,6 +189,27 @@
       return `${tg}/${bln}/${thn}`;
     };
 
+    // Normalisasi penamaan kategori lama -> penamaan kategori terbaru
+    const MAP_KATEGORI_DONASI = {
+      'infaq': 'Infaq Pembangunan',
+      'infaq pembangunan': 'Infaq Pembangunan',
+      'infaq sosial': 'Infaq Sosial (Kematian)',
+      'infaq sosial (kematian)': 'Infaq Sosial (Kematian)',
+      'infaq pendidikan': 'Infaq Pendidikan (TPQ)',
+      'infaq pendidikan (tpq)': 'Infaq Pendidikan (TPQ)',
+      'infaq operasional': 'Infaq Operasional (DKM)',
+      'infaq operasional (dkm)': 'Infaq Operasional (DKM)',
+      'infaq phbi': 'Infaq PHBI',
+      'infaq majlis taklim': 'Infaq Majlis Taklim',
+      'infaq sampah': 'Infaq Sampah',
+    };
+
+    const normalisasiKategoriDonasi = (kat) => {
+      if (!kat) return '';
+      const trimmed = String(kat).trim().replace(/\s+/g, ' ');
+      return MAP_KATEGORI_DONASI[trimmed.toLowerCase()] || trimmed;
+    };
+
     async function loadDataAdmin() {
       try {
         const q = query(collection(db, 'donations'));
@@ -201,10 +225,7 @@
         snap.forEach(doc => {
           const data = doc.data(); 
           data.id = doc.id; 
-          // Normalisasi riwayat donasi kategori Infaq -> Infaq Pembangunan
-          if (data.kategori === 'Infaq' || data.kategori === 'infaq') {
-            data.kategori = 'Infaq Pembangunan';
-          }
+          data.kategori = normalisasiKategoriDonasi(data.kategori);
           dataDonasiMaster.push(data);
         });
 
@@ -328,9 +349,19 @@
         document.getElementById('nama').value = data.nama;
         document.getElementById('tanggal').value = data.tanggal;
         document.getElementById('jumlah').value = data.jumlah;
-        let kat = data.kategori || "";
-        if (kat === 'Infaq' || kat === 'infaq') kat = 'Infaq Pembangunan';
-        document.getElementById('kategori').value = kat;
+
+        const selectKategori = document.getElementById('kategori');
+        selectKategori.querySelectorAll('.opt-legacy').forEach(opt => opt.remove());
+        const kat = normalisasiKategoriDonasi(data.kategori);
+        const adaDiOpsi = Array.from(selectKategori.options).some(opt => opt.value === kat);
+        if (kat && !adaDiOpsi) {
+          const optLegacy = document.createElement('option');
+          optLegacy.value = kat;
+          optLegacy.textContent = `${kat} (Kategori Lama)`;
+          optLegacy.className = 'opt-legacy';
+          selectKategori.appendChild(optLegacy);
+        }
+        selectKategori.value = kat;
         
         document.getElementById('form-title').textContent = "Edit Data Donasi";
         btnSimpan.textContent = "Update Data Donasi";
@@ -353,6 +384,7 @@
     
     function resetForm() {
       form.reset(); 
+      document.getElementById('kategori').querySelectorAll('.opt-legacy').forEach(opt => opt.remove());
       document.getElementById('edit-id').value = "";
       document.getElementById('form-title').textContent = "Tambah Pendapatan Baru";
       btnSimpan.textContent = "Simpan Data Donasi"; 
