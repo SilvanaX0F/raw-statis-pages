@@ -4,103 +4,24 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kelola Berita | Dashboard YBU Padang Wulan</title>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
   <style>
-    /* === STYLING DASAR === */
-    :root {
-      --sidebar-width: 260px;
-      --primary: #16a34a;
-      --dark: #1e293b;
-      --bg: #f8fafc;
-      --text: #334155;
+    /* Styling Khusus Gambar Berita */
+    .img-preview {
+      max-width: 100%;
+      height: 140px;
+      object-fit: cover;
+      border-radius: var(--radius-md);
+      margin-top: 0.5rem;
+      display: none;
+      border: 1px solid var(--border);
     }
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
-    
-    body { display: none; background-color: var(--bg); color: var(--text); overflow-x: hidden; }
-    
-    .dashboard-layout { display: flex; min-height: 100vh; width: 100%; }
-    
-    /* === MOBILE HEADER === */
-    .mobile-header {
-      display: none; position: fixed; top: 0; left: 0; right: 0;
-      background: white; height: 60px; padding: 0 1.5rem;
-      align-items: center; justify-content: space-between;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1); z-index: 999;
-    }
-    .hamburger-btn {
-      background: none; border: none; cursor: pointer; color: var(--dark);
-      display: flex; align-items: center; justify-content: center;
-    }
-    .hamburger-btn svg { width: 28px; height: 28px; }
-    
-    /* === SIDEBAR KIRI === */
-    .sidebar {
-      width: var(--sidebar-width); background-color: var(--dark); color: white;
-      display: flex; flex-direction: column; position: fixed; top: 0; bottom: 0; left: 0; /* menempel ke tepi layar yang terlihat */
-      overflow-y: auto; z-index: 1000; transition: transform 0.3s ease;
-    }
-    .sidebar-brand { padding: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); text-align: center; }
-    .sidebar-brand img { max-width: 100%; height: auto; }
-    .sidebar-nav { flex-grow: 1; padding: 1.5rem 0; }
-    .sidebar-nav a {
-      display: flex; align-items: center; gap: 0.75rem; padding: 0.85rem 1.5rem; color: #cbd5e1;
-      text-decoration: none; font-weight: 500; transition: all 0.2s;
-    }
-    .sidebar-nav a:hover { background-color: rgba(255,255,255,0.05); color: white; }
-    .sidebar-nav a.active { background-color: var(--primary); color: white; border-left: 4px solid #bbf7d0; }
-    .sidebar-nav a svg { width: 20px; height: 20px; flex-shrink: 0; } /* icon menu */
-    .sidebar-footer { padding: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1); flex-shrink: 0; }
-    .btn-logout {
-      width: 100%; padding: 0.75rem; background: transparent; border: 1px solid #ef4444; 
-      color: #ef4444; border-radius: 6px; cursor: pointer; font-weight: 600; transition: 0.2s;
-    }
-    .btn-logout:hover { background: #ef4444; color: white; }
-
-    /* OVERLAY GELAP UNTUK MOBILE */
-    .sidebar-overlay {
-      display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.5); z-index: 995; opacity: 0; transition: opacity 0.3s ease;
-    }
-
-    /* === AREA KONTEN UTAMA === */
-    .main-content {
-      flex-grow: 1; margin-left: var(--sidebar-width); padding: 2rem;
-      transition: margin 0.3s ease; width: calc(100% - var(--sidebar-width));
-    }
-    .admin-layout { display: grid; grid-template-columns: 1fr; gap: 2rem; align-items: start; }
-    .admin-form-container { padding: 1.5rem; }
-    
-    @media (min-width: 992px) { 
-      .admin-layout { grid-template-columns: 350px 1fr; } 
-      .admin-form-container { position: sticky; top: 2rem; } 
-    }
-
-    /* Tombol & Form Khusus Berita */
-    .btn-aksi { padding: 0.35rem 0.65rem; font-size: 0.75rem; font-weight: 600; border: none; border-radius: 4px; cursor: pointer; display: inline-flex; align-items: center; transition: opacity 0.2s; }
-    .btn-aksi:hover { opacity: 0.8; }
-    .btn-edit { background: #38BDF8; color: white; margin-right: 0.25rem; }
-    .btn-hapus { background: #EF4444; color: white; }
-    .img-preview { max-width: 100%; height: 120px; object-fit: cover; border-radius: 4px; margin-top: 0.5rem; display: none; }
-    .img-thumbnail { width: 60px; height: 60px; object-fit: cover; border-radius: 4px; }
-
-    /* ========================================= */
-    /* RESPONSIVE DESIGN (Layar HP < 768px)      */
-    /* ========================================= */
-    @media (max-width: 768px) {
-      .mobile-header { display: flex; }
-      .sidebar { transform: translateX(-100%); }
-      .sidebar.active { transform: translateX(0); }
-      .main-content {
-        margin-left: 0; width: 100%; padding: 1rem; padding-top: 80px; 
-      }
-      .admin-layout { grid-template-columns: 1fr; }
-      .sidebar-overlay.active { display: block; opacity: 1; }
-      /* Lebarkan sedikit input dan tombol form di HP agar lebih mudah dipencet */
-      .admin-form-container input, .admin-form-container select, .admin-form-container textarea { padding: 0.85rem !important; }
-      .admin-form-container button { padding: 0.85rem !important; }
-      .sidebar-footer { padding-bottom: 2.5rem; }
-      body:has(.sidebar.active) { overflow: hidden; } /* kunci scroll halaman saat menu terbuka */
+    .img-thumbnail {
+      width: 56px;
+      height: 56px;
+      object-fit: cover;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
     }
   </style>
 </head>
@@ -137,40 +58,40 @@
       </nav>
       <div class="sidebar-footer">
         <button type="button" class="btn-logout" onclick="window.prosesLogout()">Logout Akun</button>
-        <div style="text-align: center; margin-top: 1rem; font-size: 0.75rem; color: #94a3b8; font-weight: 500; letter-spacing: 1px;">By : Cip</div>
+        <div class="sidebar-footer-author">By : Cip</div>
       </div>
     </aside>
 
     <!-- KONTEN UTAMA -->
     <main class="main-content">
-      <div style="margin-bottom: 2rem;">
-        <h1 style="font-size: 1.5rem; color: var(--dark);">Manajemen Berita & Artikel</h1>
-        <p style="color: #64748b; font-size: 0.875rem;">Publikasikan kegiatan dan informasi terbaru yayasan.</p>
+      <div class="top-header">
+        <h1>Manajemen Berita & Artikel</h1>
+        <p>Publikasikan kegiatan dan informasi terbaru yayasan ke publik.</p>
       </div>
 
       <div class="admin-layout">
         
         <!-- FORM INPUT BERITA -->
-        <div class="card admin-form-container" style="background: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-          <h2 id="form-title" style="margin-bottom: 1rem; font-size: 1.25rem;">Tulis Berita Baru</h2>
+        <div class="card admin-form-container">
+          <h2 id="form-title" style="margin-bottom: 1.25rem; font-size: 1.2rem; font-weight: 700; color: var(--text-dark); letter-spacing: -0.015em;">Tulis Berita Baru</h2>
           
           <form id="form-berita">
             <input type="hidden" id="edit-id" value="">
             <input type="hidden" id="old-image-url" value="">
 
             <div class="form-field">
-              <label for="judul" style="font-size: 0.875rem; font-weight: 600; display:block; margin-bottom:0.25rem;">Judul Berita</label>
-              <input type="text" id="judul" placeholder="Contoh: Penyaluran Bansos" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 4px; margin-bottom: 1rem;">
+              <label for="judul">Judul Berita</label>
+              <input type="text" id="judul" placeholder="Contoh: Penyaluran Bansos Ramadhan" required>
             </div>
 
             <div class="form-field">
-              <label for="tanggal" style="font-size: 0.875rem; font-weight: 600; display:block; margin-bottom:0.25rem;">Tanggal Publikasi</label>
-              <input type="date" id="tanggal" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 4px; margin-bottom: 1rem;">
+              <label for="tanggal">Tanggal Publikasi</label>
+              <input type="date" id="tanggal" required>
             </div>
 
             <div class="form-field">
-              <label for="kategori" style="font-size: 0.875rem; font-weight: 600; display:block; margin-bottom:0.25rem;">Kategori</label>
-              <select id="kategori" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 4px; background: white; margin-bottom: 1rem;">
+              <label for="kategori">Kategori</label>
+              <select id="kategori" required>
                 <option value="Kegiatan">Kegiatan</option>
                 <option value="Program">Program</option>
                 <option value="Informasi">Informasi</option>
@@ -178,20 +99,20 @@
             </div>
 
             <div class="form-field">
-              <label for="gambar" style="font-size: 0.875rem; font-weight: 600; display:block; margin-bottom:0.25rem;">Gambar Sampul (Max 32MB)</label>
-              <input type="file" id="gambar" accept="image/*" style="width: 100%; padding: 0.5rem; border: 1px dashed var(--border); border-radius: 4px; margin-bottom: 0.5rem;">
+              <label for="gambar">Gambar Sampul (Max 32MB)</label>
+              <input type="file" id="gambar" accept="image/*" style="padding: 0.6rem; border: 1px dashed #cbd5e1; background: var(--bg-canvas);">
               <img id="img-preview" class="img-preview" src="" alt="Preview">
             </div>
 
-            <div class="form-field" style="margin-top: 1rem;">
-              <label for="isi" style="font-size: 0.875rem; font-weight: 600; display:block; margin-bottom:0.25rem;">Isi Berita</label>
-              <textarea id="isi" required placeholder="Tulis deskripsi berita..." style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 4px; margin-bottom: 1rem; font-family: inherit; min-height: 150px; resize: vertical;"></textarea>
+            <div class="form-field">
+              <label for="isi">Isi Berita</label>
+              <textarea id="isi" required placeholder="Tulis deskripsi berita secara lengkap..." style="min-height: 140px; resize: vertical;"></textarea>
             </div>
 
-            <button type="submit" id="btn-simpan" class="btn btn-primary" style="width: 100%; padding: 0.75rem; background: #0284c7; color: white; border: none; border-radius: 4px; font-weight: 600; cursor: pointer;">
+            <button type="submit" id="btn-simpan" class="btn btn-primary" style="width: 100%; padding: 0.85rem; margin-top: 0.5rem; background: var(--accent-blue); box-shadow: 0 2px 6px rgba(2, 132, 199, 0.25);">
               Publikasikan Berita
             </button>
-            <button type="button" id="btn-batal" class="btn btn-secondary" style="width: 100%; margin-top: 0.5rem; display: none; padding: 0.75rem; background: #e2e8f0; color: var(--dark); border: none; border-radius: 4px; font-weight: 600; cursor: pointer;">
+            <button type="button" id="btn-batal" class="btn btn-secondary" style="width: 100%; margin-top: 0.5rem; display: none; padding: 0.85rem;">
               Batal Edit
             </button>
           </form>
@@ -199,30 +120,30 @@
         </div>
 
         <!-- TABEL DATA BERITA -->
-        <div class="card" style="background: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow: hidden;">
-          <div style="padding: 1.5rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div class="card">
+          <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
             <div>
-              <h3 style="margin: 0; font-size: 1.1rem; color: var(--dark);">Daftar Berita</h3>
+              <h3 style="margin: 0; font-size: 1.05rem; font-weight: 700; color: var(--text-dark); letter-spacing: -0.01em;">Daftar Berita</h3>
             </div>
             <div style="flex-grow: 1; max-width: 300px; width: 100%;">
-              <input type="text" id="input-cari" placeholder="Cari judul berita..." style="width: 100%; padding: 0.6rem 1rem; border: 1px solid var(--border); border-radius: 4px; font-size: 0.875rem;">
+              <input type="text" id="input-cari" placeholder="Cari judul berita..." style="width: 100%; padding: 0.6rem 0.95rem; border: 1px solid var(--border); border-radius: var(--radius-md); font-size: 0.875rem; background: #ffffff;">
             </div>
           </div>
           
           <!-- Area scroll horizontal khusus tabel -->
-          <div style="overflow-x: auto; width: 100%;">
-            <table style="width: 100%; min-width: 600px; border-collapse: collapse; text-align: left; font-size: 0.875rem;">
+          <div class="table-responsive">
+            <table class="admin-table" style="min-width: 600px;">
               <thead>
-                <tr style="background-color: #f1f5f9; color: var(--dark);">
-                  <th style="padding: 1rem; text-align: center;">No</th>
-                  <th style="padding: 1rem;">Sampul</th>
-                  <th style="padding: 1rem;">Judul & Tanggal</th>
-                  <th style="padding: 1rem;">Kategori</th>
-                  <th style="padding: 1rem; text-align: center;">Aksi</th>
+                <tr>
+                  <th style="text-align: center; width: 50px;">No</th>
+                  <th style="width: 80px;">Sampul</th>
+                  <th>Judul & Tanggal</th>
+                  <th>Kategori</th>
+                  <th style="text-align: center;">Aksi</th>
                 </tr>
               </thead>
               <tbody id="tabel-admin-body">
-                <tr><td colspan="5" style="padding: 2rem; text-align: center;">Memuat data...</td></tr>
+                <tr><td colspan="5" style="padding: 2rem; text-align: center; color: var(--text-muted);">Memuat data...</td></tr>
               </tbody>
             </table>
           </div>
@@ -244,7 +165,7 @@
     }
 
     btnToggle.addEventListener('click', toggleMenu);
-    overlay.addEventListener('click', toggleMenu); // Tutup saat overlay di-klik
+    overlay.addEventListener('click', toggleMenu);
   </script>
 
   <script type="module" src="js/auth-guard.js"></script>
@@ -267,6 +188,13 @@
     
     let dataBeritaMaster = []; 
 
+    const formatTanggal = (tgl) => {
+      if (!tgl) return '-';
+      const parts = tgl.split('-');
+      if (parts.length === 3) return `${parts[2]}/${parts[1]}/${parts[0]}`;
+      return tgl;
+    };
+
     inputGambar.addEventListener('change', function() {
       const file = this.files[0];
       if (file) {
@@ -288,7 +216,7 @@
         const snap = await getDocs(q);
 
         if (snap.empty) {
-          tbody.innerHTML = `<tr><td colspan="5" style="padding: 2rem; text-align: center; color: #64748b;">Belum ada berita dipublikasikan.</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="5" style="padding: 2rem; text-align: center; color: var(--text-muted);">Belum ada berita dipublikasikan.</td></tr>`;
           return;
         }
 
@@ -302,31 +230,33 @@
 
       } catch (err) {
         console.error(err);
-        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: red;">Gagal memuat data.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--accent-red);">Gagal memuat data.</td></tr>`;
       }
     }
 
     function renderTabelAdmin(dataArray) {
       if (dataArray.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" style="padding: 2rem; text-align: center; color: #64748b;">Data tidak ditemukan.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" style="padding: 2rem; text-align: center; color: var(--text-muted);">Data tidak ditemukan.</td></tr>`;
         return;
       }
       let html = ''; let no = 1;
       dataArray.forEach((data) => {
-        const bgRow = no % 2 === 0 ? '#f8fafc' : '#ffffff';
+        const bgRow = no % 2 === 0 ? 'var(--bg-canvas)' : '#ffffff';
         const imgSrc = data.imageUrl || 'https://via.placeholder.com/60x60?text=No+Image';
 
         html += `
           <tr style="border-bottom: 1px solid var(--border); background-color: ${bgRow};">
-            <td style="padding: 0.85rem 1rem; text-align: center; color: #64748b;">${no++}</td>
+            <td style="padding: 0.85rem 1rem; text-align: center; color: var(--text-muted); font-size: 0.8rem; font-weight: 600;">${no++}</td>
             <td style="padding: 0.85rem 1rem;">
               <img src="${imgSrc}" class="img-thumbnail" alt="Sampul">
             </td>
             <td style="padding: 0.85rem 1rem;">
-              <strong style="color: var(--dark);">${data.judul}</strong><br>
-              <span style="font-size: 0.75rem; color: #64748b;">${data.tanggal}</span>
+              <strong style="color: var(--text-dark); font-size: 0.9rem; line-height: 1.35; display: block;">${data.judul}</strong>
+              <span style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem; display: inline-block;">${formatTanggal(data.tanggal)}</span>
             </td>
-            <td style="padding: 0.85rem 1rem; font-weight: 600; color: #475569;">${data.kategori}</td>
+            <td style="padding: 0.85rem 1rem;">
+              <span class="badge-kat" style="background: var(--accent-blue-light); color: var(--accent-blue); border-color: rgba(2,132,199,0.25);">${data.kategori}</span>
+            </td>
             <td style="padding: 0.85rem 1rem; text-align: center; white-space: nowrap;">
               <button type="button" class="btn-aksi btn-edit" data-id="${data.id}">Edit</button>
               <button type="button" class="btn-aksi btn-hapus" data-id="${data.id}">Hapus</button>
@@ -381,10 +311,10 @@
         if (editId === "") {
           dataPayload.createdAt = serverTimestamp();
           await addDoc(collection(db, 'news'), dataPayload);
-          pesanStatus.style.color = 'green'; pesanStatus.textContent = '✅ Berita berhasil dipublikasikan!';
+          pesanStatus.style.color = 'var(--primary)'; pesanStatus.textContent = '✅ Berita berhasil dipublikasikan!';
         } else {
           await updateDoc(doc(db, 'news', editId), dataPayload);
-          pesanStatus.style.color = 'green'; pesanStatus.textContent = '✅ Berita berhasil diperbarui!';
+          pesanStatus.style.color = 'var(--primary)'; pesanStatus.textContent = '✅ Berita berhasil diperbarui!';
           resetForm();
         }
 
@@ -392,7 +322,7 @@
         setTimeout(() => { pesanStatus.textContent = ''; }, 3000);
 
       } catch (error) {
-        pesanStatus.style.color = 'red'; pesanStatus.textContent = '❌ Gagal: ' + error.message;
+        pesanStatus.style.color = 'var(--accent-red)'; pesanStatus.textContent = '❌ Gagal: ' + error.message;
         console.error(error);
       } finally {
         btnSimpan.disabled = false;
@@ -420,7 +350,7 @@
         document.getElementById('form-title').textContent = "Edit Berita";
         btnSimpan.textContent = "Update Berita";
         btnBatal.style.display = "block";
-        window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll otomatis ke atas saat mau mengedit (berguna di HP)
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
 
       if (e.target.closest('.btn-hapus')) {
