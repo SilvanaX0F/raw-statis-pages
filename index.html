@@ -239,9 +239,11 @@
   </script>
 </section>
 
+<div class="page-watermark-zone">
+
    <!-- Teks Berjalan / Pengumuman -->
-    <div class="container" style="margin-top: 1.5rem; margin-bottom: 1.5rem;">
-      <div style="background: var(--primary-light); color: var(--dark); padding: 0.75rem 1rem; border-radius: var(--radius-sm, 8px); overflow: hidden; white-space: nowrap; position: relative; border: 1px solid rgba(31, 122, 77, 0.15);">
+    <div class="container" style="padding-top: 1.5rem; margin-bottom: 1rem;">
+      <div style="background: rgba(15, 36, 56, 0.06); color: var(--dark); padding: 0.75rem 1rem; border-radius: var(--radius-sm, 8px); overflow: hidden; white-space: nowrap; position: relative; border: 1px solid rgba(15, 36, 56, 0.14); backdrop-filter: blur(2px);">
         <div style="display: inline-block; animation: marquee 38s linear infinite; font-size: var(--fs-sm); font-weight: 600;">
           📢 Selamat datang di website resmi Yayasan Bina Umat Padang Wulan Cipicung ✨ Silakan hubungi kontak kami melalui halaman Kontak untuk informasi lebih lanjut.
         </div>
@@ -255,46 +257,73 @@
       }
     </style>
 
-    <!-- Hero Section (berisi teks & deskripsi utama) -->
-    <section class="hero">
-      <div class="container hero__inner">
-        <div class="hero__content" data-reveal>
-  <span class="badge">Bersama Membangun Masa Depan</span>
-  <h1>Bersama Memberikan <em>Dampak Positif</em> Bagi Masyarakat</h1>
-  <p><strong>Yayasan Bina Umat Padang Wulan Cipicung</strong> yang berkedudukan di Kabupaten Pangandaran — kami hadir mendedikasikan diri melalui pilar sosial, kemanusiaan, dan keagamaan untuk mendukung pendidikan, pemberdayaan, serta kesejahteraan umat.</p>
-  <div class="hero__actions">
-    <a href="program.html" class="btn btn-dark">Program Kami</a>
-  </div>
-</div>
-        <div class="hero__media" data-reveal>
-          <div class="img-frame">
-            <img src="images/foto-kegiatan.jpg" alt="Kegiatan sosial Yayasan Padang Wulan Cipicung bersama masyarakat" width="640" height="560" loading="lazy">
+    <!-- Hero Section (Kotak pertama dengan background kontras & teks jelas) -->
+    <section class="hero hero--showcase">
+      <div class="container">
+        <div class="hero__inner" data-reveal>
+          <div class="hero__content">
+            <span class="badge">Bersama Membangun Masa Depan</span>
+            <h1>Bersama Memberikan <em>Dampak Positif</em> Bagi Masyarakat</h1>
+            <p><strong>Yayasan Bina Umat Padang Wulan Cipicung</strong> yang berkedudukan di Kabupaten Pangandaran — kami hadir mendedikasikan diri melalui pilar sosial, kemanusiaan, dan keagamaan untuk mendukung pendidikan, pemberdayaan, serta kesejahteraan umat.</p>
+            <div class="hero__actions">
+              <a href="program.html" class="btn btn-hero-light">
+                Program Kami
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="width: 17px; height: 17px;"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+            </div>
+          </div>
+          <div class="hero__media">
+            <div class="img-frame">
+              <img src="images/foto-kegiatan.jpg" alt="Kegiatan sosial Yayasan Padang Wulan Cipicung bersama masyarakat" width="640" height="560" loading="lazy">
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Tentang Kami (Tampilan Terpusat / Center dengan Ukuran Gambar Asli) -->
-    <section class="section text-center" id="tentang">
-      <div class="container" style="max-width: 800px; margin-inline: auto;">
-        <div data-reveal>
-          <h2 style="margin-bottom: 2rem;">Berdiri Untuk Melayani, Tumbuh Bersama Masyarakat</h2>
-          
-          <!-- Gambar Besar di PC & Responsif di Mobile -->
-          <div class="img-frame" style="max-width: 560px; margin: 0 auto 2rem auto; border-radius: 16px; overflow: hidden; box-shadow: 0 6px 20px rgba(0,0,0,0.08);">
-            <img src="images/profile.jpg" alt="Logo resmi Yayasan Bina Umat Padang Wulan Cipicung" width="560" height="560" loading="lazy" style="width: 100%; height: auto; display: block; object-fit: cover;">
+    <!-- Galeri Kegiatan Terbaru + Action Tentang Kami (tanpa logo) -->
+    <section class="section home-tentang-section" id="tentang">
+      <div class="container">
+        <div class="home-gallery-head" data-reveal>
+          <span class="section-heading__eyebrow">Dokumentasi Galeri</span>
+          <h2>Berdiri Untuk Melayani, Tumbuh Bersama Masyarakat</h2>
+          <p>Menampilkan 10 momen dokumentasi kegiatan terbaru Yayasan Bina Umat Padang Wulan Cipicung.</p>
+        </div>
+
+        <div class="home-gallery-stage" data-reveal>
+          <button type="button" class="home-gallery-nav home-gallery-nav--prev" id="home-galeri-prev" aria-label="Geser galeri ke kiri">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+          </button>
+
+          <div class="home-gallery-track" id="home-galeri-track" tabindex="0" aria-label="Galeri foto terbaru">
+            <div class="home-gallery-skeleton" aria-hidden="true"></div>
+            <div class="home-gallery-skeleton" aria-hidden="true"></div>
+            <div class="home-gallery-skeleton" aria-hidden="true"></div>
+            <div class="home-gallery-skeleton" aria-hidden="true"></div>
           </div>
 
-          <!-- Tombol CTA Tentang Kami -->
-          <div>
-            <a href="tentang.html" class="btn btn-dark">Tentang Kami</a>
+          <button type="button" class="home-gallery-nav home-gallery-nav--next" id="home-galeri-next" aria-label="Geser galeri ke kanan">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+          </button>
+        </div>
+
+        <!-- Action Tentang Kami di bawah galeri dengan background dark (tanpa logo) -->
+        <div class="tentang-action-band" data-reveal>
+          <div class="tentang-action-band__copy">
+            <span class="tentang-action-band__eyebrow">Profil Yayasan</span>
+            <h3>Mengenal Lebih Dekat Yayasan Bina Umat Padang Wulan</h3>
+            <p>Pelajari latar belakang berdirinya yayasan, visi dan misi pengabdian, serta komitmen kami melayani masyarakat di bidang sosial, kemanusiaan, dan keagamaan.</p>
           </div>
+          <a href="tentang.html" class="btn btn-hero-light">
+            Tentang Kami
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="width: 17px; height: 17px;"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
         </div>
       </div>
     </section>
 
     <!-- Berita Terbaru -->
-<section class="section" id="berita">
+<section class="section home-berita-section" id="berita">
   <div class="container">
     <div class="flex-between mb-lg" style="align-items: flex-end; flex-wrap: wrap; gap: 1rem;">
       <div class="section-heading" style="margin-bottom: 0;">
@@ -348,18 +377,15 @@
   </div>
 </section>
 
-</body>
-</html>
-
-    <!-- Pimpinan & Tim -->
-<section class="section section--alt" id="tim">
+    <!-- Pimpinan & Tim (Background galeri-7) -->
+<section class="section team-showcase" id="tim">
   <div class="container">
-    <div class="section-heading text-center">
+    <div class="section-heading text-center" data-reveal>
       <span class="section-heading__eyebrow">Orang-Orang Di Balik Kami</span>
       <h2>Pimpinan &amp; Tim</h2>
       <p>Dijalankan oleh individu-individu yang berkomitmen pada tujuan sosial yayasan.</p>
       <div class="mt-md">
-        <a href="organisasi.html" class="btn btn-dark">
+        <a href="organisasi.html" class="btn btn-hero-light">
           Lihat Kepengurusan Yayasan
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px; margin-left: 6px; display: inline-block; vertical-align: middle;">
             <path d="M5 12h14M13 6l6 6-6 6"/>
@@ -373,16 +399,18 @@
     <!-- CTA Section -->
     <section class="section section--sm">
       <div class="container">
-        <div class="cta" data-reveal>
+        <div class="cta cta--dark" data-reveal>
           <h2>Mari Bersama Memberikan Dampak</h2>
           <p>Dukungan dan partisipasi Anda membantu kami menjalankan berbagai program untuk masyarakat yang membutuhkan.</p>
           <div class="cta__actions">
-            <a href="donasi.html" class="btn btn-primary">Dukung Kami</a>
+            <a href="donasi.html" class="btn btn-hero-light">Dukung Kami</a>
             <a href="kontak.html" class="btn btn-outline-light">Hubungi Kami</a>
           </div>
         </div>
       </div>
     </section>
+
+</div><!-- /.page-watermark-zone -->
 
   </main>
 
@@ -473,5 +501,272 @@
   <button type="button" class="back-to-top" data-back-to-top aria-label="Kembali ke atas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg></button>
 
   <script src="js/main.js"></script>
+
+  <!-- Memuat 10 Foto Galeri Terbaru dari Firestore + Kontrol Slider & Lightbox -->
+  <script type="module">
+    import { db, collection, getDocs, query } from './js/firebase-config.js';
+
+    const track = document.getElementById('home-galeri-track');
+    const btnPrev = document.getElementById('home-galeri-prev');
+    const btnNext = document.getElementById('home-galeri-next');
+
+    const lightbox = document.querySelector('.lightbox');
+    const lbImg = document.querySelector('[data-lightbox-img]');
+    const lbCaption = document.querySelector('[data-lightbox-caption]');
+    const lbClose = document.querySelector('.lightbox__close');
+    const lbPrev = document.querySelector('.lightbox__prev');
+    const lbNext = document.querySelector('.lightbox__next');
+
+    let daftarGaleri10 = [];
+    let lbIndex = 0;
+    let userHasSlid = false;
+    let allCardRevealed = false;
+    let scrollSettleTimer = null;
+
+    const escapeHtml = (val) => String(val ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+
+    const getMillis = (ts) => {
+      if (!ts) return 0;
+      if (typeof ts.toMillis === 'function') return ts.toMillis();
+      if (typeof ts.toDate === 'function') return ts.toDate().getTime();
+      if (typeof ts.seconds === 'number') return ts.seconds * 1000;
+      const ms = Date.parse(String(ts));
+      return Number.isFinite(ms) ? ms : 0;
+    };
+
+    function updateEdgeState() {
+      if (!track) return;
+      const maxScroll = Math.max(0, track.scrollWidth - track.clientWidth);
+      const atStart = track.scrollLeft <= 4;
+      const atEnd = allCardRevealed && track.scrollLeft >= maxScroll - 4;
+
+      if (btnPrev) btnPrev.classList.toggle('is-edge-limit', atStart);
+      if (btnNext) btnNext.classList.toggle('is-edge-limit', atEnd);
+    }
+
+    function revealAllGalleryCard({ scrollToCard = true } = {}) {
+      const allCard = document.getElementById('home-galeri-all-card');
+      if (!allCard) return;
+
+      if (!allCardRevealed) {
+        allCardRevealed = true;
+        allCard.hidden = false;
+        allCard.classList.add('is-revealed');
+      }
+      if (scrollToCard && track) {
+        requestAnimationFrame(() => {
+          track.scrollTo({ left: track.scrollWidth, behavior: 'smooth' });
+        });
+      }
+      updateEdgeState();
+    }
+
+    function openLightboxAt(idx) {
+      if (!lightbox || !lbImg || daftarGaleri10.length === 0) return;
+      lbIndex = (idx + daftarGaleri10.length) % daftarGaleri10.length;
+      const item = daftarGaleri10[lbIndex];
+      lbImg.src = item.imageUrl || '';
+      lbImg.alt = item.judul || 'Foto Galeri';
+      if (lbCaption) {
+        lbCaption.textContent = `${item.judul || 'Dokumentasi Kegiatan'}${item.tanggal ? ` (${item.tanggal})` : ''}`;
+      }
+      lightbox.setAttribute('aria-hidden', 'false');
+      lightbox.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      if (!lightbox) return;
+      lightbox.setAttribute('aria-hidden', 'true');
+      lightbox.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+
+    if (lbClose) lbClose.addEventListener('click', closeLightbox);
+    if (lbPrev) lbPrev.addEventListener('click', () => openLightboxAt(lbIndex - 1));
+    if (lbNext) lbNext.addEventListener('click', () => openLightboxAt(lbIndex + 1));
+    if (lightbox) {
+      lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) closeLightbox();
+      });
+      let touchStartX = 0;
+      lightbox.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].clientX;
+      }, { passive: true });
+      lightbox.addEventListener('touchend', (e) => {
+        const diff = e.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(diff) > 50) openLightboxAt(diff < 0 ? lbIndex + 1 : lbIndex - 1);
+      }, { passive: true });
+    }
+    document.addEventListener('keydown', (e) => {
+      if (!lightbox || lightbox.getAttribute('aria-hidden') !== 'false') return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') openLightboxAt(lbIndex - 1);
+      if (e.key === 'ArrowRight') openLightboxAt(lbIndex + 1);
+    });
+
+    function setupSliderControls() {
+      if (!track) return;
+
+      const stepScroll = (direction) => {
+        userHasSlid = true;
+        const maxScroll = Math.max(0, track.scrollWidth - track.clientWidth);
+        const atEnd = track.scrollLeft >= maxScroll - 6;
+
+        if (direction > 0 && atEnd) {
+          revealAllGalleryCard({ scrollToCard: true });
+          return;
+        }
+
+        const firstCard = track.querySelector('.home-gallery-card');
+        const cardStep = firstCard ? firstCard.offsetWidth + 16 : 280;
+        const amount = window.innerWidth >= 768 ? cardStep * 2 : cardStep;
+        track.scrollBy({ left: direction * amount, behavior: 'smooth' });
+      };
+
+      if (btnPrev) btnPrev.addEventListener('click', () => stepScroll(-1));
+      if (btnNext) btnNext.addEventListener('click', () => stepScroll(1));
+
+      track.addEventListener('touchstart', () => { userHasSlid = true; }, { passive: true });
+      track.addEventListener('scroll', () => {
+        if (track.scrollLeft > 4) userHasSlid = true;
+        updateEdgeState();
+
+        clearTimeout(scrollSettleTimer);
+        scrollSettleTimer = setTimeout(() => {
+          const maxScroll = Math.max(0, track.scrollWidth - track.clientWidth);
+          const atEnd = track.scrollLeft >= maxScroll - 6;
+          if (userHasSlid && !allCardRevealed && atEnd) {
+            revealAllGalleryCard({ scrollToCard: true });
+          }
+        }, 160);
+      }, { passive: true });
+      window.addEventListener('resize', updateEdgeState, { passive: true });
+
+      // Drag horizontal mouse agar nyaman digeser di desktop
+      let isDown = false;
+      let startX = 0;
+      let startScroll = 0;
+      let dragged = false;
+
+      track.addEventListener('mousedown', (e) => {
+        isDown = true;
+        dragged = false;
+        startX = e.pageX;
+        startScroll = track.scrollLeft;
+        track.classList.add('is-dragging');
+      });
+
+      window.addEventListener('mouseup', () => {
+        if (!isDown) return;
+        isDown = false;
+        track.classList.remove('is-dragging');
+        if (dragged && !allCardRevealed) {
+          const maxScroll = Math.max(0, track.scrollWidth - track.clientWidth);
+          if (track.scrollLeft >= maxScroll - 6) {
+            revealAllGalleryCard({ scrollToCard: true });
+          }
+        }
+        setTimeout(() => { dragged = false; }, 50);
+      });
+
+      track.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        const dx = e.pageX - startX;
+        if (Math.abs(dx) > 6) {
+          dragged = true;
+          userHasSlid = true;
+        }
+        track.scrollLeft = startScroll - dx;
+      });
+
+      track.addEventListener('click', (e) => {
+        if (dragged) {
+          e.preventDefault();
+          e.stopPropagation();
+          return;
+        }
+        const cardBtn = e.target.closest('.home-gallery-card');
+        if (cardBtn) {
+          const idx = Number(cardBtn.getAttribute('data-index'));
+          if (Number.isFinite(idx)) openLightboxAt(idx);
+        }
+      }, true);
+    }
+
+    async function loadGaleriBeranda() {
+      if (!track) return;
+      try {
+        const snap = await getDocs(query(collection(db, 'gallery')));
+        const semua = [];
+        snap.forEach((docSnap) => {
+          const d = docSnap.data();
+          if (d && d.imageUrl) semua.push(d);
+        });
+
+        semua.sort((a, b) => getMillis(b.createdAt) - getMillis(a.createdAt));
+        daftarGaleri10 = semua.slice(0, 10);
+
+        if (daftarGaleri10.length === 0) {
+          allCardRevealed = true;
+          track.innerHTML = `
+            <a href="galeri.html" class="home-gallery-all-card" id="home-galeri-all-card" style="flex: 1 1 100%; aspect-ratio: auto; min-height: 220px;">
+              <span class="home-gallery-all-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+              <strong>Lihat Semua Galeri</strong>
+              <span>Belum ada foto terbaru di server. Klik untuk membuka halaman Galeri.</span>
+            </a>`;
+          updateEdgeState();
+          return;
+        }
+
+        const cardsHtml = daftarGaleri10.map((data, idx) => {
+          const kategori = data.kategori || 'Galeri';
+          const judul = data.judul || 'Dokumentasi Kegiatan';
+          const tanggal = data.tanggal || '';
+          return `
+            <button type="button" class="home-gallery-card" data-index="${idx}" aria-label="${escapeHtml(judul)}">
+              <img src="${escapeHtml(data.imageUrl)}" alt="${escapeHtml(judul)}" loading="${idx < 4 ? 'eager' : 'lazy'}">
+              <span class="home-gallery-card__badge">${escapeHtml(kategori)}</span>
+              <div class="home-gallery-card__caption">
+                <strong>${escapeHtml(judul)}</strong>
+                ${tanggal ? `<span>${escapeHtml(tanggal)}</span>` : ''}
+              </div>
+            </button>
+          `;
+        }).join('');
+
+        // Disembunyikan saat awal muat; muncul di kolom geser setelah pengunjung menggeser sampai akhir
+        const endAllCardHtml = `
+          <a href="galeri.html" class="home-gallery-all-card" id="home-galeri-all-card" hidden aria-label="Lihat Semua Galeri">
+            <span class="home-gallery-all-card__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </span>
+            <strong>Lihat Semua Galeri</strong>
+            <span>Jelajahi seluruh dokumentasi kegiatan yayasan</span>
+          </a>
+        `;
+
+        track.innerHTML = cardsHtml + endAllCardHtml;
+        updateEdgeState();
+      } catch (err) {
+        console.error('Gagal memuat galeri beranda:', err);
+        allCardRevealed = true;
+        track.innerHTML = `
+          <a href="galeri.html" class="home-gallery-all-card" id="home-galeri-all-card" style="flex: 1 1 100%; aspect-ratio: auto; min-height: 220px;">
+            <span class="home-gallery-all-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+            <strong>Lihat Semua Galeri</strong>
+            <span>Galeri sedang disinkronkan. Klik untuk membuka halaman Galeri.</span>
+          </a>`;
+      }
+    }
+
+    setupSliderControls();
+    loadGaleriBeranda();
+  </script>
 </body>
 </html>
