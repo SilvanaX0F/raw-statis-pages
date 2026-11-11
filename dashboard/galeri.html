@@ -228,8 +228,14 @@
   <!-- LOGIKA CRUD & UPLOAD IMGBB GALERI -->
   <script type="module">
     import { db, collection, addDoc, getDocs, query, serverTimestamp, doc, updateDoc, deleteDoc } from '../js/firebase-config.js';
+    import { pasangSemuaCustomSelect } from './js/custom-select.js';
 
     const IMGBB_API_KEY = "0eeb8a2cc63b8f48b7841e72d0a034b3";
+
+    pasangSemuaCustomSelect([
+      { selector: '#kategori', title: 'Pilih Kategori Album' },
+      { selector: '#filter-kategori', title: 'Filter Kategori Galeri', compact: true },
+    ]);
 
     const form = document.getElementById('form-galeri');
     const gridContainer = document.getElementById('galeri-admin-grid');

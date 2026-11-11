@@ -173,9 +173,14 @@
   <!-- LOGIKA CRUD & UPLOAD IMGBB -->
   <script type="module">
     import { db, collection, addDoc, getDocs, query, serverTimestamp, doc, updateDoc, deleteDoc } from '../js/firebase-config.js';
+    import { pasangCustomSelect } from './js/custom-select.js';
 
     // API KEY IMGBB
     const IMGBB_API_KEY = "0eeb8a2cc63b8f48b7841e72d0a034b3";
+
+    pasangCustomSelect(document.getElementById('kategori'), {
+      title: 'Pilih Kategori Berita',
+    });
 
     const form = document.getElementById('form-berita');
     const tbody = document.getElementById('tabel-admin-body');

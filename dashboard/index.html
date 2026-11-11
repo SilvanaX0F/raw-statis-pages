@@ -397,11 +397,6 @@
       font-weight: 700;
     }
 
-    .activity-desc .activity-date {
-      font-weight: 700;
-      color: var(--text-dark);
-    }
-
     .activity-desc .activity-amount.is-donasi {
       color: var(--primary);
     }
@@ -820,7 +815,6 @@
                 <p>Gabungan aktivitas terbaru donasi, penyaluran, berita, dan galeri. Klik item untuk membuka halaman terkait.</p>
               </div>
             </div>
-            <span class="badge-kat" id="aktivitas-count-badge">Memuat...</span>
           </div>
 
           <div class="activity-list" id="aktivitas-list">
@@ -1087,8 +1081,10 @@
       if (diffSec >= 0 && diffSec < 60) return 'Baru saja';
       if (diffSec >= 60 && diffSec < 3600) return `${Math.floor(diffSec / 60)} menit lalu`;
       if (diffSec >= 3600 && diffSec < 86400) return `${Math.floor(diffSec / 3600)} jam lalu`;
+      const diffDay = Math.floor(diffSec / 86400);
+      if (diffDay >= 1 && diffDay < 30) return `${diffDay} hari lalu`;
       const dt = new Date(ms);
-      return `${pad2(dt.getDate())}-${pad2(dt.getMonth() + 1)}-${dt.getFullYear()} • ${pad2(dt.getHours())}:${pad2(dt.getMinutes())}`;
+      return `${pad2(dt.getHours())}:${pad2(dt.getMinutes())}`;
     };
 
     const ambilInfoWaktuAktivitas = (data) => {
@@ -1099,16 +1095,7 @@
       const sortMs = updatedMs || createdMs || (parsedTgl ? parsedTgl.ms : 0);
       const hasExactTime = updatedMs > 0 || createdMs > 0;
 
-      let tglDisplay = '-';
-      if (isUpdated) {
-        tglDisplay = formatDateObjDDMMYYYY(new Date(updatedMs));
-      } else if (parsedTgl) {
-        tglDisplay = parsedTgl.formatted;
-      } else if (createdMs > 0) {
-        tglDisplay = formatDateObjDDMMYYYY(new Date(createdMs));
-      }
-
-      return { isUpdated, sortMs, hasExactTime, tglDisplay };
+      return { isUpdated, sortMs, hasExactTime };
     };
 
     const state = {
@@ -1228,7 +1215,7 @@
           sortMs: waktu.sortMs,
           hasExactTime: waktu.hasExactTime,
           extraLabel: namaDonatur ? `Donatur: ${namaDonatur}` : '',
-          descHtml: `tgl <span class="activity-date">${escapeHtml(waktu.tglDisplay)}</span> Admin telah ${aksiKata} donasi sebesar <strong class="activity-amount is-donasi">${escapeHtml(nominal)}</strong> pada kategori <strong>${escapeHtml(kategori)}</strong>`,
+          descHtml: `Admin telah ${aksiKata} donasi sebesar <strong class="activity-amount is-donasi">${escapeHtml(nominal)}</strong> pada kategori <strong>${escapeHtml(kategori)}</strong>`,
         });
       });
 
@@ -1249,7 +1236,7 @@
           sortMs: waktu.sortMs,
           hasExactTime: waktu.hasExactTime,
           extraLabel: sumberDana ? `Pos: ${sumberDana}` : '',
-          descHtml: `tgl <span class="activity-date">${escapeHtml(waktu.tglDisplay)}</span> Admin telah ${aksiKata} penyaluran sebesar <strong class="activity-amount is-pengeluaran">${escapeHtml(nominal)}</strong> untuk <strong>${escapeHtml(uraian)}</strong>${sumberFragment}`,
+          descHtml: `Admin telah ${aksiKata} penyaluran sebesar <strong class="activity-amount is-pengeluaran">${escapeHtml(nominal)}</strong> untuk <strong>${escapeHtml(uraian)}</strong>${sumberFragment}`,
         });
       });
 
@@ -1268,7 +1255,7 @@
           sortMs: waktu.sortMs,
           hasExactTime: waktu.hasExactTime,
           extraLabel: `Kategori: ${kategori}`,
-          descHtml: `tgl <span class="activity-date">${escapeHtml(waktu.tglDisplay)}</span> Admin telah ${aksiKata} berita <strong>&ldquo;${escapeHtml(judul)}&rdquo;</strong> pada kategori <strong>${escapeHtml(kategori)}</strong>`,
+          descHtml: `Admin telah ${aksiKata} berita <strong>&ldquo;${escapeHtml(judul)}&rdquo;</strong> pada kategori <strong>${escapeHtml(kategori)}</strong>`,
         });
       });
 
@@ -1287,7 +1274,7 @@
           sortMs: waktu.sortMs,
           hasExactTime: waktu.hasExactTime,
           extraLabel: `Album: ${kategori}`,
-          descHtml: `tgl <span class="activity-date">${escapeHtml(waktu.tglDisplay)}</span> Admin telah ${aksiKata} foto galeri <strong>&ldquo;${escapeHtml(judul)}&rdquo;</strong> pada kategori <strong>${escapeHtml(kategori)}</strong>`,
+          descHtml: `Admin telah ${aksiKata} foto galeri <strong>&ldquo;${escapeHtml(judul)}&rdquo;</strong> pada kategori <strong>${escapeHtml(kategori)}</strong>`,
         });
       });
 
@@ -1297,7 +1284,6 @@
 
     function renderAktivitasTerakhir() {
       const container = document.getElementById('aktivitas-list');
-      const countBadge = document.getElementById('aktivitas-count-badge');
       const allReady = Object.values(state.ready).every(Boolean);
 
       if (!allReady) {
@@ -1305,7 +1291,6 @@
       }
 
       const items = bangunItemAktivitas();
-      countBadge.textContent = `${items.length} Terbaru`;
 
       if (items.length === 0) {
         const anyError = Object.values(state.errors).every(Boolean);

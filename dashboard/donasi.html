@@ -165,6 +165,7 @@
   <script type="module">
     import { db, collection, addDoc, getDocs, query, serverTimestamp, doc, updateDoc, deleteDoc } from '../js/firebase-config.js';
     import { formatRibuanTitik, parseAngkaDariFormat, pasangFormatInputRibuan } from './js/nominal-input.js';
+    import { pasangCustomSelect } from './js/custom-select.js';
 
     const form = document.getElementById('form-donasi');
     const tbody = document.getElementById('tabel-admin-body');
@@ -175,6 +176,10 @@
     const inputJumlah = document.getElementById('jumlah');
 
     pasangFormatInputRibuan(inputJumlah);
+    pasangCustomSelect(document.getElementById('kategori'), {
+      title: 'Pilih Kategori Donasi',
+      searchPlaceholder: 'Cari kategori donasi...',
+    });
     
     let dataDonasiMaster = []; 
 

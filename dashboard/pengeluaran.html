@@ -179,6 +179,7 @@
   <script type="module">
     import { db, collection, addDoc, getDocs, query, serverTimestamp, doc, updateDoc, deleteDoc } from '../js/firebase-config.js';
     import { formatRibuanTitik, parseAngkaDariFormat, pasangFormatInputRibuan } from './js/nominal-input.js';
+    import { pasangSemuaCustomSelect } from './js/custom-select.js';
 
     const form = document.getElementById('form-pengeluaran');
     const tbody = document.getElementById('tabel-admin-body');
@@ -191,6 +192,10 @@
     const inputJumlah = document.getElementById('jumlah');
 
     pasangFormatInputRibuan(inputJumlah);
+    pasangSemuaCustomSelect([
+      { selector: '#keterangan', title: 'Pilih Uraian Program', searchPlaceholder: 'Cari uraian program...' },
+      { selector: '#sumber-dana', title: 'Pilih Sumber Dana', searchPlaceholder: 'Cari pos sumber dana...' },
+    ]);
     
     let dataPengeluaranMaster = [];
     let dataTampil = [];
