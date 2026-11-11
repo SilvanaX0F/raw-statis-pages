@@ -48,6 +48,18 @@
     <section class="section page-first-section" id="laporan-donasi" style="padding-bottom: 2.5rem;">
       <div class="container">
 
+        <!-- BAR STATUS SINKRONISASI REALTIME -->
+        <div class="sync-status-bar" id="sync-status-bar">
+          <div class="sync-status-bar__info">
+            <span class="sync-dot is-syncing" id="sync-dot" aria-hidden="true"></span>
+            <span id="sync-status-text">Menyinkronkan data keuangan realtime...</span>
+          </div>
+          <button type="button" class="sync-refresh-btn" id="btn-refresh-keuangan" title="Muat ulang data terbaru">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+            <span>Segarkan</span>
+          </button>
+        </div>
+
         <!-- KARTU RINGKASAN KEUANGAN YAYASAN PER POS DANA -->
         <div class="summary-cards-grid">
           <!-- Kartu 1: Total Donasi Masuk per Pos -->
@@ -542,6 +554,7 @@
       margin: 0;
     }
     .summary-card__value {
+      font-size: 1.25rem;
       font-size: clamp(1.18rem, 1.6vw, 1.4rem);
       font-weight: 800;
       letter-spacing: -0.02em;
@@ -559,6 +572,91 @@
       font-weight: 600;
       animation: pulse 1.5s ease-in-out infinite;
     }
+    .summary-error {
+      padding: 0.75rem 0;
+      font-size: 0.85rem;
+      color: #b91c1c;
+      font-weight: 600;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      align-items: flex-start;
+    }
+    .btn-retry-inline {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+      border-radius: 6px;
+      padding: 0.3rem 0.7rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn-retry-inline:hover { background: #fecaca; }
+
+    /* Bar Status Sinkronisasi Realtime */
+    .sync-status-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      margin-bottom: 1rem;
+      padding: 0.55rem 0.9rem;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    .sync-status-bar__info {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .sync-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+    .sync-dot.is-syncing {
+      background: #f59e0b;
+      animation: pulse 1.2s ease-in-out infinite;
+    }
+    .sync-dot.is-live {
+      background: #16a34a;
+      box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.18);
+    }
+    .sync-dot.is-error {
+      background: #e11d48;
+      box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.15);
+    }
+    .sync-refresh-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.3rem 0.7rem;
+      background: var(--light);
+      color: var(--secondary);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .sync-refresh-btn:hover {
+      border-color: var(--secondary);
+      background: #e9eef2;
+    }
+    .sync-refresh-btn:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+
     @keyframes pulse {
       0%, 100% { opacity: 0.5; }
       50% { opacity: 1; }
@@ -566,6 +664,7 @@
 
     /* Penyesuaian Heading Laporan */
     .report-heading {
+      font-size: 1.5rem;
       font-size: clamp(1.35rem, 2.2vw, 1.75rem);
       font-weight: 800;
       letter-spacing: -0.02em;
@@ -596,399 +695,754 @@
     }
   </style>
 
-  <!-- ================= SCRIPT LOGIKA DONASI & PENGELUARAN (Firebase) ================= -->
+  <!-- ================= SCRIPT LOGIKA DONASI & PENGELUARAN (Realtime + REST Fallback) ================= -->
+  <script>
+    (function () {
+      var FIREBASE_PROJECT_ID = 'yayasan-padang-wulan';
+      var FIREBASE_API_KEY = 'AIzaSyAAQK1Ne1tGHgpbaPr74Ow_NNaYdJo12wY';
+      var itemsPerPage = 10;
+
+      // Daftar 11 Pos Dana Utama Yayasan (urutan konsisten di form & ringkasan)
+      var DAFTAR_POS_DANA = [
+        'Zakat Mal',
+        'Zakat Fitrah',
+        'Infaq Pembangunan',
+        'Infaq Sosial (Kematian)',
+        'Infaq Pendidikan (TPQ)',
+        'Infaq Operasional (DKM)',
+        'Infaq PHBI',
+        'Infaq Majlis Taklim',
+        'Infaq Sampah',
+        'Shodaqoh',
+        'Wakaf'
+      ];
+
+      // Normalisasi penamaan kategori lama / beda kapitalisasi -> penamaan kategori standar
+      var MAP_KATEGORI_DONASI = {
+        'zakat mal': 'Zakat Mal',
+        'zakat fitrah': 'Zakat Fitrah',
+        'infaq': 'Infaq Pembangunan',
+        'infaq pembangunan': 'Infaq Pembangunan',
+        'infaq sosial': 'Infaq Sosial (Kematian)',
+        'infaq sosial (kematian)': 'Infaq Sosial (Kematian)',
+        'infaq pendidikan': 'Infaq Pendidikan (TPQ)',
+        'infaq pendidikan (tpq)': 'Infaq Pendidikan (TPQ)',
+        'infaq operasional': 'Infaq Operasional (DKM)',
+        'infaq operasional (dkm)': 'Infaq Operasional (DKM)',
+        'infaq phbi': 'Infaq PHBI',
+        'infaq majlis taklim': 'Infaq Majlis Taklim',
+        'infaq sampah': 'Infaq Sampah',
+        'shodaqoh': 'Shodaqoh',
+        'sodaqoh': 'Shodaqoh',
+        'wakaf': 'Wakaf'
+      };
+
+      var DONASI_BADGE_COLORS = {
+        'Zakat Mal': { bg: '#EBF8FF', text: '#1E40AF' },
+        'Zakat Fitrah': { bg: '#DBEAFE', text: '#1D4ED8' },
+        'Zakat': { bg: '#EBF8FF', text: '#2B6CB0' },
+        'Infaq Pembangunan': { bg: '#FEEBC8', text: '#C05621' },
+        'Infaq Sosial (Kematian)': { bg: '#E0F2FE', text: '#0369A1' },
+        'Infaq Pendidikan (TPQ)': { bg: '#E6FFFA', text: '#234E52' },
+        'Infaq Operasional (DKM)': { bg: '#F1F5F9', text: '#334155' },
+        'Infaq PHBI': { bg: '#FEF3C7', text: '#92400E' },
+        'Infaq Majlis Taklim': { bg: '#FCE7F3', text: '#9D174D' },
+        'Infaq Sampah': { bg: '#ECFDF5', text: '#047857' },
+        'Shodaqoh': { bg: '#F3E8FF', text: '#6B21A8' },
+        'Sodaqoh': { bg: '#F3E8FF', text: '#6B21A8' },
+        'Wakaf': { bg: '#FEFCBF', text: '#975A16' }
+      };
+
+      // Elemen DOM
+      var tbodyDonasi = document.getElementById('tabel-donasi-body');
+      var pageDonasiContainer = document.getElementById('pagination-donasi');
+      var selectFilterDonasi = document.getElementById('filter-donasi-select');
+
+      var tbodyPengeluaran = document.getElementById('tabel-pengeluaran-body');
+      var pagePengeluaranContainer = document.getElementById('pagination-pengeluaran');
+      var selectFilterUraian = document.getElementById('filter-uraian-select');
+      var selectFilterSumberDana = document.getElementById('filter-sumber-dana-select');
+
+      var syncDot = document.getElementById('sync-dot');
+      var syncStatusText = document.getElementById('sync-status-text');
+      var btnRefreshKeuangan = document.getElementById('btn-refresh-keuangan');
+
+      // State Aplikasi
+      var dataDonasiMaster = [];
+      var currentFilterDonasi = [];
+      var currentPageDonasi = 1;
+
+      var dataPengeluaranMaster = [];
+      var currentFilterPengeluaran = [];
+      var currentPagePengeluaran = 1;
+
+      var stateDonasi = 'loading';      // 'loading' | 'ready' | 'error'
+      var statePengeluaran = 'loading'; // 'loading' | 'ready' | 'error'
+      var realtimeDonasiAktif = false;
+      var realtimePengeluaranAktif = false;
+      var lastSyncedAt = null;
+      var sedangMuatRest = false;
+
+      // Helper Parsing & Pemformatan yang Tangguh di Semua Browser/Device
+      function escapeHtml(str) {
+        return String(str == null ? '' : str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      function parseNominal(val) {
+        if (typeof val === 'number') {
+          return isFinite(val) ? Math.round(val) : 0;
+        }
+        if (typeof val === 'string') {
+          var trimmed = val.trim();
+          if (!trimmed) return 0;
+          if (/^-?\d+(\.\d{1,2})?$/.test(trimmed)) {
+            var numFloat = Number(trimmed);
+            return isFinite(numFloat) ? Math.round(numFloat) : 0;
+          }
+          var digits = trimmed.replace(/[^0-9-]/g, '');
+          var parsed = Number(digits);
+          return isFinite(parsed) ? parsed : 0;
+        }
+        return 0;
+      }
+
+      function formatRupiahRingkas(angka) {
+        var num = Math.round(Number(angka) || 0);
+        try {
+          return new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+          }).format(num);
+        } catch (err) {
+          var absFormatted = String(Math.abs(num)).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+          return (num < 0 ? '-Rp ' : 'Rp ') + absFormatted;
+        }
+      }
+
+      function parseTimestampMs(tgl) {
+        if (!tgl) return 0;
+        if (typeof tgl === 'object') {
+          if (typeof tgl.toDate === 'function') return tgl.toDate().getTime();
+          if (typeof tgl.seconds === 'number') return tgl.seconds * 1000;
+        }
+        var ms = Date.parse(String(tgl));
+        return isFinite(ms) ? ms : 0;
+      }
+
+      function formatTanggal(t) {
+        if (!t) return '-';
+        if (typeof t === 'object') {
+          var ms = parseTimestampMs(t);
+          if (ms > 0) {
+            var dt = new Date(ms);
+            var dd = ('0' + dt.getDate()).slice(-2);
+            var mm = ('0' + (dt.getMonth() + 1)).slice(-2);
+            return dd + '-' + mm + '-' + dt.getFullYear();
+          }
+          return '-';
+        }
+        var str = String(t).trim().slice(0, 10);
+        var parts = str.split('-');
+        if (parts.length === 3 && parts[0].length === 4) {
+          return parts[2] + '-' + parts[1] + '-' + parts[0];
+        }
+        return String(t);
+      }
+
+      function normalisasiKategoriDonasi(kat) {
+        if (!kat) return 'Lainnya';
+        var trimmed = String(kat).trim().replace(/\s+/g, ' ');
+        return MAP_KATEGORI_DONASI[trimmed.toLowerCase()] || trimmed;
+      }
+
+      function getDonasiBadgeStyle(kat) {
+        if (DONASI_BADGE_COLORS[kat]) return DONASI_BADGE_COLORS[kat];
+        if (kat && kat.indexOf('Infaq') === 0) return { bg: '#FEEBC8', text: '#C05621' };
+        return { bg: '#e3f2e8', text: '#145c38' };
+      }
+
+      function ambilUraianPengeluaran(d) {
+        return String((d && (d.keterangan || d.nama)) || '').trim();
+      }
+
+      function formatJamUpdate(dateObj) {
+        if (!dateObj) return '';
+        var hh = ('0' + dateObj.getHours()).slice(-2);
+        var mm = ('0' + dateObj.getMinutes()).slice(-2);
+        var ss = ('0' + dateObj.getSeconds()).slice(-2);
+        return hh + ':' + mm + ':' + ss;
+      }
+
+      function perbaruiStatusBar() {
+        if (!syncDot || !syncStatusText) return;
+        syncDot.className = 'sync-dot';
+        var jamStr = lastSyncedAt ? ' • Pembaruan ' + formatJamUpdate(lastSyncedAt) : '';
+
+        if (realtimeDonasiAktif && realtimePengeluaranAktif && stateDonasi === 'ready' && statePengeluaran === 'ready') {
+          syncDot.classList.add('is-live');
+          syncStatusText.textContent = 'Data Live Realtime' + jamStr;
+        } else if (stateDonasi === 'ready' && statePengeluaran === 'ready') {
+          syncDot.classList.add('is-live');
+          syncStatusText.textContent = 'Terhubung & Tersinkron' + jamStr;
+        } else if (stateDonasi === 'error' || statePengeluaran === 'error') {
+          syncDot.classList.add('is-error');
+          syncStatusText.textContent = 'Koneksi terganggu. Tekan Segarkan untuk memuat ulang.';
+        } else {
+          syncDot.classList.add('is-syncing');
+          syncStatusText.textContent = 'Menyinkronkan data keuangan realtime...';
+        }
+      }
+
+      function htmlKartuError(pesan) {
+        return '<div class="summary-error"><span>' + escapeHtml(pesan) + '</span><button type="button" class="btn-retry-inline" data-retry-keuangan>Coba Lagi</button></div>';
+      }
+
+      function renderRincianPos(containerEl, items, variant) {
+        if (!containerEl) return;
+        containerEl.innerHTML = items.map(function (item) {
+          var cls = 'is-zero';
+          var teksNilai = 'Rp 0';
+          if (item.nilai !== 0) {
+            if (variant === 'donasi') {
+              cls = 'is-donasi';
+              teksNilai = formatRupiahRingkas(item.nilai);
+            } else if (variant === 'pengeluaran') {
+              cls = 'is-pengeluaran';
+              teksNilai = formatRupiahRingkas(Math.abs(item.nilai));
+            } else {
+              cls = item.nilai < 0 ? 'is-deficit' : 'is-saldo';
+              teksNilai = formatRupiahRingkas(item.nilai);
+            }
+          }
+          return (
+            '<div class="breakdown-row">' +
+              '<span class="breakdown-row__name">' + escapeHtml(item.nama) + '</span>' +
+              '<span class="breakdown-row__colon">:</span>' +
+              '<span class="breakdown-row__val ' + cls + '">' + teksNilai + '</span>' +
+            '</div>'
+          );
+        }).join('');
+      }
+
+      function perbaruiRingkasanFinansial() {
+        var elDonasi = document.getElementById('ringkasan-total-donasi');
+        var elPengeluaran = document.getElementById('ringkasan-total-pengeluaran');
+        var elSaldo = document.getElementById('ringkasan-saldo-kas');
+        var listDonasi = document.getElementById('list-ringkasan-donasi');
+        var listPengeluaran = document.getElementById('list-ringkasan-pengeluaran');
+        var listSaldo = document.getElementById('list-ringkasan-saldo');
+
+        var masukPerPos = {};
+        var keluarPerPos = {};
+        DAFTAR_POS_DANA.forEach(function (pos) {
+          masukPerPos[pos] = 0;
+          keluarPerPos[pos] = 0;
+        });
+
+        var totalDonasiMasuk = 0;
+        var masukLainnya = 0;
+        var totalPenyaluran = 0;
+        var keluarLainnya = 0;
+
+        // 1. Render Kartu Donasi Masuk (hanya setelah data donasi siap)
+        if (stateDonasi === 'ready') {
+          dataDonasiMaster.forEach(function (d) {
+            var nom = parseNominal(d.jumlah);
+            var pos = d.kategori;
+            totalDonasiMasuk += nom;
+            if (Object.prototype.hasOwnProperty.call(masukPerPos, pos)) {
+              masukPerPos[pos] += nom;
+            } else {
+              masukLainnya += nom;
+            }
+          });
+
+          var itemsDonasi = DAFTAR_POS_DANA.map(function (pos) {
+            return { nama: pos, nilai: masukPerPos[pos] };
+          });
+          if (masukLainnya !== 0) itemsDonasi.push({ nama: 'Lainnya (Data Lama)', nilai: masukLainnya });
+
+          renderRincianPos(listDonasi, itemsDonasi, 'donasi');
+          if (elDonasi) elDonasi.textContent = formatRupiahRingkas(totalDonasiMasuk);
+        } else if (stateDonasi === 'error') {
+          if (listDonasi) listDonasi.innerHTML = htmlKartuError('Gagal memuat data penerimaan.');
+          if (elDonasi) elDonasi.textContent = '-';
+        }
+
+        // 2. Render Kartu Penyaluran (hanya setelah data pengeluaran siap)
+        if (statePengeluaran === 'ready') {
+          dataPengeluaranMaster.forEach(function (d) {
+            var nom = parseNominal(d.jumlah);
+            var pos = d.sumberDana || '';
+            totalPenyaluran += nom;
+            if (pos && Object.prototype.hasOwnProperty.call(keluarPerPos, pos)) {
+              keluarPerPos[pos] += nom;
+            } else {
+              keluarLainnya += nom;
+            }
+          });
+
+          var itemsPengeluaran = DAFTAR_POS_DANA.map(function (pos) {
+            return { nama: pos, nilai: keluarPerPos[pos] };
+          });
+          if (keluarLainnya !== 0) itemsPengeluaran.push({ nama: 'Umum / Belum Dipilih', nilai: keluarLainnya });
+
+          renderRincianPos(listPengeluaran, itemsPengeluaran, 'pengeluaran');
+          if (elPengeluaran) elPengeluaran.textContent = formatRupiahRingkas(totalPenyaluran);
+        } else if (statePengeluaran === 'error') {
+          if (listPengeluaran) listPengeluaran.innerHTML = htmlKartuError('Gagal memuat data penyaluran.');
+          if (elPengeluaran) elPengeluaran.textContent = '-';
+        }
+
+        // 3. Render Kartu Saldo (hanya dihitung apabila KEDUA data penerimaan & penyaluran siap)
+        if (stateDonasi === 'ready' && statePengeluaran === 'ready') {
+          var itemsSaldo = DAFTAR_POS_DANA.map(function (pos) {
+            return { nama: pos, nilai: masukPerPos[pos] - keluarPerPos[pos] };
+          });
+          if (masukLainnya !== 0 || keluarLainnya !== 0) {
+            itemsSaldo.push({ nama: 'Lainnya / Umum', nilai: masukLainnya - keluarLainnya });
+          }
+
+          renderRincianPos(listSaldo, itemsSaldo, 'saldo');
+          var saldo = totalDonasiMasuk - totalPenyaluran;
+          if (elSaldo) {
+            elSaldo.textContent = formatRupiahRingkas(saldo);
+            elSaldo.style.color = saldo < 0 ? '#e11d48' : '';
+          }
+        } else if (stateDonasi === 'error' || statePengeluaran === 'error') {
+          if (listSaldo) listSaldo.innerHTML = htmlKartuError('Menunggu sinkronisasi penerimaan & penyaluran.');
+          if (elSaldo) {
+            elSaldo.textContent = '-';
+            elSaldo.style.color = '';
+          }
+        }
+      }
+
+      // ================= RENDER TABEL DONASI =================
+      function renderTabelDonasi(dataArray, page) {
+        if (!tbodyDonasi) return;
+        if (dataArray.length === 0) {
+          tbodyDonasi.innerHTML = '<tr><td colspan="5" style="padding: 3rem; text-align: center; color: var(--muted);">Tidak ada riwayat untuk kategori ini.</td></tr>';
+          if (pageDonasiContainer) pageDonasiContainer.innerHTML = '';
+          return;
+        }
+
+        var totalPages = Math.ceil(dataArray.length / itemsPerPage);
+        currentPageDonasi = Math.min(Math.max(page || 1, 1), totalPages);
+        var start = (currentPageDonasi - 1) * itemsPerPage;
+        var dataHalaman = dataArray.slice(start, start + itemsPerPage);
+
+        var html = '';
+        var totalSeluruhnya = 0;
+        var no = start + 1;
+
+        dataArray.forEach(function (d) { totalSeluruhnya += parseNominal(d.jumlah); });
+
+        dataHalaman.forEach(function (d) {
+          var bg = no % 2 === 0 ? 'var(--light)' : 'var(--white)';
+          var nominal = formatRupiahRingkas(parseNominal(d.jumlah));
+          var kat = d.kategori || 'Lainnya';
+          var badge = getDonasiBadgeStyle(kat);
+
+          html +=
+            '<tr style="border-bottom: 1px solid var(--border); background-color: ' + bg + ';">' +
+              '<td class="tabel-td" style="text-align: center; color: var(--muted);">' + (no++) + '</td>' +
+              '<td class="tabel-td tabel-tanggal" style="color: var(--muted);">' + escapeHtml(formatTanggal(d.tanggal)) + '</td>' +
+              '<td class="tabel-td" style="font-weight: 600; color: var(--secondary);">' + escapeHtml(d.nama || '-') + '</td>' +
+              '<td class="tabel-td" style="text-align: center;">' +
+                '<span class="kategori-badge" style="background: ' + badge.bg + '; color: ' + badge.text + '; border-radius: 20px; font-weight: 700; display: inline-block;">' + escapeHtml(kat) + '</span>' +
+              '</td>' +
+              '<td class="tabel-td" style="text-align: right; font-weight: 700; color: var(--primary-dark);">' + nominal + '</td>' +
+            '</tr>';
+        });
+
+        var totalFmt = formatRupiahRingkas(totalSeluruhnya);
+        html +=
+          '<tr style="background-color: var(--light); border-top: 2px solid var(--border);">' +
+            '<td colspan="4" class="tabel-td-total" style="text-align: right; font-weight: 800; color: var(--secondary);">TOTAL SELURUHNYA :</td>' +
+            '<td class="tabel-td-total" style="text-align: right; font-weight: 800; color: var(--primary-dark);">' + totalFmt + '</td>' +
+          '</tr>';
+
+        tbodyDonasi.innerHTML = html;
+        renderPagination(totalPages, currentPageDonasi, pageDonasiContainer, function (newPage) {
+          currentPageDonasi = newPage;
+          renderTabelDonasi(currentFilterDonasi, currentPageDonasi);
+        });
+      }
+
+      function terapkanFilterDonasi(resetPage) {
+        if (resetPage) currentPageDonasi = 1;
+        var fVal = selectFilterDonasi ? selectFilterDonasi.value : 'Semua';
+        currentFilterDonasi = fVal === 'Semua'
+          ? dataDonasiMaster.slice()
+          : dataDonasiMaster.filter(function (i) { return i.kategori === fVal; });
+        renderTabelDonasi(currentFilterDonasi, currentPageDonasi);
+      }
+
+      if (selectFilterDonasi) {
+        selectFilterDonasi.addEventListener('change', function () {
+          terapkanFilterDonasi(true);
+        });
+      }
+
+      // ================= RENDER TABEL PENGELUARAN =================
+      function renderTabelPengeluaran(dataArray, page) {
+        if (!tbodyPengeluaran) return;
+        if (dataArray.length === 0) {
+          tbodyPengeluaran.innerHTML = '<tr><td colspan="5" style="padding: 3rem; text-align: center; color: var(--muted);">Tidak ada riwayat untuk filter ini.</td></tr>';
+          if (pagePengeluaranContainer) pagePengeluaranContainer.innerHTML = '';
+          return;
+        }
+
+        var totalPages = Math.ceil(dataArray.length / itemsPerPage);
+        currentPagePengeluaran = Math.min(Math.max(page || 1, 1), totalPages);
+        var start = (currentPagePengeluaran - 1) * itemsPerPage;
+        var dataHalaman = dataArray.slice(start, start + itemsPerPage);
+
+        var html = '';
+        var totalSeluruhnya = 0;
+        var no = start + 1;
+
+        dataArray.forEach(function (d) { totalSeluruhnya += parseNominal(d.jumlah); });
+
+        dataHalaman.forEach(function (d) {
+          var bg = no % 2 === 0 ? 'var(--light)' : 'var(--white)';
+          var nominal = formatRupiahRingkas(parseNominal(d.jumlah));
+          var uraian = ambilUraianPengeluaran(d) || '-';
+          var sumber = d.sumberDana || '';
+          var sumberStyle = sumber ? getDonasiBadgeStyle(sumber) : null;
+          var sumberHtml = sumber
+            ? '<span class="kategori-badge" style="background: ' + sumberStyle.bg + '; color: ' + sumberStyle.text + '; border-radius: 20px; font-weight: 700; display: inline-block;">' + escapeHtml(sumber) + '</span>'
+            : '<span style="color: var(--muted);">-</span>';
+
+          html +=
+            '<tr style="border-bottom: 1px solid var(--border); background-color: ' + bg + ';">' +
+              '<td class="tabel-td" style="text-align: center; color: var(--muted);">' + (no++) + '</td>' +
+              '<td class="tabel-td tabel-tanggal" style="color: var(--muted);">' + escapeHtml(formatTanggal(d.tanggal)) + '</td>' +
+              '<td class="tabel-td" style="font-weight: 600; color: var(--secondary); white-space: pre-wrap;">' + escapeHtml(uraian) + '</td>' +
+              '<td class="tabel-td" style="text-align: center;">' + sumberHtml + '</td>' +
+              '<td class="tabel-td" style="text-align: right; font-weight: 700; color: #ef4444; white-space: nowrap;">- ' + nominal + '</td>' +
+            '</tr>';
+        });
+
+        var totalFmt = formatRupiahRingkas(totalSeluruhnya);
+        html +=
+          '<tr style="background-color: var(--light); border-top: 2px solid var(--border);">' +
+            '<td colspan="4" class="tabel-td-total" style="text-align: right; font-weight: 800; color: var(--secondary);">TOTAL KELUAR :</td>' +
+            '<td class="tabel-td-total" style="text-align: right; font-weight: 800; color: #ef4444; white-space: nowrap;">- ' + totalFmt + '</td>' +
+          '</tr>';
+
+        tbodyPengeluaran.innerHTML = html;
+        renderPagination(totalPages, currentPagePengeluaran, pagePengeluaranContainer, function (newPage) {
+          currentPagePengeluaran = newPage;
+          renderTabelPengeluaran(currentFilterPengeluaran, currentPagePengeluaran);
+        });
+      }
+
+      function terapkanFilterPengeluaran(resetPage) {
+        if (resetPage !== false) currentPagePengeluaran = 1;
+        var uraianVal = selectFilterUraian ? selectFilterUraian.value : 'Semua';
+        var sumberVal = selectFilterSumberDana ? selectFilterSumberDana.value : 'Semua';
+        currentFilterPengeluaran = dataPengeluaranMaster.filter(function (item) {
+          var cocokUraian = uraianVal === 'Semua' || ambilUraianPengeluaran(item) === uraianVal;
+          var cocokSumber = sumberVal === 'Semua' || (item.sumberDana || '') === sumberVal;
+          return cocokUraian && cocokSumber;
+        });
+        renderTabelPengeluaran(currentFilterPengeluaran, currentPagePengeluaran);
+      }
+
+      if (selectFilterUraian) {
+        selectFilterUraian.addEventListener('change', function () { terapkanFilterPengeluaran(true); });
+      }
+      if (selectFilterSumberDana) {
+        selectFilterSumberDana.addEventListener('change', function () { terapkanFilterPengeluaran(true); });
+      }
+
+      // ================= FUNGSI PAGINASI UMUM =================
+      function renderPagination(totalPages, activePage, container, callback) {
+        if (!container) return;
+        if (totalPages <= 1) { container.innerHTML = ''; return; }
+        var html = '';
+        for (var i = 1; i <= totalPages; i++) {
+          var active = i === activePage ? 'active' : '';
+          html += '<button type="button" class="page-btn ' + active + '" data-page="' + i + '">' + i + '</button>';
+        }
+        container.innerHTML = html;
+        container.querySelectorAll('.page-btn').forEach(function (btn) {
+          btn.addEventListener('click', function (e) {
+            callback(parseInt(e.target.getAttribute('data-page'), 10));
+          });
+        });
+      }
+
+      // ================= PEMROSES DATA TERPUSAT =================
+      function applyDonasiData(rawList, opts) {
+        var options = opts || {};
+        dataDonasiMaster = rawList.map(function (item) {
+          var copy = Object.assign({}, item);
+          copy.kategori = normalisasiKategoriDonasi(copy.kategori);
+          copy.jumlah = parseNominal(copy.jumlah);
+          return copy;
+        });
+        dataDonasiMaster.sort(function (a, b) {
+          return parseTimestampMs(b.tanggal) - parseTimestampMs(a.tanggal);
+        });
+
+        stateDonasi = 'ready';
+        if (options.fromRealtime) realtimeDonasiAktif = true;
+        lastSyncedAt = new Date();
+
+        perbaruiRingkasanFinansial();
+        terapkanFilterDonasi(false);
+        perbaruiStatusBar();
+      }
+
+      function applyPengeluaranData(rawList, opts) {
+        var options = opts || {};
+        dataPengeluaranMaster = rawList.map(function (item) {
+          var copy = Object.assign({}, item);
+          if (copy.sumberDana) {
+            copy.sumberDana = normalisasiKategoriDonasi(copy.sumberDana);
+          }
+          copy.jumlah = parseNominal(copy.jumlah);
+          return copy;
+        });
+        dataPengeluaranMaster.sort(function (a, b) {
+          return parseTimestampMs(b.tanggal) - parseTimestampMs(a.tanggal);
+        });
+
+        statePengeluaran = 'ready';
+        if (options.fromRealtime) realtimePengeluaranAktif = true;
+        lastSyncedAt = new Date();
+
+        perbaruiRingkasanFinansial();
+        terapkanFilterPengeluaran(false);
+        perbaruiStatusBar();
+      }
+
+      function markErrorIfNotReady(jenis) {
+        if (jenis === 'donasi' && stateDonasi !== 'ready') {
+          stateDonasi = 'error';
+          if (tbodyDonasi) {
+            tbodyDonasi.innerHTML = '<tr><td colspan="5" style="padding: 2rem; text-align: center; color: #b91c1c;">Gagal memuat data donasi. <button type="button" class="btn-retry-inline" data-retry-keuangan style="margin-left: 0.5rem;">Coba Lagi</button></td></tr>';
+          }
+        }
+        if (jenis === 'pengeluaran' && statePengeluaran !== 'ready') {
+          statePengeluaran = 'error';
+          if (tbodyPengeluaran) {
+            tbodyPengeluaran.innerHTML = '<tr><td colspan="5" style="padding: 2rem; text-align: center; color: #b91c1c;">Gagal memuat data penyaluran. <button type="button" class="btn-retry-inline" data-retry-keuangan style="margin-left: 0.5rem;">Coba Lagi</button></td></tr>';
+          }
+        }
+        perbaruiRingkasanFinansial();
+        perbaruiStatusBar();
+      }
+
+      // ================= FALLBACK FIRESTORE REST API (CEPAT & ANTI-BLOKIR) =================
+      function parseFirestoreRestValue(field) {
+        if (!field || typeof field !== 'object') return undefined;
+        if ('stringValue' in field) return field.stringValue;
+        if ('integerValue' in field) return Number(field.integerValue);
+        if ('doubleValue' in field) return Number(field.doubleValue);
+        if ('booleanValue' in field) return Boolean(field.booleanValue);
+        if ('timestampValue' in field) return field.timestampValue;
+        if ('nullValue' in field) return null;
+        return undefined;
+      }
+
+      function parseFirestoreRestDoc(doc) {
+        var out = {};
+        var fields = (doc && doc.fields) ? doc.fields : {};
+        for (var key in fields) {
+          if (Object.prototype.hasOwnProperty.call(fields, key)) {
+            out[key] = parseFirestoreRestValue(fields[key]);
+          }
+        }
+        return out;
+      }
+
+      async function fetchCollectionViaRest(collectionName) {
+        var hasil = [];
+        var pageToken = '';
+        var halaman = 0;
+
+        while (halaman < 20) {
+          halaman++;
+          var url =
+            'https://firestore.googleapis.com/v1/projects/' +
+            FIREBASE_PROJECT_ID +
+            '/databases/(default)/documents/' +
+            encodeURIComponent(collectionName) +
+            '?pageSize=300&key=' +
+            encodeURIComponent(FIREBASE_API_KEY) +
+            (pageToken ? '&pageToken=' + encodeURIComponent(pageToken) : '');
+
+          var controller = typeof AbortController === 'function' ? new AbortController() : null;
+          var timerId = controller ? setTimeout(function () { controller.abort(); }, 10000) : null;
+
+          try {
+            var res = await fetch(url, {
+              method: 'GET',
+              cache: 'no-store',
+              signal: controller ? controller.signal : undefined
+            });
+            if (!res.ok) {
+              throw new Error('HTTP ' + res.status);
+            }
+            var json = await res.json();
+            if (Array.isArray(json.documents)) {
+              for (var i = 0; i < json.documents.length; i++) {
+                hasil.push(parseFirestoreRestDoc(json.documents[i]));
+              }
+            }
+            if (!json.nextPageToken) break;
+            pageToken = json.nextPageToken;
+          } finally {
+            if (timerId) clearTimeout(timerId);
+          }
+        }
+
+        return hasil;
+      }
+
+      function settlePromise(p) {
+        return p.then(
+          function (value) { return { status: 'fulfilled', value: value }; },
+          function (reason) { return { status: 'rejected', reason: reason }; }
+        );
+      }
+
+      async function muatSemuaViaRest(paksaTimpa) {
+        if (sedangMuatRest) return;
+        sedangMuatRest = true;
+        if (btnRefreshKeuangan) btnRefreshKeuangan.disabled = true;
+
+        try {
+          var hasilSettled = await Promise.all([
+            settlePromise(fetchCollectionViaRest('donations')),
+            settlePromise(fetchCollectionViaRest('expenses'))
+          ]);
+
+          var donasiRes = hasilSettled[0];
+          if (donasiRes.status === 'fulfilled') {
+            if (paksaTimpa || !realtimeDonasiAktif) {
+              applyDonasiData(donasiRes.value, { fromRealtime: false });
+            }
+          } else if (!realtimeDonasiAktif) {
+            markErrorIfNotReady('donasi');
+          }
+
+          var pengRes = hasilSettled[1];
+          if (pengRes.status === 'fulfilled') {
+            if (paksaTimpa || !realtimePengeluaranAktif) {
+              applyPengeluaranData(pengRes.value, { fromRealtime: false });
+            }
+          } else if (!realtimePengeluaranAktif) {
+            markErrorIfNotReady('pengeluaran');
+          }
+        } finally {
+          sedangMuatRest = false;
+          if (btnRefreshKeuangan) btnRefreshKeuangan.disabled = false;
+        }
+      }
+
+      // Ekspos API agar script module Firebase onSnapshot dapat langsung memperbarui UI
+      window.__keuanganApp = {
+        applyDonasiData: applyDonasiData,
+        applyPengeluaranData: applyPengeluaranData,
+        markErrorIfNotReady: markErrorIfNotReady,
+        muatViaRest: muatSemuaViaRest
+      };
+
+      // Listener tombol Segarkan & Coba Lagi
+      if (btnRefreshKeuangan) {
+        btnRefreshKeuangan.addEventListener('click', function () {
+          muatSemuaViaRest(true);
+        });
+      }
+      document.addEventListener('click', function (e) {
+        if (e.target && e.target.closest && e.target.closest('[data-retry-keuangan]')) {
+          muatSemuaViaRest(true);
+        }
+      });
+
+      // Lifecycle browser mobile: pulihkan dari BFCache, kembali online, atau tab aktif
+      window.addEventListener('pageshow', function (event) {
+        if (event.persisted) {
+          muatSemuaViaRest(true);
+        }
+      });
+      window.addEventListener('online', function () {
+        muatSemuaViaRest(true);
+      });
+      document.addEventListener('visibilitychange', function () {
+        if (document.visibilityState === 'visible' && (!realtimeDonasiAktif || !realtimePengeluaranAktif)) {
+          muatSemuaViaRest(false);
+        }
+      });
+
+      // Muat seketika via REST API HTTPS (anti-blokir WebChannel/SDK lambat)
+      muatSemuaViaRest(false);
+
+      // Polling cadangan tiap 20 detik bila perangkat memblokir koneksi realtime onSnapshot
+      setInterval(function () {
+        if (document.visibilityState === 'visible' && (!realtimeDonasiAktif || !realtimePengeluaranAktif)) {
+          muatSemuaViaRest(false);
+        }
+      }, 20000);
+    })();
+  </script>
+
+  <!-- ================= KONEKSI REALTIME FIREBASE SDK (onSnapshot) ================= -->
   <script type="module">
-    import { db, collection, getDocs, query } from './js/firebase-config.js';
-
-    // ================= 1. LOGIKA DONASI =================
-    const tbodyDonasi = document.getElementById('tabel-donasi-body');
-    const pageDonasiContainer = document.getElementById('pagination-donasi');
-    const selectFilterDonasi = document.getElementById('filter-donasi-select');
-    
-    let dataDonasiMaster = [];
-    let currentFilterDonasi = [];
-    let currentPageDonasi = 1;
-    const itemsPerPage = 10; 
-
-    // Daftar 11 Pos Dana Utama Yayasan (urutan konsisten di form & ringkasan)
-    const DAFTAR_POS_DANA = [
-      'Zakat Mal',
-      'Zakat Fitrah',
-      'Infaq Pembangunan',
-      'Infaq Sosial (Kematian)',
-      'Infaq Pendidikan (TPQ)',
-      'Infaq Operasional (DKM)',
-      'Infaq PHBI',
-      'Infaq Majlis Taklim',
-      'Infaq Sampah',
-      'Shodaqoh',
-      'Wakaf',
-    ];
-
-    const formatRupiahRingkas = (angka) => {
-      return new Intl.NumberFormat('id-ID', {
-        style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0
-      }).format(angka);
-    };
-
-    function renderRincianPos(containerEl, items, variant) {
-      if (!containerEl) return;
-      containerEl.innerHTML = items.map(({ nama, nilai }) => {
-        let cls = 'is-zero';
-        let teksNilai = 'Rp 0';
-        if (nilai !== 0) {
-          if (variant === 'donasi') {
-            cls = 'is-donasi';
-            teksNilai = formatRupiahRingkas(nilai);
-          } else if (variant === 'pengeluaran') {
-            cls = 'is-pengeluaran';
-            teksNilai = formatRupiahRingkas(Math.abs(nilai));
-          } else {
-            cls = nilai < 0 ? 'is-deficit' : 'is-saldo';
-            teksNilai = formatRupiahRingkas(nilai);
-          }
-        }
-        return `
-          <div class="breakdown-row">
-            <span class="breakdown-row__name">${nama}</span>
-            <span class="breakdown-row__colon">:</span>
-            <span class="breakdown-row__val ${cls}">${teksNilai}</span>
-          </div>`;
-      }).join('');
-    }
-
-    function perbaruiRingkasanFinansial() {
-      const elDonasi = document.getElementById('ringkasan-total-donasi');
-      const elPengeluaran = document.getElementById('ringkasan-total-pengeluaran');
-      const elSaldo = document.getElementById('ringkasan-saldo-kas');
-      const listDonasi = document.getElementById('list-ringkasan-donasi');
-      const listPengeluaran = document.getElementById('list-ringkasan-pengeluaran');
-      const listSaldo = document.getElementById('list-ringkasan-saldo');
-
-      const masukPerPos = {};
-      const keluarPerPos = {};
-      DAFTAR_POS_DANA.forEach(pos => {
-        masukPerPos[pos] = 0;
-        keluarPerPos[pos] = 0;
-      });
-
-      let totalDonasiMasuk = 0;
-      let masukLainnya = 0;
-      dataDonasiMaster.forEach(d => {
-        const nom = parseInt(d.jumlah) || 0;
-        const pos = d.kategori;
-        totalDonasiMasuk += nom;
-        if (Object.prototype.hasOwnProperty.call(masukPerPos, pos)) {
-          masukPerPos[pos] += nom;
-        } else {
-          masukLainnya += nom;
-        }
-      });
-
-      let totalPenyaluran = 0;
-      let keluarLainnya = 0;
-      dataPengeluaranMaster.forEach(d => {
-        const nom = parseInt(d.jumlah) || 0;
-        const pos = d.sumberDana || '';
-        totalPenyaluran += nom;
-        if (pos && Object.prototype.hasOwnProperty.call(keluarPerPos, pos)) {
-          keluarPerPos[pos] += nom;
-        } else {
-          keluarLainnya += nom;
-        }
-      });
-
-      const itemsDonasi = DAFTAR_POS_DANA.map(pos => ({ nama: pos, nilai: masukPerPos[pos] }));
-      const itemsPengeluaran = DAFTAR_POS_DANA.map(pos => ({ nama: pos, nilai: keluarPerPos[pos] }));
-      const itemsSaldo = DAFTAR_POS_DANA.map(pos => ({ nama: pos, nilai: masukPerPos[pos] - keluarPerPos[pos] }));
-
-      // Tampilkan baris penyesuaian jika ada data lama di luar 11 pos agar rincian selalu klop dengan total
-      if (masukLainnya !== 0) itemsDonasi.push({ nama: 'Lainnya (Data Lama)', nilai: masukLainnya });
-      if (keluarLainnya !== 0) itemsPengeluaran.push({ nama: 'Umum / Belum Dipilih', nilai: keluarLainnya });
-      if (masukLainnya !== 0 || keluarLainnya !== 0) {
-        itemsSaldo.push({ nama: 'Lainnya / Umum', nilai: masukLainnya - keluarLainnya });
-      }
-
-      renderRincianPos(listDonasi, itemsDonasi, 'donasi');
-      renderRincianPos(listPengeluaran, itemsPengeluaran, 'pengeluaran');
-      renderRincianPos(listSaldo, itemsSaldo, 'saldo');
-
-      const saldo = totalDonasiMasuk - totalPenyaluran;
-      if (elDonasi) elDonasi.textContent = formatRupiahRingkas(totalDonasiMasuk);
-      if (elPengeluaran) {
-        elPengeluaran.textContent = formatRupiahRingkas(totalPenyaluran);
-      }
-      if (elSaldo) {
-        elSaldo.textContent = formatRupiahRingkas(saldo);
-        elSaldo.style.color = saldo < 0 ? '#e11d48' : '';
-      }
-    }
-
-    // Ubah format tanggal
-    const formatTanggal = (t) => {
-      if (!t) return '-';
-      const [thn, bln, tgl] = String(t).split('-');
-      return (thn && bln && tgl) ? `${tgl}-${bln}-${thn}` : t;
-    };
-
-    // Normalisasi penamaan kategori lama -> penamaan kategori terbaru
-    const MAP_KATEGORI_DONASI = {
-      'infaq': 'Infaq Pembangunan',
-      'infaq pembangunan': 'Infaq Pembangunan',
-      'infaq sosial': 'Infaq Sosial (Kematian)',
-      'infaq sosial (kematian)': 'Infaq Sosial (Kematian)',
-      'infaq pendidikan': 'Infaq Pendidikan (TPQ)',
-      'infaq pendidikan (tpq)': 'Infaq Pendidikan (TPQ)',
-      'infaq operasional': 'Infaq Operasional (DKM)',
-      'infaq operasional (dkm)': 'Infaq Operasional (DKM)',
-      'infaq phbi': 'Infaq PHBI',
-      'infaq majlis taklim': 'Infaq Majlis Taklim',
-      'infaq sampah': 'Infaq Sampah',
-    };
-
-    const normalisasiKategoriDonasi = (kat) => {
-      if (!kat) return 'Lainnya';
-      const trimmed = String(kat).trim().replace(/\s+/g, ' ');
-      return MAP_KATEGORI_DONASI[trimmed.toLowerCase()] || trimmed;
-    };
-
-    const DONASI_BADGE_COLORS = {
-      'Zakat Mal': { bg: '#EBF8FF', text: '#1E40AF' },
-      'Zakat Fitrah': { bg: '#DBEAFE', text: '#1D4ED8' },
-      'Zakat': { bg: '#EBF8FF', text: '#2B6CB0' },
-      'Infaq Pembangunan': { bg: '#FEEBC8', text: '#C05621' },
-      'Infaq Sosial (Kematian)': { bg: '#E0F2FE', text: '#0369A1' },
-      'Infaq Pendidikan (TPQ)': { bg: '#E6FFFA', text: '#234E52' },
-      'Infaq Operasional (DKM)': { bg: '#F1F5F9', text: '#334155' },
-      'Infaq PHBI': { bg: '#FEF3C7', text: '#92400E' },
-      'Infaq Majlis Taklim': { bg: '#FCE7F3', text: '#9D174D' },
-      'Infaq Sampah': { bg: '#ECFDF5', text: '#047857' },
-      'Shodaqoh': { bg: '#F3E8FF', text: '#6B21A8' },
-      'Sodaqoh': { bg: '#F3E8FF', text: '#6B21A8' },
-      'Wakaf': { bg: '#FEFCBF', text: '#975A16' },
-    };
-
-    const getDonasiBadgeStyle = (kat) => {
-      if (DONASI_BADGE_COLORS[kat]) return DONASI_BADGE_COLORS[kat];
-      if (kat.startsWith('Infaq')) return { bg: '#FEEBC8', text: '#C05621' };
-      return { bg: '#e3f2e8', text: '#145c38' };
-    };
-
-    async function loadDonasi() {
+    (async () => {
       try {
-        const q = query(collection(db, 'donations'));
-        const snap = await getDocs(q);
-        if (snap.empty) {
-          tbodyDonasi.innerHTML = `<tr><td colspan="5" style="padding: 3rem; text-align: center; color: var(--muted);">Belum ada riwayat donasi.</td></tr>`;
-          dataDonasiMaster = [];
-          perbaruiRingkasanFinansial();
-          return;
+        const { db, collection, onSnapshot, query } = await import('./js/firebase-config.js');
+        const appBridge = window.__keuanganApp;
+
+        if (appBridge) {
+          onSnapshot(
+            query(collection(db, 'donations')),
+            (snap) => {
+              // Abaikan snapshot awal dari cache offline apabila masih kosong
+              if (snap.empty && snap.metadata && snap.metadata.fromCache) return;
+              const list = [];
+              snap.forEach((doc) => list.push(doc.data()));
+              appBridge.applyDonasiData(list, { fromRealtime: true });
+            },
+            (err) => {
+              console.warn('Realtime donasi dialihkan ke mode sinkronisasi HTTP:', err);
+              appBridge.muatViaRest(false);
+            }
+          );
+
+          onSnapshot(
+            query(collection(db, 'expenses')),
+            (snap) => {
+              if (snap.empty && snap.metadata && snap.metadata.fromCache) return;
+              const list = [];
+              snap.forEach((doc) => list.push(doc.data()));
+              appBridge.applyPengeluaranData(list, { fromRealtime: true });
+            },
+            (err) => {
+              console.warn('Realtime pengeluaran dialihkan ke mode sinkronisasi HTTP:', err);
+              appBridge.muatViaRest(false);
+            }
+          );
         }
-        dataDonasiMaster = [];
-        snap.forEach(doc => {
-          const d = doc.data();
-          d.kategori = normalisasiKategoriDonasi(d.kategori);
-          dataDonasiMaster.push(d);
-        });
-        dataDonasiMaster.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
-        
-        perbaruiRingkasanFinansial();
-        currentFilterDonasi = [...dataDonasiMaster];
-        renderTabelDonasi(currentFilterDonasi, currentPageDonasi);
       } catch (err) {
-        tbodyDonasi.innerHTML = `<tr><td colspan="5" style="text-align: center; color: red;">Gagal memuat data donasi.</td></tr>`;
-      }
-    }
-
-    function renderTabelDonasi(dataArray, page) {
-      if (dataArray.length === 0) {
-        tbodyDonasi.innerHTML = `<tr><td colspan="5" style="padding: 3rem; text-align: center; color: var(--muted);">Tidak ada riwayat untuk kategori ini.</td></tr>`;
-        pageDonasiContainer.innerHTML = '';
-        return;
-      }
-      
-      const totalPages = Math.ceil(dataArray.length / itemsPerPage);
-      const start = (page - 1) * itemsPerPage;
-      const dataHalaman = dataArray.slice(start, start + itemsPerPage);
-      
-      let html = '';
-      let totalSeluruhnya = 0; 
-      let no = start + 1; 
-
-      dataArray.forEach(d => totalSeluruhnya += (parseInt(d.jumlah) || 0));
-
-      dataHalaman.forEach((d) => {
-        const bg = no % 2 === 0 ? 'var(--light)' : 'var(--white)';
-        const nominal = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(d.jumlah);
-        const kat = d.kategori || 'Lainnya';
-        const { bg: wBg, text: wTeks } = getDonasiBadgeStyle(kat);
-
-        html += `
-          <tr style="border-bottom: 1px solid var(--border); background-color: ${bg};">
-            <td class="tabel-td" style="text-align: center; color: var(--muted);">${no++}</td>
-            <td class="tabel-td tabel-tanggal" style="color: var(--muted);">${formatTanggal(d.tanggal)}</td>
-            <td class="tabel-td" style="font-weight: 600; color: var(--secondary);">${d.nama}</td>
-            <td class="tabel-td" style="text-align: center;">
-              <span class="kategori-badge" style="background: ${wBg}; color: ${wTeks}; border-radius: 20px; font-weight: 700; display: inline-block;">${kat}</span>
-            </td>
-            <td class="tabel-td" style="text-align: right; font-weight: 700; color: var(--primary-dark);">${nominal}</td>
-          </tr>`;
-      });
-
-      const totalFmt = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(totalSeluruhnya);
-      html += `
-        <tr style="background-color: var(--light); border-top: 2px solid var(--border);">
-          <td colspan="4" class="tabel-td-total" style="text-align: right; font-weight: 800; color: var(--secondary);">TOTAL SELURUHNYA :</td>
-          <td class="tabel-td-total" style="text-align: right; font-weight: 800; color: var(--primary-dark);">${totalFmt}</td>
-        </tr>`;
-
-      tbodyDonasi.innerHTML = html;
-      renderPagination(totalPages, page, pageDonasiContainer, (newPage) => {
-        currentPageDonasi = newPage;
-        renderTabelDonasi(currentFilterDonasi, currentPageDonasi);
-      });
-    }
-
-    if (selectFilterDonasi) {
-      selectFilterDonasi.addEventListener('change', (e) => {
-        const fVal = e.target.value;
-        currentPageDonasi = 1; 
-        currentFilterDonasi = fVal === 'Semua' ? [...dataDonasiMaster] : dataDonasiMaster.filter(i => i.kategori === fVal);
-        renderTabelDonasi(currentFilterDonasi, currentPageDonasi); 
-      });
-    }
-
-    // ================= 2. LOGIKA PENGELUARAN =================
-    const tbodyPengeluaran = document.getElementById('tabel-pengeluaran-body');
-    const pagePengeluaranContainer = document.getElementById('pagination-pengeluaran');
-    const selectFilterUraian = document.getElementById('filter-uraian-select');
-    const selectFilterSumberDana = document.getElementById('filter-sumber-dana-select');
-    
-    let dataPengeluaranMaster = [];
-    let currentFilterPengeluaran = [];
-    let currentPagePengeluaran = 1;
-
-    // Uraian program disimpan di field 'keterangan'; data lama yang memakai 'nama' tetap terbaca
-    const ambilUraianPengeluaran = (d) => (d.keterangan || d.nama || '').trim();
-
-    async function loadPengeluaran() {
-      try {
-        const q = query(collection(db, 'expenses'));
-        const snap = await getDocs(q);
-        if (snap.empty) {
-          tbodyPengeluaran.innerHTML = `<tr><td colspan="5" style="padding: 3rem; text-align: center; color: var(--muted);">Belum ada riwayat penyaluran.</td></tr>`;
-          dataPengeluaranMaster = [];
-          perbaruiRingkasanFinansial();
-          return;
+        console.warn('SDK Firebase tidak tersedia di perangkat ini, memakai jalur HTTP REST:', err);
+        if (window.__keuanganApp) {
+          window.__keuanganApp.muatViaRest(false);
         }
-        dataPengeluaranMaster = [];
-        snap.forEach(doc => {
-          const d = doc.data();
-          if (d.sumberDana) {
-            d.sumberDana = normalisasiKategoriDonasi(d.sumberDana);
-          }
-          dataPengeluaranMaster.push(d);
-        });
-        dataPengeluaranMaster.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
-        
-        perbaruiRingkasanFinansial();
-        currentFilterPengeluaran = [...dataPengeluaranMaster];
-        renderTabelPengeluaran(currentFilterPengeluaran, currentPagePengeluaran);
-      } catch (err) {
-        tbodyPengeluaran.innerHTML = `<tr><td colspan="5" style="text-align: center; color: red;">Gagal memuat data penyaluran.</td></tr>`;
       }
-    }
-
-    function renderTabelPengeluaran(dataArray, page) {
-      if (dataArray.length === 0) {
-        tbodyPengeluaran.innerHTML = `<tr><td colspan="5" style="padding: 3rem; text-align: center; color: var(--muted);">Tidak ada riwayat untuk filter ini.</td></tr>`;
-        pagePengeluaranContainer.innerHTML = '';
-        return;
-      }
-      
-      const totalPages = Math.ceil(dataArray.length / itemsPerPage);
-      const start = (page - 1) * itemsPerPage;
-      const dataHalaman = dataArray.slice(start, start + itemsPerPage);
-      
-      let html = '';
-      let totalSeluruhnya = 0; 
-      let no = start + 1; 
-
-      dataArray.forEach(d => totalSeluruhnya += (parseInt(d.jumlah) || 0));
-
-      dataHalaman.forEach((d) => {
-        const bg = no % 2 === 0 ? 'var(--light)' : 'var(--white)';
-        const nominal = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(d.jumlah);
-        const uraian = ambilUraianPengeluaran(d) || '-';
-        const sumber = d.sumberDana || '';
-        const sumberStyle = sumber ? getDonasiBadgeStyle(sumber) : null;
-        const sumberHtml = sumber
-          ? `<span class="kategori-badge" style="background: ${sumberStyle.bg}; color: ${sumberStyle.text}; border-radius: 20px; font-weight: 700; display: inline-block;">${sumber}</span>`
-          : `<span style="color: var(--muted);">-</span>`;
-
-        html += `
-          <tr style="border-bottom: 1px solid var(--border); background-color: ${bg};">
-            <td class="tabel-td" style="text-align: center; color: var(--muted);">${no++}</td>
-            <td class="tabel-td tabel-tanggal" style="color: var(--muted);">${formatTanggal(d.tanggal)}</td>
-            <td class="tabel-td" style="font-weight: 600; color: var(--secondary); white-space: pre-wrap;">${uraian}</td>
-            <td class="tabel-td" style="text-align: center;">${sumberHtml}</td>
-            <!-- Teks nominal warna merah menandakan minus/keluar -->
-            <td class="tabel-td" style="text-align: right; font-weight: 700; color: #ef4444; white-space: nowrap;">- ${nominal}</td>
-          </tr>`;
-      });
-
-      const totalFmt = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(totalSeluruhnya);
-      html += `
-        <tr style="background-color: var(--light); border-top: 2px solid var(--border);">
-          <td colspan="4" class="tabel-td-total" style="text-align: right; font-weight: 800; color: var(--secondary);">TOTAL KELUAR :</td>
-          <td class="tabel-td-total" style="text-align: right; font-weight: 800; color: #ef4444; white-space: nowrap;">- ${totalFmt}</td>
-        </tr>`;
-
-      tbodyPengeluaran.innerHTML = html;
-      renderPagination(totalPages, page, pagePengeluaranContainer, (newPage) => {
-        currentPagePengeluaran = newPage;
-        renderTabelPengeluaran(currentFilterPengeluaran, currentPagePengeluaran);
-      });
-    }
-
-    function terapkanFilterPengeluaran() {
-      const uraianVal = selectFilterUraian ? selectFilterUraian.value : 'Semua';
-      const sumberVal = selectFilterSumberDana ? selectFilterSumberDana.value : 'Semua';
-      currentPagePengeluaran = 1;
-      currentFilterPengeluaran = dataPengeluaranMaster.filter(item => {
-        const cocokUraian = uraianVal === 'Semua' || ambilUraianPengeluaran(item) === uraianVal;
-        const cocokSumber = sumberVal === 'Semua' || (item.sumberDana || '') === sumberVal;
-        return cocokUraian && cocokSumber;
-      });
-      renderTabelPengeluaran(currentFilterPengeluaran, currentPagePengeluaran);
-    }
-
-    if (selectFilterUraian) {
-      selectFilterUraian.addEventListener('change', terapkanFilterPengeluaran);
-    }
-    if (selectFilterSumberDana) {
-      selectFilterSumberDana.addEventListener('change', terapkanFilterPengeluaran);
-    }
-
-    // ================= 3. FUNGSI PAGINASI UMUM =================
-    function renderPagination(totalPages, activePage, container, callback) {
-      if (totalPages <= 1) { container.innerHTML = ''; return; }
-      let html = '';
-      for (let i = 1; i <= totalPages; i++) {
-        const active = i === activePage ? 'active' : '';
-        html += `<button class="page-btn ${active}" data-page="${i}">${i}</button>`;
-      }
-      container.innerHTML = html;
-      container.querySelectorAll('.page-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          callback(parseInt(e.target.getAttribute('data-page')));
-        });
-      });
-    }
-
-    // Jalankan Kedua Fungsi saat Halaman Dimuat
-    loadDonasi();
-    loadPengeluaran();
+    })();
   </script>
 
   <!-- ================= SCRIPT UTAMA (HAMBURGER & BACK-TO-TOP) ================= -->

@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, query, orderBy, serverTimestamp, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore, initializeFirestore, collection, addDoc, getDocs, onSnapshot, query, orderBy, serverTimestamp, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
 // === TAMBAHAN BARU: Import Firebase Storage ===
@@ -16,9 +16,18 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+let db;
+try {
+  // Deteksi otomatis long-polling agar koneksi Firestore stabil di browser mobile, Safari, & jaringan proxy
+  db = initializeFirestore(app, {
+    experimentalAutoDetectLongPolling: true,
+    useFetchStreams: false,
+  });
+} catch (err) {
+  db = getFirestore(app);
+}
 const auth = getAuth(app);
 const storage = getStorage(app); // Inisialisasi Storage
 
 // Export semua modul
-export { db, auth, storage, ref, uploadBytesResumable, getDownloadURL, deleteObject, collection, addDoc, getDocs, query, orderBy, serverTimestamp, doc, updateDoc, deleteDoc };
+export { db, auth, storage, firebaseConfig, ref, uploadBytesResumable, getDownloadURL, deleteObject, collection, addDoc, getDocs, onSnapshot, query, orderBy, serverTimestamp, doc, updateDoc, deleteDoc };
