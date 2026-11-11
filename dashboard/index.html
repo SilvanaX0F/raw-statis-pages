@@ -6,20 +6,113 @@
   <title>Dashboard Admin | Yayasan Padang Wulan</title>
   <link rel="stylesheet" href="css/dashboard.css">
   <style>
+    /* === TOP HEADER POLISH === */
+    .top-header-bar {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1.25rem;
+      margin-bottom: 1.75rem;
+      flex-wrap: wrap;
+    }
+
+    .top-header-bar .top-header {
+      margin-bottom: 0;
+    }
+
+    .header-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--primary);
+      background: var(--primary-light);
+      border: 1px solid var(--primary-border);
+      padding: 0.2rem 0.65rem;
+      border-radius: 9999px;
+      margin-bottom: 0.5rem;
+    }
+
+    .top-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .live-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.45rem 0.85rem;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 9999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-main);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent-amber);
+      flex-shrink: 0;
+    }
+
+    .live-dot.is-live {
+      background: var(--primary);
+      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.18);
+      animation: livePulse 2s infinite;
+    }
+
+    .live-dot.is-error {
+      background: var(--accent-red);
+      box-shadow: none;
+      animation: none;
+    }
+
+    @keyframes livePulse {
+      0%, 100% { box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.22); }
+      50% { box-shadow: 0 0 0 5px rgba(5, 150, 105, 0.06); }
+    }
+
+    .btn-top-link {
+      padding: 0.5rem 0.95rem;
+      gap: 0.45rem;
+      text-decoration: none;
+      font-size: 0.82rem;
+    }
+
+    .btn-top-link svg {
+      width: 15px;
+      height: 15px;
+    }
+
     /* === KARTU RINGKASAN STATISTIK === */
     .grid-summary {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.35rem;
+      margin-bottom: 1.75rem;
     }
+
     .card-stat {
-      padding: 1.75rem 1.5rem;
-      transition: all 0.2s ease;
+      padding: 1.45rem 1.45rem 1.25rem;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
     }
+
     .card-stat:hover {
+      transform: translateY(-2px);
       box-shadow: var(--shadow-md);
       border-color: #cbd5e1;
     }
+
     .card-stat::before {
       content: "";
       position: absolute;
@@ -28,32 +121,575 @@
       width: 4px;
       height: 100%;
     }
+
     .card-stat.donasi::before { background-color: var(--primary); }
     .card-stat.pengeluaran::before { background-color: var(--accent-red); }
     .card-stat.saldo::before { background-color: var(--accent-blue); }
-    
+
+    .stat-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 0.65rem;
+    }
+
     .card-stat h3 {
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       color: var(--text-muted);
       font-weight: 700;
-      margin-bottom: 0.6rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
+
+    .stat-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-md);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .stat-icon svg {
+      width: 19px;
+      height: 19px;
+    }
+
+    .card-stat.donasi .stat-icon {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .card-stat.pengeluaran .stat-icon {
+      background: var(--accent-red-light);
+      color: var(--accent-red);
+    }
+
+    .card-stat.saldo .stat-icon {
+      background: var(--accent-blue-light);
+      color: var(--accent-blue);
+    }
+
     .card-stat .value {
-      font-size: 1.85rem;
+      font-size: clamp(1.5rem, 2.2vw, 1.85rem);
       font-weight: 800;
       letter-spacing: -0.025em;
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      min-height: 2.3rem;
+      line-height: 1.2;
     }
+
     .card-stat.donasi .value { color: var(--primary); }
     .card-stat.pengeluaran .value { color: var(--accent-red); }
     .card-stat.saldo .value { color: var(--accent-blue); }
 
+    .stat-foot {
+      margin-top: 0.9rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--bg-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .stat-link {
+      color: var(--text-dark);
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      white-space: nowrap;
+      transition: color 0.15s ease;
+    }
+
+    .card-stat.donasi .stat-link:hover { color: var(--primary); }
+    .card-stat.pengeluaran .stat-link:hover { color: var(--accent-red); }
+    .card-stat.saldo .stat-link:hover { color: var(--accent-blue); }
+
+    /* === GRID KONTEN UTAMA DASHBOARD === */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    .dashboard-side {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .panel-card {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .panel-head {
+      padding: 1.25rem 1.45rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      background: #ffffff;
+    }
+
+    .panel-title-wrap {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.85rem;
+    }
+
+    .panel-head-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-md);
+      background: var(--primary-light);
+      color: var(--primary);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+
+    .panel-head-icon svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .panel-head h2 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      letter-spacing: -0.015em;
+      line-height: 1.3;
+    }
+
+    .panel-head p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+    }
+
+    /* === DAFTAR 5 AKTIVITAS TERAKHIR === */
+    .activity-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .activity-state {
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .activity-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.95rem;
+      padding: 1.05rem 1.45rem;
+      border-bottom: 1px solid var(--border);
+      text-decoration: none;
+      color: inherit;
+      transition: background-color 0.15s ease;
+    }
+
+    .activity-item:last-child {
+      border-bottom: none;
+    }
+
+    .activity-item:hover {
+      background-color: #f8fafc;
+    }
+
+    .activity-item:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: -2px;
+      background-color: var(--primary-light);
+    }
+
+    .activity-leading {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      flex-shrink: 0;
+      padding-top: 0.1rem;
+    }
+
+    .activity-num {
+      width: 22px;
+      height: 22px;
+      border-radius: 9999px;
+      background: var(--bg-subtle);
+      color: var(--text-dark);
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border);
+    }
+
+    .activity-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: var(--radius-md);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .activity-icon svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    .activity-icon--donasi {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .activity-icon--pengeluaran {
+      background: var(--accent-red-light);
+      color: var(--accent-red);
+    }
+
+    .activity-icon--berita {
+      background: var(--accent-blue-light);
+      color: var(--accent-blue);
+    }
+
+    .activity-icon--galeri {
+      background: var(--accent-amber-light);
+      color: var(--accent-amber);
+    }
+
+    .activity-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .activity-desc {
+      font-size: 0.875rem;
+      line-height: 1.55;
+      color: var(--text-main);
+      word-break: break-word;
+    }
+
+    .activity-desc strong {
+      color: var(--text-dark);
+      font-weight: 700;
+    }
+
+    .activity-desc .activity-date {
+      font-weight: 700;
+      color: var(--text-dark);
+    }
+
+    .activity-desc .activity-amount.is-donasi {
+      color: var(--primary);
+    }
+
+    .activity-desc .activity-amount.is-pengeluaran {
+      color: var(--accent-red);
+    }
+
+    .activity-meta {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.45rem 0.65rem;
+      margin-top: 0.5rem;
+    }
+
+    .badge-kat--donasi {
+      background: var(--primary-light);
+      color: var(--primary);
+      border-color: var(--primary-border);
+    }
+
+    .badge-kat--penyaluran {
+      background: var(--accent-red-light);
+      color: var(--accent-red);
+      border-color: rgba(225, 29, 72, 0.25);
+    }
+
+    .badge-kat--berita {
+      background: var(--accent-blue-light);
+      color: var(--accent-blue);
+      border-color: rgba(2, 132, 199, 0.25);
+    }
+
+    .badge-kat--galeri {
+      background: var(--accent-amber-light);
+      color: var(--accent-amber);
+      border-color: rgba(217, 119, 6, 0.28);
+    }
+
+    .badge-action-update {
+      display: inline-block;
+      background: var(--bg-subtle);
+      color: var(--text-main);
+      border: 1px solid var(--border);
+      padding: 2px 8px;
+      border-radius: 9999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+    }
+
+    .activity-extra {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+    }
+
+    .activity-time {
+      font-size: 0.75rem;
+      color: var(--text-light);
+      margin-left: auto;
+    }
+
+    .activity-chevron {
+      color: var(--text-light);
+      display: inline-flex;
+      align-items: center;
+      padding-top: 0.35rem;
+      flex-shrink: 0;
+      transition: transform 0.15s ease, color 0.15s ease;
+    }
+
+    .activity-chevron svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    .activity-item:hover .activity-chevron {
+      transform: translateX(3px);
+      color: var(--primary);
+    }
+
+    /* === PANEL KANAN: RINGKASAN MODUL & AKSI CEPAT === */
+    .panel-body {
+      padding: 1.25rem 1.45rem;
+    }
+
+    .ratio-box {
+      background: var(--bg-canvas);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 0.95rem 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .ratio-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .ratio-head span {
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    .ratio-head strong {
+      color: var(--text-dark);
+      font-weight: 800;
+    }
+
+    .ratio-track {
+      width: 100%;
+      height: 8px;
+      border-radius: 9999px;
+      background: #e2e8f0;
+      overflow: hidden;
+    }
+
+    .ratio-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 9999px;
+      background: linear-gradient(90deg, var(--primary) 0%, #10b981 100%);
+      transition: width 0.5s ease;
+    }
+
+    .ratio-fill.is-high {
+      background: linear-gradient(90deg, var(--accent-amber) 0%, var(--accent-red) 100%);
+    }
+
+    .ratio-caption {
+      display: block;
+      margin-top: 0.45rem;
+      font-size: 0.74rem;
+      color: var(--text-muted);
+    }
+
+    .module-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+    }
+
+    .module-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      padding: 0.65rem 0.8rem;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: #ffffff;
+      text-decoration: none;
+      color: var(--text-main);
+      font-size: 0.84rem;
+      font-weight: 600;
+      transition: border-color 0.15s ease, background-color 0.15s ease;
+    }
+
+    .module-row:hover {
+      border-color: #cbd5e1;
+      background: var(--bg-canvas);
+    }
+
+    .module-row-left {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .module-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .module-dot--donasi { background: var(--primary); }
+    .module-dot--penyaluran { background: var(--accent-red); }
+    .module-dot--berita { background: var(--accent-blue); }
+    .module-dot--galeri { background: var(--accent-amber); }
+
+    .module-count {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      background: var(--bg-subtle);
+      padding: 0.15rem 0.55rem;
+      border-radius: 9999px;
+    }
+
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.75rem;
+    }
+
+    .quick-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.55rem;
+      padding: 0.9rem;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: #ffffff;
+      text-decoration: none;
+      color: var(--text-dark);
+      font-size: 0.82rem;
+      font-weight: 700;
+      transition: all 0.18s ease;
+    }
+
+    .quick-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+      border-color: #cbd5e1;
+    }
+
+    .quick-btn-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-sm);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .quick-btn-icon svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .quick-btn--donasi .quick-btn-icon { background: var(--primary-light); color: var(--primary); }
+    .quick-btn--donasi:hover { border-color: var(--primary-border); }
+
+    .quick-btn--penyaluran .quick-btn-icon { background: var(--accent-red-light); color: var(--accent-red); }
+    .quick-btn--penyaluran:hover { border-color: rgba(225, 29, 72, 0.35); }
+
+    .quick-btn--berita .quick-btn-icon { background: var(--accent-blue-light); color: var(--accent-blue); }
+    .quick-btn--berita:hover { border-color: rgba(2, 132, 199, 0.35); }
+
+    .quick-btn--galeri .quick-btn-icon { background: var(--accent-amber-light); color: var(--accent-amber); }
+    .quick-btn--galeri:hover { border-color: rgba(217, 119, 6, 0.38); }
+
+    .quick-btn span.quick-sub {
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 1024px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
     @media (max-width: 768px) {
       .grid-summary {
+        grid-template-columns: 1fr;
+      }
+
+      .panel-head {
+        padding: 1.1rem 1.15rem;
+      }
+
+      .panel-body {
+        padding: 1.1rem 1.15rem;
+      }
+
+      .activity-item {
+        padding: 0.95rem 1.15rem;
+        gap: 0.75rem;
+      }
+
+      .activity-icon {
+        display: none;
+      }
+
+      .activity-time {
+        margin-left: 0;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .quick-actions {
         grid-template-columns: 1fr;
       }
     }
@@ -100,33 +736,185 @@
 
     <!-- KONTEN UTAMA -->
     <main class="main-content">
-      <div class="top-header">
-        <h1>Selamat Datang, Admin!</h1>
-        <p>Berikut adalah ringkasan keuangan sistem Yayasan Padang Wulan.</p>
+      <div class="top-header-bar">
+        <div class="top-header">
+          <span class="header-eyebrow">Panel Kontrol Admin</span>
+          <h1>Selamat Datang, Admin!</h1>
+          <p>Ringkasan keuangan, statistik data, dan aktivitas terbaru Yayasan Padang Wulan.</p>
+        </div>
+        <div class="top-header-actions">
+          <div class="live-pill" aria-live="polite">
+            <span class="live-dot" id="sync-dot" aria-hidden="true"></span>
+            <span id="sync-status-text">Menyinkronkan data...</span>
+          </div>
+          <a href="../keuangan-padang-wulan.html" target="_blank" rel="noopener" class="btn btn-secondary btn-top-link">
+            <span>Laporan Publik</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        </div>
       </div>
 
       <!-- Ringkasan Statistik -->
       <div class="grid-summary">
         <div class="card card-stat donasi">
-          <h3>Total Donasi Masuk</h3>
+          <div class="stat-head">
+            <h3>Total Donasi Masuk</h3>
+            <span class="stat-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </span>
+          </div>
           <div class="value" id="total-donasi">
             <div class="spinner"></div>
+          </div>
+          <div class="stat-foot">
+            <span id="meta-donasi">Memuat jumlah transaksi...</span>
+            <a href="donasi.html" class="stat-link">Kelola →</a>
           </div>
         </div>
         
         <div class="card card-stat pengeluaran">
-          <h3>Total Penyaluran</h3>
+          <div class="stat-head">
+            <h3>Total Penyaluran</h3>
+            <span class="stat-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            </span>
+          </div>
           <div class="value" id="total-pengeluaran">
             <div class="spinner"></div>
+          </div>
+          <div class="stat-foot">
+            <span id="meta-pengeluaran">Memuat jumlah transaksi...</span>
+            <a href="pengeluaran.html" class="stat-link">Kelola →</a>
           </div>
         </div>
         
         <div class="card card-stat saldo">
-          <h3>Saldo Kas Saat Ini</h3>
+          <div class="stat-head">
+            <h3>Saldo Kas Saat Ini</h3>
+            <span class="stat-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </span>
+          </div>
           <div class="value" id="saldo-kas">
             <div class="spinner"></div>
           </div>
+          <div class="stat-foot">
+            <span id="meta-saldo">Memuat kondisi kas...</span>
+            <a href="../keuangan-padang-wulan.html" target="_blank" rel="noopener" class="stat-link">Laporan →</a>
+          </div>
         </div>
+      </div>
+
+      <!-- Konten Utama: 5 Aktivitas Terakhir & Panel Samping -->
+      <div class="dashboard-grid">
+
+        <!-- KARTU 5 AKTIVITAS TERAKHIR -->
+        <section class="card panel-card" aria-labelledby="judul-aktivitas">
+          <div class="panel-head">
+            <div class="panel-title-wrap">
+              <span class="panel-head-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              </span>
+              <div>
+                <h2 id="judul-aktivitas">5 Aktivitas Terakhir</h2>
+                <p>Gabungan aktivitas terbaru donasi, penyaluran, berita, dan galeri. Klik item untuk membuka halaman terkait.</p>
+              </div>
+            </div>
+            <span class="badge-kat" id="aktivitas-count-badge">Memuat...</span>
+          </div>
+
+          <div class="activity-list" id="aktivitas-list">
+            <div class="activity-state">
+              <div class="spinner" style="color: var(--primary);"></div>
+              <span>Memuat aktivitas admin terbaru...</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- PANEL SAMPING: RINGKASAN MODUL & AKSI CEPAT -->
+        <aside class="dashboard-side">
+          <section class="card panel-card" aria-labelledby="judul-ringkasan-modul">
+            <div class="panel-head">
+              <div>
+                <h2 id="judul-ringkasan-modul">Ringkasan Data Sistem</h2>
+                <p>Cakupan data aktif dan proporsi penyaluran dana.</p>
+              </div>
+            </div>
+            <div class="panel-body">
+              <div class="ratio-box">
+                <div class="ratio-head">
+                  <span>Rasio Penyaluran Dana</span>
+                  <strong id="ratio-percent">0%</strong>
+                </div>
+                <div class="ratio-track">
+                  <div class="ratio-fill" id="ratio-bar-fill"></div>
+                </div>
+                <small class="ratio-caption" id="ratio-caption">Menunggu sinkronisasi data keuangan...</small>
+              </div>
+
+              <div class="module-list">
+                <a href="donasi.html" class="module-row">
+                  <span class="module-row-left"><span class="module-dot module-dot--donasi"></span>Data Donasi Masuk</span>
+                  <span class="module-count" id="count-mod-donasi">-</span>
+                </a>
+                <a href="pengeluaran.html" class="module-row">
+                  <span class="module-row-left"><span class="module-dot module-dot--penyaluran"></span>Data Penyaluran Dana</span>
+                  <span class="module-count" id="count-mod-pengeluaran">-</span>
+                </a>
+                <a href="berita.html" class="module-row">
+                  <span class="module-row-left"><span class="module-dot module-dot--berita"></span>Berita &amp; Artikel</span>
+                  <span class="module-count" id="count-mod-berita">-</span>
+                </a>
+                <a href="galeri.html" class="module-row">
+                  <span class="module-row-left"><span class="module-dot module-dot--galeri"></span>Dokumentasi Galeri</span>
+                  <span class="module-count" id="count-mod-galeri">-</span>
+                </a>
+              </div>
+            </div>
+          </section>
+
+          <section class="card panel-card" aria-labelledby="judul-aksi-cepat">
+            <div class="panel-head">
+              <div>
+                <h2 id="judul-aksi-cepat">Aksi Cepat</h2>
+                <p>Pintasan langsung ke halaman pengelolaan admin.</p>
+              </div>
+            </div>
+            <div class="panel-body">
+              <div class="quick-actions">
+                <a href="donasi.html" class="quick-btn quick-btn--donasi">
+                  <span class="quick-btn-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  </span>
+                  <span>Input Donasi</span>
+                  <span class="quick-sub">Catat pemasukan</span>
+                </a>
+                <a href="pengeluaran.html" class="quick-btn quick-btn--penyaluran">
+                  <span class="quick-btn-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  </span>
+                  <span>Catat Penyaluran</span>
+                  <span class="quick-sub">Catat pengeluaran</span>
+                </a>
+                <a href="berita.html" class="quick-btn quick-btn--berita">
+                  <span class="quick-btn-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                  </span>
+                  <span>Tulis Berita</span>
+                  <span class="quick-sub">Update artikel</span>
+                </a>
+                <a href="galeri.html" class="quick-btn quick-btn--galeri">
+                  <span class="quick-btn-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                  </span>
+                  <span>Unggah Galeri</span>
+                  <span class="quick-sub">Update dokumentasi</span>
+                </a>
+              </div>
+            </div>
+          </section>
+        </aside>
+
       </div>
 
     </main>
@@ -150,45 +938,440 @@
   <!-- PANGGIL SCRIPT PENJAGA KEAMANAN -->
   <script type="module" src="js/auth-guard.js"></script>
 
-  <!-- LOGIKA PENGHITUNGAN REALTIME -->
+  <!-- LOGIKA REALTIME DASHBOARD & 5 AKTIVITAS TERAKHIR -->
   <script type="module">
-    import { db, collection, getDocs } from '../js/firebase-config.js';
+    import { db, auth, collection, onSnapshot, query } from '../js/firebase-config.js';
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+    const BULAN_ID = {
+      januari: 0, jan: 0,
+      februari: 1, feb: 1,
+      maret: 2, mar: 2,
+      april: 3, apr: 3,
+      mei: 4,
+      juni: 5, jun: 5,
+      juli: 6, jul: 6,
+      agustus: 7, agu: 7, agt: 7,
+      september: 8, sep: 8,
+      oktober: 9, okt: 9,
+      november: 10, nov: 10,
+      desember: 11, des: 11,
+    };
+
+    const MAP_KATEGORI_NORMALISASI = {
+      'zakat mal': 'Zakat Mal',
+      'zakat fitrah': 'Zakat Fitrah',
+      'infaq': 'Infaq Pembangunan',
+      'infaq pembangunan': 'Infaq Pembangunan',
+      'infaq sosial': 'Infaq Sosial (Kematian)',
+      'infaq sosial (kematian)': 'Infaq Sosial (Kematian)',
+      'infaq sosial (kepemudaan)': 'Infaq Sosial (Kepemudaan)',
+      'infaq pendidikan': 'Infaq Pendidikan (TPQ)',
+      'infaq pendidikan (tpq)': 'Infaq Pendidikan (TPQ)',
+      'infaq operasional': 'Infaq Operasional (DKM)',
+      'infaq operasional (dkm)': 'Infaq Operasional (DKM)',
+      'infaq phbi': 'Infaq PHBI',
+      'infaq majlis taklim': 'Infaq Majlis Taklim',
+      'infaq dari sampah': 'Infaq dari Sampah',
+      'infaq dari sarpras': 'Infaq dari Sarpras',
+      'shodaqoh': 'Shodaqoh',
+      'wakaf': 'Wakaf',
+    };
+
+    const ICONS = {
+      donasi: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
+      pengeluaran: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>',
+      berita: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>',
+      galeri: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>',
+    };
+
+    const escapeHtml = (val) => String(val ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+
+    const normalisasiPosDana = (val) => {
+      if (!val) return '';
+      const trimmed = String(val).trim().replace(/\s+/g, ' ');
+      return MAP_KATEGORI_NORMALISASI[trimmed.toLowerCase()] || trimmed;
+    };
+
+    const parseNominal = (val) => {
+      if (typeof val === 'number') return Number.isFinite(val) ? Math.round(val) : 0;
+      if (typeof val === 'string') {
+        const trimmed = val.trim();
+        if (!trimmed) return 0;
+        if (/^-?\d+(\.\d{1,2})?$/.test(trimmed)) {
+          const numFloat = Number(trimmed);
+          return Number.isFinite(numFloat) ? Math.round(numFloat) : 0;
+        }
+        const digits = trimmed.replace(/[^0-9-]/g, '');
+        const parsed = Number(digits);
+        return Number.isFinite(parsed) ? parsed : 0;
+      }
+      return 0;
+    };
 
     const formatRupiah = (angka) => {
       return new Intl.NumberFormat('id-ID', {
         style: 'currency', currency: 'IDR', minimumFractionDigits: 0, maximumFractionDigits: 0
-      }).format(angka);
+      }).format(Math.round(Number(angka) || 0));
     };
 
-    async function hitungRingkasanKeuangan() {
-      const elDonasi = document.getElementById('total-donasi');
-      const elPengeluaran = document.getElementById('total-pengeluaran');
-      const elSaldo = document.getElementById('saldo-kas');
+    const pad2 = (n) => String(n).padStart(2, '0');
 
-      try {
-        let totalDonasi = 0;
-        const donasiSnap = await getDocs(collection(db, 'donations'));
-        donasiSnap.forEach(doc => { totalDonasi += Number(doc.data().jumlah); });
+    const formatDateObjDDMMYYYY = (dateObj) => {
+      if (!(dateObj instanceof Date) || Number.isNaN(dateObj.getTime())) return '-';
+      return `${pad2(dateObj.getDate())}-${pad2(dateObj.getMonth() + 1)}-${dateObj.getFullYear()}`;
+    };
 
-        let totalPengeluaran = 0;
-        const pengeluaranSnap = await getDocs(collection(db, 'expenses'));
-        pengeluaranSnap.forEach(doc => { totalPengeluaran += Number(doc.data().jumlah); });
+    const parseTimestampToMs = (ts) => {
+      if (!ts) return 0;
+      if (typeof ts === 'object') {
+        if (typeof ts.toMillis === 'function') return ts.toMillis();
+        if (typeof ts.toDate === 'function') return ts.toDate().getTime();
+        if (typeof ts.seconds === 'number') return ts.seconds * 1000;
+      }
+      if (typeof ts === 'number' && Number.isFinite(ts)) return ts;
+      const ms = Date.parse(String(ts));
+      return Number.isFinite(ms) ? ms : 0;
+    };
 
-        const saldo = totalDonasi - totalPengeluaran;
+    // Parse string tanggal ("YYYY-MM-DD", "DD-MM-YYYY", "DD/MM/YYYY", atau "11 November 2026")
+    const parseTanggalField = (rawTgl) => {
+      if (!rawTgl) return null;
+      const str = String(rawTgl).trim();
+      const isoMatch = str.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+      if (isoMatch) {
+        const y = Number(isoMatch[1]);
+        const m = Number(isoMatch[2]) - 1;
+        const d = Number(isoMatch[3]);
+        const dt = new Date(y, m, d, 12, 0, 0);
+        if (!Number.isNaN(dt.getTime())) {
+          return { formatted: `${pad2(d)}-${pad2(m + 1)}-${y}`, ms: dt.getTime() };
+        }
+      }
+      const dmyMatch = str.match(/^(\d{1,2})[-/](\d{1,2})[-/](\d{4})$/);
+      if (dmyMatch) {
+        const d = Number(dmyMatch[1]);
+        const m = Number(dmyMatch[2]) - 1;
+        const y = Number(dmyMatch[3]);
+        const dt = new Date(y, m, d, 12, 0, 0);
+        if (!Number.isNaN(dt.getTime())) {
+          return { formatted: `${pad2(d)}-${pad2(m + 1)}-${y}`, ms: dt.getTime() };
+        }
+      }
+      const idMatch = str.match(/^(\d{1,2})\s+([a-zA-Z]+)\s+(\d{4})$/);
+      if (idMatch) {
+        const d = Number(idMatch[1]);
+        const bulanIdx = BULAN_ID[idMatch[2].toLowerCase()];
+        const y = Number(idMatch[3]);
+        if (bulanIdx !== undefined) {
+          const dt = new Date(y, bulanIdx, d, 12, 0, 0);
+          return { formatted: `${pad2(d)}-${pad2(bulanIdx + 1)}-${y}`, ms: dt.getTime() };
+        }
+      }
+      const fallbackMs = Date.parse(str);
+      if (Number.isFinite(fallbackMs)) {
+        const dt = new Date(fallbackMs);
+        return { formatted: formatDateObjDDMMYYYY(dt), ms: fallbackMs };
+      }
+      return null;
+    };
 
-        elDonasi.textContent = formatRupiah(totalDonasi);
-        elPengeluaran.textContent = formatRupiah(totalPengeluaran);
-        elSaldo.textContent = formatRupiah(saldo);
+    const formatWaktuMeta = (ms) => {
+      if (!ms) return '';
+      const diffSec = Math.floor((Date.now() - ms) / 1000);
+      if (diffSec >= 0 && diffSec < 60) return 'Baru saja';
+      if (diffSec >= 60 && diffSec < 3600) return `${Math.floor(diffSec / 60)} menit lalu`;
+      if (diffSec >= 3600 && diffSec < 86400) return `${Math.floor(diffSec / 3600)} jam lalu`;
+      const dt = new Date(ms);
+      return `${pad2(dt.getDate())}-${pad2(dt.getMonth() + 1)}-${dt.getFullYear()} • ${pad2(dt.getHours())}:${pad2(dt.getMinutes())}`;
+    };
 
-      } catch (error) {
-        console.error("Gagal mengambil data ringkasan:", error);
-        elDonasi.innerHTML = `<span style="font-size:1rem; color:var(--accent-red);">Gagal memuat</span>`;
-        elPengeluaran.innerHTML = `<span style="font-size:1rem; color:var(--accent-red);">Gagal memuat</span>`;
-        elSaldo.innerHTML = `<span style="font-size:1rem; color:var(--accent-red);">Gagal memuat</span>`;
+    const ambilInfoWaktuAktivitas = (data) => {
+      const updatedMs = parseTimestampToMs(data.updatedAt);
+      const createdMs = parseTimestampToMs(data.createdAt);
+      const parsedTgl = parseTanggalField(data.tanggal);
+      const isUpdated = updatedMs > 0;
+      const sortMs = updatedMs || createdMs || (parsedTgl ? parsedTgl.ms : 0);
+      const hasExactTime = updatedMs > 0 || createdMs > 0;
+
+      let tglDisplay = '-';
+      if (isUpdated) {
+        tglDisplay = formatDateObjDDMMYYYY(new Date(updatedMs));
+      } else if (parsedTgl) {
+        tglDisplay = parsedTgl.formatted;
+      } else if (createdMs > 0) {
+        tglDisplay = formatDateObjDDMMYYYY(new Date(createdMs));
+      }
+
+      return { isUpdated, sortMs, hasExactTime, tglDisplay };
+    };
+
+    const state = {
+      donations: [],
+      expenses: [],
+      news: [],
+      gallery: [],
+      ready: { donations: false, expenses: false, news: false, gallery: false },
+      errors: { donations: false, expenses: false, news: false, gallery: false },
+    };
+
+    function updateStatusHeader() {
+      const dot = document.getElementById('sync-dot');
+      const label = document.getElementById('sync-status-text');
+      const allReady = Object.values(state.ready).every(Boolean);
+      const anyError = Object.values(state.errors).some(Boolean);
+
+      if (!allReady) {
+        dot.className = 'live-dot';
+        label.textContent = 'Menyinkronkan data...';
+      } else if (anyError) {
+        dot.className = 'live-dot is-error';
+        label.textContent = 'Sebagian data gagal dimuat';
+      } else {
+        dot.className = 'live-dot is-live';
+        label.textContent = 'Data Live Realtime';
       }
     }
 
-    hitungRingkasanKeuangan();
+    function renderRingkasanKeuangan() {
+      const elDonasi = document.getElementById('total-donasi');
+      const elPengeluaran = document.getElementById('total-pengeluaran');
+      const elSaldo = document.getElementById('saldo-kas');
+      const elMetaDonasi = document.getElementById('meta-donasi');
+      const elMetaPengeluaran = document.getElementById('meta-pengeluaran');
+      const elMetaSaldo = document.getElementById('meta-saldo');
+      const elRatioPct = document.getElementById('ratio-percent');
+      const elRatioBar = document.getElementById('ratio-bar-fill');
+      const elRatioCaption = document.getElementById('ratio-caption');
+
+      if (state.ready.donations) {
+        if (state.errors.donations) {
+          elDonasi.innerHTML = '<span style="font-size:0.95rem; color:var(--accent-red);">Gagal memuat</span>';
+          elMetaDonasi.textContent = 'Koneksi bermasalah';
+        } else {
+          const totalDonasi = state.donations.reduce((acc, item) => acc + parseNominal(item.jumlah), 0);
+          elDonasi.textContent = formatRupiah(totalDonasi);
+          elMetaDonasi.textContent = `${state.donations.length} transaksi masuk`;
+        }
+      }
+
+      if (state.ready.expenses) {
+        if (state.errors.expenses) {
+          elPengeluaran.innerHTML = '<span style="font-size:0.95rem; color:var(--accent-red);">Gagal memuat</span>';
+          elMetaPengeluaran.textContent = 'Koneksi bermasalah';
+        } else {
+          const totalPengeluaran = state.expenses.reduce((acc, item) => acc + parseNominal(item.jumlah), 0);
+          elPengeluaran.textContent = formatRupiah(totalPengeluaran);
+          elMetaPengeluaran.textContent = `${state.expenses.length} transaksi keluar`;
+        }
+      }
+
+      if (state.ready.donations && state.ready.expenses) {
+        if (state.errors.donations || state.errors.expenses) {
+          elSaldo.innerHTML = '<span style="font-size:0.95rem; color:var(--accent-red);">Gagal memuat</span>';
+          elMetaSaldo.textContent = 'Sebagian data gagal dimuat';
+          elRatioCaption.textContent = 'Rasio belum dapat dihitung.';
+        } else {
+          const totalDonasi = state.donations.reduce((acc, item) => acc + parseNominal(item.jumlah), 0);
+          const totalPengeluaran = state.expenses.reduce((acc, item) => acc + parseNominal(item.jumlah), 0);
+          const saldo = totalDonasi - totalPengeluaran;
+          elSaldo.textContent = formatRupiah(saldo);
+
+          const rasio = totalDonasi > 0 ? Math.round((totalPengeluaran / totalDonasi) * 100) : 0;
+          const barWidth = Math.min(Math.max(rasio, 0), 100);
+          elMetaSaldo.textContent = totalDonasi > 0 ? `Tersalurkan ${rasio}% dari donasi` : 'Belum ada donasi tercatat';
+          elRatioPct.textContent = `${rasio}%`;
+          elRatioBar.style.width = `${barWidth}%`;
+          elRatioBar.classList.toggle('is-high', rasio >= 85);
+          elRatioCaption.textContent = totalDonasi > 0
+            ? `${formatRupiah(totalPengeluaran)} telah disalurkan dari ${formatRupiah(totalDonasi)} donasi masuk.`
+            : 'Belum ada transaksi donasi untuk dihitung rasionya.';
+        }
+      }
+
+      // Statistik jumlah dokumen per modul
+      document.getElementById('count-mod-donasi').textContent = state.ready.donations
+        ? (state.errors.donations ? 'Err' : `${state.donations.length} data`)
+        : '-';
+      document.getElementById('count-mod-pengeluaran').textContent = state.ready.expenses
+        ? (state.errors.expenses ? 'Err' : `${state.expenses.length} data`)
+        : '-';
+      document.getElementById('count-mod-berita').textContent = state.ready.news
+        ? (state.errors.news ? 'Err' : `${state.news.length} berita`)
+        : '-';
+      document.getElementById('count-mod-galeri').textContent = state.ready.gallery
+        ? (state.errors.gallery ? 'Err' : `${state.gallery.length} foto`)
+        : '-';
+    }
+
+    function bangunItemAktivitas() {
+      const semua = [];
+
+      state.donations.forEach((d) => {
+        const waktu = ambilInfoWaktuAktivitas(d);
+        const nominal = formatRupiah(parseNominal(d.jumlah));
+        const kategori = normalisasiPosDana(d.kategori) || 'Donasi';
+        const aksiKata = waktu.isUpdated ? 'memperbarui' : 'menginput';
+        const namaDonatur = (d.nama || '').trim();
+
+        semua.push({
+          jenisKey: 'donasi',
+          badgeClass: 'badge-kat--donasi',
+          badgeLabel: 'Donasi',
+          href: 'donasi.html',
+          isUpdated: waktu.isUpdated,
+          sortMs: waktu.sortMs,
+          hasExactTime: waktu.hasExactTime,
+          extraLabel: namaDonatur ? `Donatur: ${namaDonatur}` : '',
+          descHtml: `tgl <span class="activity-date">${escapeHtml(waktu.tglDisplay)}</span> Admin telah ${aksiKata} donasi sebesar <strong class="activity-amount is-donasi">${escapeHtml(nominal)}</strong> pada kategori <strong>${escapeHtml(kategori)}</strong>`,
+        });
+      });
+
+      state.expenses.forEach((d) => {
+        const waktu = ambilInfoWaktuAktivitas(d);
+        const nominal = formatRupiah(parseNominal(d.jumlah));
+        const uraian = (d.keterangan || d.nama || 'Keperluan Program').trim();
+        const sumberDana = normalisasiPosDana(d.sumberDana);
+        const aksiKata = waktu.isUpdated ? 'memperbarui' : 'menginput';
+        const sumberFragment = sumberDana ? ` diambil dari <strong>${escapeHtml(sumberDana)}</strong>` : '';
+
+        semua.push({
+          jenisKey: 'pengeluaran',
+          badgeClass: 'badge-kat--penyaluran',
+          badgeLabel: 'Penyaluran',
+          href: 'pengeluaran.html',
+          isUpdated: waktu.isUpdated,
+          sortMs: waktu.sortMs,
+          hasExactTime: waktu.hasExactTime,
+          extraLabel: sumberDana ? `Pos: ${sumberDana}` : '',
+          descHtml: `tgl <span class="activity-date">${escapeHtml(waktu.tglDisplay)}</span> Admin telah ${aksiKata} penyaluran sebesar <strong class="activity-amount is-pengeluaran">${escapeHtml(nominal)}</strong> untuk <strong>${escapeHtml(uraian)}</strong>${sumberFragment}`,
+        });
+      });
+
+      state.news.forEach((d) => {
+        const waktu = ambilInfoWaktuAktivitas(d);
+        const judul = (d.judul || 'Tanpa Judul').trim();
+        const kategori = (d.kategori || 'Berita').trim();
+        const aksiKata = waktu.isUpdated ? 'memperbarui' : 'mempublikasikan';
+
+        semua.push({
+          jenisKey: 'berita',
+          badgeClass: 'badge-kat--berita',
+          badgeLabel: 'Berita',
+          href: 'berita.html',
+          isUpdated: waktu.isUpdated,
+          sortMs: waktu.sortMs,
+          hasExactTime: waktu.hasExactTime,
+          extraLabel: `Kategori: ${kategori}`,
+          descHtml: `tgl <span class="activity-date">${escapeHtml(waktu.tglDisplay)}</span> Admin telah ${aksiKata} berita <strong>&ldquo;${escapeHtml(judul)}&rdquo;</strong> pada kategori <strong>${escapeHtml(kategori)}</strong>`,
+        });
+      });
+
+      state.gallery.forEach((d) => {
+        const waktu = ambilInfoWaktuAktivitas(d);
+        const judul = (d.judul || 'Foto Kegiatan').trim();
+        const kategori = (d.kategori || 'Galeri').trim();
+        const aksiKata = waktu.isUpdated ? 'memperbarui' : 'mengunggah';
+
+        semua.push({
+          jenisKey: 'galeri',
+          badgeClass: 'badge-kat--galeri',
+          badgeLabel: 'Galeri',
+          href: 'galeri.html',
+          isUpdated: waktu.isUpdated,
+          sortMs: waktu.sortMs,
+          hasExactTime: waktu.hasExactTime,
+          extraLabel: `Album: ${kategori}`,
+          descHtml: `tgl <span class="activity-date">${escapeHtml(waktu.tglDisplay)}</span> Admin telah ${aksiKata} foto galeri <strong>&ldquo;${escapeHtml(judul)}&rdquo;</strong> pada kategori <strong>${escapeHtml(kategori)}</strong>`,
+        });
+      });
+
+      semua.sort((a, b) => b.sortMs - a.sortMs);
+      return semua.slice(0, 5);
+    }
+
+    function renderAktivitasTerakhir() {
+      const container = document.getElementById('aktivitas-list');
+      const countBadge = document.getElementById('aktivitas-count-badge');
+      const allReady = Object.values(state.ready).every(Boolean);
+
+      if (!allReady) {
+        return;
+      }
+
+      const items = bangunItemAktivitas();
+      countBadge.textContent = `${items.length} Terbaru`;
+
+      if (items.length === 0) {
+        const anyError = Object.values(state.errors).every(Boolean);
+        container.innerHTML = anyError
+          ? `<div class="activity-state" style="color: var(--accent-red);">Gagal memuat aktivitas admin dari server.</div>`
+          : `<div class="activity-state">Belum ada aktivitas donasi, penyaluran, berita, atau galeri yang tercatat.</div>`;
+        return;
+      }
+
+      container.innerHTML = items.map((item, idx) => {
+        const waktuMeta = item.hasExactTime ? formatWaktuMeta(item.sortMs) : '';
+        return `
+          <a href="${item.href}" class="activity-item">
+            <div class="activity-leading">
+              <span class="activity-num">${idx + 1}</span>
+              <span class="activity-icon activity-icon--${item.jenisKey}" aria-hidden="true">${ICONS[item.jenisKey]}</span>
+            </div>
+            <div class="activity-body">
+              <p class="activity-desc">${item.descHtml}</p>
+              <div class="activity-meta">
+                <span class="badge-kat ${item.badgeClass}">${item.badgeLabel}</span>
+                ${item.isUpdated ? '<span class="badge-action-update">Pembaruan</span>' : ''}
+                ${item.extraLabel ? `<span class="activity-extra">${escapeHtml(item.extraLabel)}</span>` : ''}
+                ${waktuMeta ? `<span class="activity-time">${escapeHtml(waktuMeta)}</span>` : ''}
+              </div>
+            </div>
+            <span class="activity-chevron" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </span>
+          </a>
+        `;
+      }).join('');
+    }
+
+    function pantauKoleksi(key, namaKoleksi) {
+      onSnapshot(
+        query(collection(db, namaKoleksi)),
+        (snap) => {
+          state[key] = snap.docs.map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }));
+          state.ready[key] = true;
+          state.errors[key] = false;
+          updateStatusHeader();
+          renderRingkasanKeuangan();
+          renderAktivitasTerakhir();
+        },
+        (err) => {
+          console.error(`Gagal memuat koleksi ${namaKoleksi}:`, err);
+          state.ready[key] = true;
+          state.errors[key] = true;
+          updateStatusHeader();
+          renderRingkasanKeuangan();
+          renderAktivitasTerakhir();
+        }
+      );
+    }
+
+    let listenerAktif = false;
+    onAuthStateChanged(auth, (user) => {
+      if (user && !listenerAktif) {
+        listenerAktif = true;
+        pantauKoleksi('donations', 'donations');
+        pantauKoleksi('expenses', 'expenses');
+        pantauKoleksi('news', 'news');
+        pantauKoleksi('gallery', 'gallery');
+      }
+    });
   </script>
 
 </body>

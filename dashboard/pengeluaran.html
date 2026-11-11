@@ -364,6 +364,7 @@
           await addDoc(collection(db, 'expenses'), dataPayload);
           pesanStatus.style.color = 'var(--primary)'; pesanStatus.textContent = '✅ Pengeluaran berhasil dicatat!';
         } else {
+          dataPayload.updatedAt = serverTimestamp();
           await updateDoc(doc(db, 'expenses', editId), dataPayload);
           pesanStatus.style.color = 'var(--primary)'; pesanStatus.textContent = '✅ Data pengeluaran diperbarui!';
           resetForm();

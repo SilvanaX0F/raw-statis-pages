@@ -340,6 +340,7 @@
           await addDoc(collection(db, 'donations'), dataPayload);
           pesanStatus.style.color = 'var(--primary)'; pesanStatus.textContent = '✅ Donasi berhasil dicatat!';
         } else {
+          dataPayload.updatedAt = serverTimestamp();
           await updateDoc(doc(db, 'donations', editId), dataPayload);
           pesanStatus.style.color = 'var(--primary)'; pesanStatus.textContent = '✅ Data donasi diperbarui!';
           resetForm();

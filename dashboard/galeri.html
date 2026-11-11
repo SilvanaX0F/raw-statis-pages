@@ -377,6 +377,7 @@
           await addDoc(collection(db, 'gallery'), dataPayload);
           pesanStatus.style.color = 'var(--primary)'; pesanStatus.textContent = '✅ Foto berhasil ditambahkan!';
         } else {
+          dataPayload.updatedAt = serverTimestamp();
           await updateDoc(doc(db, 'gallery', editId), dataPayload);
           pesanStatus.style.color = 'var(--primary)'; pesanStatus.textContent = '✅ Info foto berhasil diperbarui!';
           resetForm();

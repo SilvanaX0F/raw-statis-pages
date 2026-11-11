@@ -313,6 +313,7 @@
           await addDoc(collection(db, 'news'), dataPayload);
           pesanStatus.style.color = 'var(--primary)'; pesanStatus.textContent = '✅ Berita berhasil dipublikasikan!';
         } else {
+          dataPayload.updatedAt = serverTimestamp();
           await updateDoc(doc(db, 'news', editId), dataPayload);
           pesanStatus.style.color = 'var(--primary)'; pesanStatus.textContent = '✅ Berita berhasil diperbarui!';
           resetForm();
