@@ -199,21 +199,6 @@
       color: var(--text-muted);
     }
 
-    .stat-link {
-      color: var(--text-dark);
-      font-weight: 600;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.25rem;
-      white-space: nowrap;
-      transition: color 0.15s ease;
-    }
-
-    .card-stat.donasi .stat-link:hover { color: var(--primary); }
-    .card-stat.pengeluaran .stat-link:hover { color: var(--accent-red); }
-    .card-stat.saldo .stat-link:hover { color: var(--accent-blue); }
-
     /* === GRID KONTEN UTAMA DASHBOARD === */
     .dashboard-grid {
       display: grid;
@@ -478,7 +463,7 @@
       color: var(--primary);
     }
 
-    /* === PANEL KANAN: RINGKASAN MODUL & AKSI CEPAT === */
+    /* === PANEL KANAN: RINGKASAN MODUL === */
     .panel-body {
       padding: 1.25rem 1.45rem;
     }
@@ -590,66 +575,6 @@
       border-radius: 9999px;
     }
 
-    .quick-actions {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 0.75rem;
-    }
-
-    .quick-btn {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.55rem;
-      padding: 0.9rem;
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border);
-      background: #ffffff;
-      text-decoration: none;
-      color: var(--text-dark);
-      font-size: 0.82rem;
-      font-weight: 700;
-      transition: all 0.18s ease;
-    }
-
-    .quick-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-sm);
-      border-color: #cbd5e1;
-    }
-
-    .quick-btn-icon {
-      width: 32px;
-      height: 32px;
-      border-radius: var(--radius-sm);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .quick-btn-icon svg {
-      width: 16px;
-      height: 16px;
-    }
-
-    .quick-btn--donasi .quick-btn-icon { background: var(--primary-light); color: var(--primary); }
-    .quick-btn--donasi:hover { border-color: var(--primary-border); }
-
-    .quick-btn--penyaluran .quick-btn-icon { background: var(--accent-red-light); color: var(--accent-red); }
-    .quick-btn--penyaluran:hover { border-color: rgba(225, 29, 72, 0.35); }
-
-    .quick-btn--berita .quick-btn-icon { background: var(--accent-blue-light); color: var(--accent-blue); }
-    .quick-btn--berita:hover { border-color: rgba(2, 132, 199, 0.35); }
-
-    .quick-btn--galeri .quick-btn-icon { background: var(--accent-amber-light); color: var(--accent-amber); }
-    .quick-btn--galeri:hover { border-color: rgba(217, 119, 6, 0.38); }
-
-    .quick-btn span.quick-sub {
-      font-size: 0.72rem;
-      font-weight: 500;
-      color: var(--text-muted);
-    }
-
     @media (max-width: 1024px) {
       .dashboard-grid {
         grid-template-columns: 1fr;
@@ -680,12 +605,6 @@
 
       .activity-time {
         margin-left: 0;
-      }
-    }
-
-    @media (max-width: 420px) {
-      .quick-actions {
-        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -763,7 +682,6 @@
           </div>
           <div class="stat-foot">
             <span id="meta-donasi">Memuat jumlah transaksi...</span>
-            <a href="donasi.html" class="stat-link">Kelola →</a>
           </div>
         </div>
         
@@ -779,7 +697,6 @@
           </div>
           <div class="stat-foot">
             <span id="meta-pengeluaran">Memuat jumlah transaksi...</span>
-            <a href="pengeluaran.html" class="stat-link">Kelola →</a>
           </div>
         </div>
         
@@ -795,7 +712,6 @@
           </div>
           <div class="stat-foot">
             <span id="meta-saldo">Memuat kondisi kas...</span>
-            <a href="../keuangan-padang-wulan.html" target="_blank" rel="noopener" class="stat-link">Laporan →</a>
           </div>
         </div>
       </div>
@@ -825,7 +741,7 @@
           </div>
         </section>
 
-        <!-- PANEL SAMPING: RINGKASAN MODUL & AKSI CEPAT -->
+        <!-- PANEL SAMPING: RINGKASAN MODUL -->
         <aside class="dashboard-side">
           <section class="card panel-card" aria-labelledby="judul-ringkasan-modul">
             <div class="panel-head">
@@ -862,47 +778,6 @@
                 <a href="galeri.html" class="module-row">
                   <span class="module-row-left"><span class="module-dot module-dot--galeri"></span>Dokumentasi Galeri</span>
                   <span class="module-count" id="count-mod-galeri">-</span>
-                </a>
-              </div>
-            </div>
-          </section>
-
-          <section class="card panel-card" aria-labelledby="judul-aksi-cepat">
-            <div class="panel-head">
-              <div>
-                <h2 id="judul-aksi-cepat">Aksi Cepat</h2>
-                <p>Pintasan langsung ke halaman pengelolaan admin.</p>
-              </div>
-            </div>
-            <div class="panel-body">
-              <div class="quick-actions">
-                <a href="donasi.html" class="quick-btn quick-btn--donasi">
-                  <span class="quick-btn-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                  </span>
-                  <span>Input Donasi</span>
-                  <span class="quick-sub">Catat pemasukan</span>
-                </a>
-                <a href="pengeluaran.html" class="quick-btn quick-btn--penyaluran">
-                  <span class="quick-btn-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                  </span>
-                  <span>Catat Penyaluran</span>
-                  <span class="quick-sub">Catat pengeluaran</span>
-                </a>
-                <a href="berita.html" class="quick-btn quick-btn--berita">
-                  <span class="quick-btn-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-                  </span>
-                  <span>Tulis Berita</span>
-                  <span class="quick-sub">Update artikel</span>
-                </a>
-                <a href="galeri.html" class="quick-btn quick-btn--galeri">
-                  <span class="quick-btn-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-                  </span>
-                  <span>Unggah Galeri</span>
-                  <span class="quick-sub">Update dokumentasi</span>
                 </a>
               </div>
             </div>
