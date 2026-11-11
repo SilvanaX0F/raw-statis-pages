@@ -133,6 +133,7 @@
               <option value="Zakat Fitrah">Zakat Fitrah</option>
               <option value="Infaq Pembangunan">Infaq Pembangunan</option>
               <option value="Infaq Sosial (Kematian)">Infaq Sosial (Kematian)</option>
+              <option value="Infaq Sosial (Kepemudaan)">Infaq Sosial (Kepemudaan)</option>
               <option value="Infaq Pendidikan (TPQ)">Infaq Pendidikan (TPQ)</option>
               <option value="Infaq Operasional (DKM)">Infaq Operasional (DKM)</option>
               <option value="Infaq PHBI">Infaq PHBI</option>
@@ -231,6 +232,7 @@
                 <option value="Zakat Fitrah">Zakat Fitrah</option>
                 <option value="Infaq Pembangunan">Infaq Pembangunan</option>
                 <option value="Infaq Sosial (Kematian)">Infaq Sosial (Kematian)</option>
+                <option value="Infaq Sosial (Kepemudaan)">Infaq Sosial (Kepemudaan)</option>
                 <option value="Infaq Pendidikan (TPQ)">Infaq Pendidikan (TPQ)</option>
                 <option value="Infaq Operasional (DKM)">Infaq Operasional (DKM)</option>
                 <option value="Infaq PHBI">Infaq PHBI</option>
@@ -712,12 +714,13 @@
       var FIREBASE_API_KEY = 'AIzaSyAAQK1Ne1tGHgpbaPr74Ow_NNaYdJo12wY';
       var itemsPerPage = 10;
 
-      // Daftar 12 Pos Dana Utama Yayasan (urutan konsisten di form & ringkasan)
+      // Daftar 13 Pos Dana Utama Yayasan (urutan konsisten di form & ringkasan)
       var DAFTAR_POS_DANA = [
         'Zakat Mal',
         'Zakat Fitrah',
         'Infaq Pembangunan',
         'Infaq Sosial (Kematian)',
+        'Infaq Sosial (Kepemudaan)',
         'Infaq Pendidikan (TPQ)',
         'Infaq Operasional (DKM)',
         'Infaq PHBI',
@@ -736,6 +739,7 @@
         'infaq pembangunan': 'Infaq Pembangunan',
         'infaq sosial': 'Infaq Sosial (Kematian)',
         'infaq sosial (kematian)': 'Infaq Sosial (Kematian)',
+        'infaq sosial (kepemudaan)': 'Infaq Sosial (Kepemudaan)',
         'infaq pendidikan': 'Infaq Pendidikan (TPQ)',
         'infaq pendidikan (tpq)': 'Infaq Pendidikan (TPQ)',
         'infaq operasional': 'Infaq Operasional (DKM)',
@@ -755,6 +759,7 @@
         'Zakat': { bg: '#EBF8FF', text: '#2B6CB0' },
         'Infaq Pembangunan': { bg: '#FEEBC8', text: '#C05621' },
         'Infaq Sosial (Kematian)': { bg: '#E0F2FE', text: '#0369A1' },
+        'Infaq Sosial (Kepemudaan)': { bg: '#CFFAFE', text: '#155E75' },
         'Infaq Pendidikan (TPQ)': { bg: '#E6FFFA', text: '#234E52' },
         'Infaq Operasional (DKM)': { bg: '#F1F5F9', text: '#334155' },
         'Infaq PHBI': { bg: '#FEF3C7', text: '#92400E' },
@@ -793,7 +798,6 @@
       var statePengeluaran = 'loading'; // 'loading' | 'ready' | 'error'
       var realtimeDonasiAktif = false;
       var realtimePengeluaranAktif = false;
-      var lastSyncedAt = null;
       var sedangMuatRest = false;
 
       // Helper Parsing & Pemformatan yang Tangguh di Semua Browser/Device
@@ -885,25 +889,16 @@
         return String((d && (d.keterangan || d.nama)) || '').trim();
       }
 
-      function formatJamUpdate(dateObj) {
-        if (!dateObj) return '';
-        var hh = ('0' + dateObj.getHours()).slice(-2);
-        var mm = ('0' + dateObj.getMinutes()).slice(-2);
-        var ss = ('0' + dateObj.getSeconds()).slice(-2);
-        return hh + ':' + mm + ':' + ss;
-      }
-
       function perbaruiStatusBar() {
         if (!syncDot || !syncStatusText) return;
         syncDot.className = 'sync-dot';
-        var jamStr = lastSyncedAt ? ' • Pembaruan ' + formatJamUpdate(lastSyncedAt) : '';
 
         if (realtimeDonasiAktif && realtimePengeluaranAktif && stateDonasi === 'ready' && statePengeluaran === 'ready') {
           syncDot.classList.add('is-live');
-          syncStatusText.textContent = 'Data Live Realtime' + jamStr;
+          syncStatusText.textContent = 'Data Live Realtime';
         } else if (stateDonasi === 'ready' && statePengeluaran === 'ready') {
           syncDot.classList.add('is-live');
-          syncStatusText.textContent = 'Terhubung & Tersinkron' + jamStr;
+          syncStatusText.textContent = 'Terhubung & Tersinkron';
         } else if (stateDonasi === 'error' || statePengeluaran === 'error') {
           syncDot.classList.add('is-error');
           syncStatusText.textContent = 'Koneksi terganggu. Tekan Segarkan untuk memuat ulang.';
@@ -1234,7 +1229,6 @@
 
         stateDonasi = 'ready';
         if (options.fromRealtime) realtimeDonasiAktif = true;
-        lastSyncedAt = new Date();
 
         perbaruiRingkasanFinansial();
         terapkanFilterDonasi(false);
@@ -1257,7 +1251,6 @@
 
         statePengeluaran = 'ready';
         if (options.fromRealtime) realtimePengeluaranAktif = true;
-        lastSyncedAt = new Date();
 
         perbaruiRingkasanFinansial();
         terapkanFilterPengeluaran(false);
