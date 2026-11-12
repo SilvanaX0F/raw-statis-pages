@@ -201,13 +201,6 @@
 
     /* === GRID KONTEN UTAMA DASHBOARD === */
     .dashboard-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
-      gap: 1.5rem;
-      align-items: start;
-    }
-
-    .dashboard-side {
       display: flex;
       flex-direction: column;
       gap: 1.5rem;
@@ -522,9 +515,9 @@
     }
 
     .module-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0.55rem;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.65rem;
     }
 
     .module-row {
@@ -575,14 +568,12 @@
       border-radius: 9999px;
     }
 
-    @media (max-width: 1024px) {
-      .dashboard-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
     @media (max-width: 768px) {
       .grid-summary {
+        grid-template-columns: 1fr;
+      }
+
+      .module-list {
         grid-template-columns: 1fr;
       }
 
@@ -716,8 +707,49 @@
         </div>
       </div>
 
-      <!-- Konten Utama: 5 Aktivitas Terakhir & Panel Samping -->
+      <!-- Konten Utama: Ringkasan Data Sistem & 5 Aktivitas Terakhir -->
       <div class="dashboard-grid">
+
+        <!-- KARTU RINGKASAN DATA SISTEM -->
+        <section class="card panel-card" aria-labelledby="judul-ringkasan-modul">
+          <div class="panel-head">
+            <div>
+              <h2 id="judul-ringkasan-modul">Ringkasan Data Sistem</h2>
+              <p>Cakupan data aktif dan proporsi penyaluran dana.</p>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="ratio-box">
+              <div class="ratio-head">
+                <span>Rasio Penyaluran Dana</span>
+                <strong id="ratio-percent">0%</strong>
+              </div>
+              <div class="ratio-track">
+                <div class="ratio-fill" id="ratio-bar-fill"></div>
+              </div>
+              <small class="ratio-caption" id="ratio-caption">Menunggu sinkronisasi data keuangan...</small>
+            </div>
+
+            <div class="module-list">
+              <a href="donasi.html" class="module-row">
+                <span class="module-row-left"><span class="module-dot module-dot--donasi"></span>Data Donasi Masuk</span>
+                <span class="module-count" id="count-mod-donasi">-</span>
+              </a>
+              <a href="pengeluaran.html" class="module-row">
+                <span class="module-row-left"><span class="module-dot module-dot--penyaluran"></span>Data Penyaluran Dana</span>
+                <span class="module-count" id="count-mod-pengeluaran">-</span>
+              </a>
+              <a href="berita.html" class="module-row">
+                <span class="module-row-left"><span class="module-dot module-dot--berita"></span>Berita &amp; Artikel</span>
+                <span class="module-count" id="count-mod-berita">-</span>
+              </a>
+              <a href="galeri.html" class="module-row">
+                <span class="module-row-left"><span class="module-dot module-dot--galeri"></span>Dokumentasi Galeri</span>
+                <span class="module-count" id="count-mod-galeri">-</span>
+              </a>
+            </div>
+          </div>
+        </section>
 
         <!-- KARTU 5 AKTIVITAS TERAKHIR -->
         <section class="card panel-card" aria-labelledby="judul-aktivitas">
@@ -740,49 +772,6 @@
             </div>
           </div>
         </section>
-
-        <!-- PANEL SAMPING: RINGKASAN MODUL -->
-        <aside class="dashboard-side">
-          <section class="card panel-card" aria-labelledby="judul-ringkasan-modul">
-            <div class="panel-head">
-              <div>
-                <h2 id="judul-ringkasan-modul">Ringkasan Data Sistem</h2>
-                <p>Cakupan data aktif dan proporsi penyaluran dana.</p>
-              </div>
-            </div>
-            <div class="panel-body">
-              <div class="ratio-box">
-                <div class="ratio-head">
-                  <span>Rasio Penyaluran Dana</span>
-                  <strong id="ratio-percent">0%</strong>
-                </div>
-                <div class="ratio-track">
-                  <div class="ratio-fill" id="ratio-bar-fill"></div>
-                </div>
-                <small class="ratio-caption" id="ratio-caption">Menunggu sinkronisasi data keuangan...</small>
-              </div>
-
-              <div class="module-list">
-                <a href="donasi.html" class="module-row">
-                  <span class="module-row-left"><span class="module-dot module-dot--donasi"></span>Data Donasi Masuk</span>
-                  <span class="module-count" id="count-mod-donasi">-</span>
-                </a>
-                <a href="pengeluaran.html" class="module-row">
-                  <span class="module-row-left"><span class="module-dot module-dot--penyaluran"></span>Data Penyaluran Dana</span>
-                  <span class="module-count" id="count-mod-pengeluaran">-</span>
-                </a>
-                <a href="berita.html" class="module-row">
-                  <span class="module-row-left"><span class="module-dot module-dot--berita"></span>Berita &amp; Artikel</span>
-                  <span class="module-count" id="count-mod-berita">-</span>
-                </a>
-                <a href="galeri.html" class="module-row">
-                  <span class="module-row-left"><span class="module-dot module-dot--galeri"></span>Dokumentasi Galeri</span>
-                  <span class="module-count" id="count-mod-galeri">-</span>
-                </a>
-              </div>
-            </div>
-          </section>
-        </aside>
 
       </div>
 

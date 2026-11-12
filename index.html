@@ -126,6 +126,30 @@
     }
     
     .carousel-btn:hover { background: var(--primary) !important; }
+
+    @media (max-width: 768px) {
+      .hero-carousel-container {
+        height: 62vh;
+        min-height: 380px;
+      }
+
+      .hero-overlay {
+        padding: 1.75rem 1rem;
+      }
+
+      .carousel-btn {
+        width: 38px !important;
+        height: 38px !important;
+      }
+
+      .carousel-btn--prev {
+        left: 10px !important;
+      }
+
+      .carousel-btn--next {
+        right: 10px !important;
+      }
+    }
   </style>
 
   <div class="hero-carousel-container">
@@ -242,8 +266,8 @@
 <div class="page-watermark-zone">
 
    <!-- Teks Berjalan / Pengumuman -->
-    <div class="container" style="padding-top: 1.5rem; margin-bottom: 1rem;">
-      <div style="background: rgba(15, 36, 56, 0.06); color: var(--dark); padding: 0.75rem 1rem; border-radius: var(--radius-sm, 8px); overflow: hidden; white-space: nowrap; position: relative; border: 1px solid rgba(15, 36, 56, 0.14); backdrop-filter: blur(2px);">
+    <div class="container home-marquee-wrap">
+      <div class="home-marquee-box">
         <div style="display: inline-block; animation: marquee 38s linear infinite; font-size: var(--fs-sm); font-weight: 600;">
           📢 Selamat datang di website resmi Yayasan Bina Umat Padang Wulan Cipicung ✨ Silakan hubungi kontak kami melalui halaman Kontak untuk informasi lebih lanjut.
         </div>
