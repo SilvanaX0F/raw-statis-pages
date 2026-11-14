@@ -25,30 +25,11 @@ export const DEFAULT_SITE_SETTINGS = {
     jamOperasional: "Senin - Sabtu: 08.00 - 16.00 WIB",
     mapsUrl: "https://maps.google.com"
   },
-  rekeningBank: [
-    {
-      id: "bank-bsi-1",
-      namaBank: "Bank Syariah Indonesia (BSI)",
-      nomorRekening: "7123456789",
-      atasNama: "Yayasan Padang Wulan",
-      cabang: "KCP Kuningan",
-      utama: true,
-      catatan: "Rekening Operasional & Penerimaan Infaq/Shodaqoh"
-    },
-    {
-      id: "bank-mandiri-1",
-      namaBank: "Bank Mandiri",
-      nomorRekening: "1300098765432",
-      atasNama: "Yayasan Bina Umat Padang Wulan",
-      cabang: "KC Kuningan",
-      utama: false,
-      catatan: "Penerimaan Zakat Mal & Zakat Fitrah"
-    }
-  ],
+  rekeningBank: [],
   qris: {
-    imageUrl: "images/donasi-qris.svg",
-    nmId: "ID1020030040050",
-    instruksi: "Buka aplikasi m-Banking atau dompet digital Anda (BSI, BCA, Mandiri, GoPay, OVO, ShopeePay, Dana, dll). Pindai kode QRIS di atas lalu masukkan nominal donasi. Kirim konfirmasi donasi ke WhatsApp admin kami."
+    imageUrl: "",
+    nmId: "",
+    instruksi: ""
   },
   mediaSosial: {
     facebook: "https://facebook.com/yayasanpadangwulan",
@@ -71,14 +52,28 @@ export function getLocalSettings() {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) {
       const parsed = JSON.parse(raw);
+      const cleanedBanks = Array.isArray(parsed.rekeningBank)
+        ? parsed.rekeningBank.filter(b => {
+            if (!b || !b.nomorRekening) return false;
+            const no = String(b.nomorRekening).trim();
+            return no !== '7123456789' && no !== '1300098765432';
+          })
+        : [];
+
+      let qrisObj = { ...DEFAULT_SITE_SETTINGS.qris, ...(parsed.qris || {}) };
+      if (qrisObj.nmId === 'ID1020030040050' || (qrisObj.imageUrl && qrisObj.imageUrl.includes('donasi-qris.svg'))) {
+        qrisObj.imageUrl = '';
+        qrisObj.nmId = '';
+      }
+
       return {
         ...DEFAULT_SITE_SETTINGS,
         ...parsed,
         profilYayasan: { ...DEFAULT_SITE_SETTINGS.profilYayasan, ...(parsed.profilYayasan || {}) },
         mediaSosial: { ...DEFAULT_SITE_SETTINGS.mediaSosial, ...(parsed.mediaSosial || {}) },
         pengaturanSistem: { ...DEFAULT_SITE_SETTINGS.pengaturanSistem, ...(parsed.pengaturanSistem || {}) },
-        qris: { ...DEFAULT_SITE_SETTINGS.qris, ...(parsed.qris || {}) },
-        rekeningBank: Array.isArray(parsed.rekeningBank) && parsed.rekeningBank.length > 0 ? parsed.rekeningBank : DEFAULT_SITE_SETTINGS.rekeningBank
+        qris: qrisObj,
+        rekeningBank: cleanedBanks
       };
     }
   } catch (e) {
@@ -130,103 +125,107 @@ function terapkanKeBeranda(settings) {
 
 // 3. APLIKASIKAN KE HALAMAN DONASI (donasi.html)
 function terapkanKeDonasi(settings) {
-  const rekList = settings.rekeningBank || [];
+  const rekList = Array.isArray(settings.rekeningBank) ? settings.rekeningBank : [];
   const qris = settings.qris || {};
   const p = settings.profilYayasan || {};
 
   // A. Render Daftar Rekening Bank
-  const rekContainer = document.querySelector('.donation-card .donation-bank') || document.getElementById('donasi-rekening-list');
-  if (rekContainer) {
-    const parentCard = rekContainer.closest('.donation-card');
-    if (parentCard) {
-      // Pastikan ada container list
-      let listEl = parentCard.querySelector('.donation-bank-list');
-      if (!listEl) {
-        listEl = document.createElement('div');
-        listEl.className = 'donation-bank-list';
-        listEl.style.cssText = 'display: flex; flex-direction: column; gap: 0.85rem; margin-top: 1rem;';
-        rekContainer.replaceWith(listEl);
-      }
+  const listEl = document.getElementById('donasi-rekening-list') || document.querySelector('.donation-bank-list');
+  const rekNote = document.getElementById('donasi-rekening-note') || (listEl ? listEl.parentElement.querySelector('p.text-muted') : null);
 
-      if (rekList.length === 0) {
-        listEl.innerHTML = '<p class="text-muted" style="font-size: var(--fs-sm);">Belum ada rekening bank yang dikonfigurasi.</p>';
-      } else {
-        listEl.innerHTML = rekList.map((b) => {
-          const isUtama = Boolean(b.utama);
-          return `
-            <div class="donation-bank" style="padding: 1.15rem; border-radius: 10px; border: 1.5px solid ${isUtama ? '#059669' : '#e2e8f0'}; background: ${isUtama ? '#f0fdf4' : '#ffffff'}; position: relative; margin-bottom: 0.75rem;">
-              ${isUtama ? '<span style="position: absolute; top: -10px; right: 12px; background: #059669; color: #fff; font-size: 0.68rem; font-weight: 800; padding: 2px 8px; border-radius: 9999px; text-transform: uppercase;">Rekening Utama</span>' : ''}
-              <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap;">
-                <div>
-                  <div class="donation-bank__name" style="font-weight: 800; font-size: 1.05rem; color: #0f172a;">${escapeHtml(b.namaBank)}</div>
-                  <div style="display: flex; align-items: center; gap: 0.5rem; margin: 0.35rem 0;">
-                    <span class="donation-bank__number" style="font-family: monospace; font-size: 1.25rem; font-weight: 800; letter-spacing: 0.04em; color: #059669;">${escapeHtml(b.nomorRekening)}</span>
-                    <button type="button" class="btn-salin-rekening" data-no="${escapeHtml(b.nomorRekening)}" style="background: #e2e8f0; border: none; border-radius: 6px; padding: 3px 8px; font-size: 0.72rem; font-weight: 700; cursor: pointer; transition: all 0.2s;">Salin</button>
-                  </div>
-                  <div class="text-muted" style="font-size: var(--fs-sm);">
-                    Atas Nama: <strong style="color: #0f172a;">${escapeHtml(b.atasNama)}</strong>
-                    ${b.cabang ? ` • <span style="font-size: 0.8rem;">${escapeHtml(b.cabang)}</span>` : ''}
-                  </div>
-                  ${b.catatan ? `<div style="font-size: 0.76rem; color: #059669; margin-top: 0.35rem; font-weight: 600;">${escapeHtml(b.catatan)}</div>` : ''}
+  if (listEl) {
+    if (rekList.length === 0) {
+      if (rekNote) rekNote.style.display = 'none';
+      listEl.innerHTML = `
+        <div class="donation-empty-state" style="padding: 1.65rem 1.25rem; border-radius: 12px; background: rgba(15, 36, 56, 0.03); border: 1.5px dashed rgba(15, 36, 56, 0.16); text-align: center;">
+          <div style="width: 44px; height: 44px; border-radius: 50%; background: rgba(15, 36, 56, 0.08); display: flex; align-items: center; justify-content: center; margin: 0 auto 0.75rem; color: var(--dark);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 22px; height: 22px;"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          </div>
+          <h4 style="font-size: 0.98rem; font-weight: 700; color: #0f172a; margin-bottom: 0.35rem;">Rekening Donasi Sedang Disiapkan</h4>
+          <p class="text-muted" style="font-size: var(--fs-xs); line-height: 1.5; margin: 0 0 0.85rem;">
+            Nomor rekening resmi yayasan sedang dalam tahap penyesuaian oleh pengurus. Untuk informasi dan konfirmasi penyaluran donasi saat ini, silakan hubungi kami secara langsung.
+          </p>
+          <a href="kontak.html" class="btn btn-secondary btn-sm" style="font-size: 0.78rem; padding: 0.45rem 1rem;">Hubungi Pengurus Yayasan</a>
+        </div>
+      `;
+    } else {
+      if (rekNote) rekNote.style.display = 'block';
+      listEl.innerHTML = rekList.map((b) => {
+        const isUtama = Boolean(b.utama);
+        return `
+          <div class="donation-bank" style="padding: 1.15rem; border-radius: 10px; border: 1.5px solid ${isUtama ? '#059669' : '#e2e8f0'}; background: ${isUtama ? '#f0fdf4' : '#ffffff'}; position: relative; margin-bottom: 0.75rem;">
+            ${isUtama ? '<span style="position: absolute; top: -10px; right: 12px; background: #059669; color: #fff; font-size: 0.68rem; font-weight: 800; padding: 2px 8px; border-radius: 9999px; text-transform: uppercase;">Rekening Utama</span>' : ''}
+            <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap;">
+              <div>
+                <div class="donation-bank__name" style="font-weight: 800; font-size: 1.05rem; color: #0f172a;">${escapeHtml(b.namaBank)}</div>
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin: 0.35rem 0;">
+                  <span class="donation-bank__number" style="font-family: monospace; font-size: 1.25rem; font-weight: 800; letter-spacing: 0.04em; color: #059669;">${escapeHtml(b.nomorRekening)}</span>
+                  <button type="button" class="btn-salin-rekening" data-no="${escapeHtml(b.nomorRekening)}" style="background: #e2e8f0; border: none; border-radius: 6px; padding: 3px 8px; font-size: 0.72rem; font-weight: 700; cursor: pointer; transition: all 0.2s;">Salin</button>
                 </div>
+                <div class="text-muted" style="font-size: var(--fs-sm);">
+                  Atas Nama: <strong style="color: #0f172a;">${escapeHtml(b.atasNama)}</strong>
+                  ${b.cabang ? ` • <span style="font-size: 0.8rem;">${escapeHtml(b.cabang)}</span>` : ''}
+                </div>
+                ${b.catatan ? `<div style="font-size: 0.76rem; color: #059669; margin-top: 0.35rem; font-weight: 600;">${escapeHtml(b.catatan)}</div>` : ''}
               </div>
             </div>
-          `;
-        }).join('');
+          </div>
+        `;
+      }).join('');
 
-        // Pasang event listener tombol salin
-        listEl.querySelectorAll('.btn-salin-rekening').forEach(btn => {
-          btn.addEventListener('click', function() {
-            const no = this.getAttribute('data-no');
-            navigator.clipboard.writeText(no).then(() => {
-              const oriText = this.textContent;
-              this.textContent = 'Tersalin!';
-              this.style.background = '#059669';
-              this.style.color = '#ffffff';
-              setTimeout(() => {
-                this.textContent = oriText;
-                this.style.background = '#e2e8f0';
-                this.style.color = 'inherit';
-              }, 2000);
-            });
+      // Pasang event listener tombol salin
+      listEl.querySelectorAll('.btn-salin-rekening').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const no = this.getAttribute('data-no');
+          navigator.clipboard.writeText(no).then(() => {
+            const oriText = this.textContent;
+            this.textContent = 'Tersalin!';
+            this.style.background = '#059669';
+            this.style.color = '#ffffff';
+            setTimeout(() => {
+              this.textContent = oriText;
+              this.style.background = '#e2e8f0';
+              this.style.color = 'inherit';
+            }, 2000);
           });
         });
-      }
+      });
     }
   }
 
   // B. Render QRIS Section
-  const qrisImg = document.getElementById('donasi-qris-img') || document.querySelector('.donation-card img[src*="qris"]');
-  if (qrisImg && qris.imageUrl) {
-    qrisImg.src = qris.imageUrl;
-  }
+  const qrisBox = document.getElementById('donasi-qris-box');
+  const hasValidQris = qris && qris.imageUrl && qris.imageUrl.trim() !== '' && !qris.imageUrl.includes('placeholder') && !qris.imageUrl.includes('donasi-qris.svg');
 
-  const qrisCard = qrisImg ? qrisImg.closest('.donation-card') : null;
-  if (qrisCard) {
-    let nmidEl = document.getElementById('donasi-qris-nmid');
-    if (!nmidEl) {
-      nmidEl = document.createElement('div');
-      nmidEl.id = 'donasi-qris-nmid';
-      nmidEl.style.cssText = 'font-family: monospace; font-size: 0.78rem; font-weight: 700; color: #475569; margin-top: 0.5rem; text-align: center;';
-      qrisImg.insertAdjacentElement('afterend', nmidEl);
-    }
-    if (qris.nmId) {
-      nmidEl.textContent = `NMID: ${qris.nmId}`;
-      nmidEl.style.display = 'block';
+  if (qrisBox) {
+    if (!hasValidQris) {
+      qrisBox.innerHTML = `
+        <div class="qris-empty-state" style="padding: 1.65rem 1.25rem; border-radius: 12px; background: rgba(15, 36, 56, 0.03); border: 1.5px dashed rgba(15, 36, 56, 0.16); text-align: center;">
+          <div style="width: 44px; height: 44px; border-radius: 50%; background: rgba(15, 36, 56, 0.08); display: flex; align-items: center; justify-content: center; margin: 0 auto 0.75rem; color: var(--dark);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 22px; height: 22px;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><rect x="7" y="7" width="3" height="3"/><rect x="14" y="7" width="3" height="3"/><rect x="7" y="14" width="3" height="3"/></svg>
+          </div>
+          <h4 style="font-size: 0.98rem; font-weight: 700; color: #0f172a; margin-bottom: 0.35rem;">QRIS Sedang Disiapkan</h4>
+          <p class="text-muted" style="font-size: var(--fs-xs); line-height: 1.5; margin: 0;">
+            Metode pembayaran digital QRIS yayasan saat ini sedang dalam proses registrasi merchant resmi oleh pengurus.
+          </p>
+        </div>
+      `;
     } else {
-      nmidEl.style.display = 'none';
+      qrisBox.innerHTML = `
+        <div class="img-frame img-frame--sm" style="max-width: 240px; margin-inline: auto;">
+          <img id="donasi-qris-img" src="${escapeHtml(qris.imageUrl)}" alt="Kode QRIS Donasi" width="280" height="280" loading="lazy" style="width: 100%; height: auto; border-radius: 8px;">
+        </div>
+        ${qris.nmId ? `<p id="donasi-qris-nmid" class="text-muted" style="font-size: var(--fs-xs); font-weight: 700; margin-top: 0.5rem; color: var(--text);">NMID: ${escapeHtml(qris.nmId)}</p>` : ''}
+        <p id="donasi-qris-instruksi" class="text-muted" style="font-size: var(--fs-xs); margin-top: 0.35rem;">${escapeHtml(qris.instruksi || 'Pindai kode QRIS resmi di atas menggunakan aplikasi mobile banking atau dompet digital Anda.')}</p>
+      `;
     }
-
-    let instEl = document.getElementById('donasi-qris-instruksi');
-    if (!instEl) {
-      instEl = document.createElement('p');
-      instEl.id = 'donasi-qris-instruksi';
-      instEl.className = 'text-muted';
-      instEl.style.cssText = 'font-size: var(--fs-xs); margin-top: 0.5rem; line-height: 1.4;';
-      nmidEl.insertAdjacentElement('afterend', instEl);
-    }
-    if (qris.instruksi) {
-      instEl.textContent = qris.instruksi;
+  } else {
+    // Fallback jika markup kartu lama masih ada
+    const qrisImg = document.getElementById('donasi-qris-img');
+    if (qrisImg) {
+      if (hasValidQris) {
+        qrisImg.src = qris.imageUrl;
+      }
     }
   }
 

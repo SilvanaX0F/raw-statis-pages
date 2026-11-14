@@ -74,15 +74,9 @@
               <h2 style="font-size: var(--fs-xl);">Rekening Donasi</h2>
             </div>
             <div id="donasi-rekening-list" class="donation-bank-list" style="margin-top: 1rem;">
-              <div class="donation-bank">
-                <div>
-                  <div class="donation-bank__name">Bank Syariah Indonesia (BSI)</div>
-                  <div class="donation-bank__number">7123456789</div>
-                </div>
-                <div class="text-muted" style="font-size: var(--fs-sm);">Atas Nama:<br><strong style="color: var(--secondary);">Yayasan Padang Wulan</strong></div>
-              </div>
+              <!-- Akan diisi secara dinamis dari Pengaturan Dashboard -->
             </div>
-            <p class="text-muted" style="font-size: var(--fs-xs); margin-top: 0.75rem;">Nomor rekening di atas resmi dikelola oleh Yayasan Padang Wulan.</p>
+            <p id="donasi-rekening-note" class="text-muted" style="font-size: var(--fs-xs); margin-top: 0.75rem; display: none;">Nomor rekening di atas resmi dikelola oleh Yayasan Padang Wulan.</p>
           </div>
 
           <div class="card donation-card text-center" data-reveal>
@@ -90,11 +84,9 @@
               <span class="split__label">Pembayaran Digital</span>
               <h2 style="font-size: var(--fs-xl);">QRIS</h2>
             </div>
-            <div class="img-frame img-frame--sm" style="max-width: 240px; margin-inline: auto;">
-              <img id="donasi-qris-img" src="images/donasi-qris.svg" alt="Kode QRIS Donasi" width="280" height="280" loading="lazy">
+            <div id="donasi-qris-box" style="margin-top: 1rem;">
+              <!-- Akan diisi secara dinamis dari Pengaturan Dashboard -->
             </div>
-            <p id="donasi-qris-nmid" class="text-muted" style="font-size: var(--fs-xs); font-weight: 700; margin-top: 0.5rem; color: var(--text);"></p>
-            <p id="donasi-qris-instruksi" class="text-muted" style="font-size: var(--fs-xs); margin-top: 0.35rem;">Pindai kode QRIS resmi di atas menggunakan aplikasi mobile banking atau dompet digital Anda.</p>
           </div>
         </div>
 

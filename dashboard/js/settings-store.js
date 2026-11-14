@@ -69,30 +69,11 @@ export const DEFAULT_SETTINGS = {
     jamOperasional: "Senin - Sabtu: 08.00 - 16.00 WIB",
     mapsUrl: "https://maps.google.com"
   },
-  rekeningBank: [
-    {
-      id: "bank-bsi-1",
-      namaBank: "Bank Syariah Indonesia (BSI)",
-      nomorRekening: "7123456789",
-      atasNama: "Yayasan Padang Wulan",
-      cabang: "KCP Kuningan",
-      utama: true,
-      catatan: "Rekening Operasional & Penerimaan Infaq/Shodaqoh"
-    },
-    {
-      id: "bank-mandiri-1",
-      namaBank: "Bank Mandiri",
-      nomorRekening: "1300098765432",
-      atasNama: "Yayasan Bina Umat Padang Wulan",
-      cabang: "KC Kuningan",
-      utama: false,
-      catatan: "Penerimaan Zakat Mal & Zakat Fitrah"
-    }
-  ],
+  rekeningBank: [],
   qris: {
-    imageUrl: "../images/donasi-qris.svg",
-    nmId: "ID1020030040050",
-    instruksi: "Buka aplikasi m-Banking atau dompet digital (BSI, BCA, Mandiri, GoPay, OVO, ShopeePay, Dana, dll). Pindai kode QRIS dan masukkan nominal donasi. Kirim konfirmasi donasi ke WhatsApp admin kami."
+    imageUrl: "",
+    nmId: "",
+    instruksi: ""
   },
   mediaSosial: {
     facebook: "https://facebook.com/yayasanpadangwulan",
@@ -135,10 +116,19 @@ function mergeWithDefault(source) {
     merged.profilYayasan = { ...merged.profilYayasan, ...source.profilYayasan };
   }
   if (Array.isArray(source.rekeningBank)) {
-    merged.rekeningBank = deepClone(source.rekeningBank);
+    merged.rekeningBank = deepClone(source.rekeningBank).filter(b => {
+      if (!b || !b.nomorRekening) return false;
+      const no = String(b.nomorRekening).trim();
+      return no !== '7123456789' && no !== '1300098765432';
+    });
   }
   if (source.qris && typeof source.qris === 'object') {
-    merged.qris = { ...merged.qris, ...source.qris };
+    const q = { ...merged.qris, ...source.qris };
+    if (q.nmId === 'ID1020030040050' || (q.imageUrl && q.imageUrl.includes('donasi-qris.svg'))) {
+      q.imageUrl = '';
+      q.nmId = '';
+    }
+    merged.qris = q;
   }
   if (source.mediaSosial && typeof source.mediaSosial === 'object') {
     merged.mediaSosial = { ...merged.mediaSosial, ...source.mediaSosial };

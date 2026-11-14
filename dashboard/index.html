@@ -1213,15 +1213,36 @@
     }
 
     let listenerAktif = false;
+    function mulaiPantau() {
+      if (listenerAktif) return;
+      listenerAktif = true;
+      pantauKoleksi('donations', 'donations');
+      pantauKoleksi('expenses', 'expenses');
+      pantauKoleksi('news', 'news');
+      pantauKoleksi('gallery', 'gallery');
+    }
+
+    // 1. Cek sesi lokal (Master Admin master@admin1 atau sesi aktif lainnya)
+    try {
+      const sesi = localStorage.getItem('ybu_auth_session');
+      if (sesi) {
+        mulaiPantau();
+      }
+    } catch (_) {}
+
+    // 2. Dengarkan perubahan Firebase Auth (Staff Admin)
     onAuthStateChanged(auth, (user) => {
-      if (user && !listenerAktif) {
-        listenerAktif = true;
-        pantauKoleksi('donations', 'donations');
-        pantauKoleksi('expenses', 'expenses');
-        pantauKoleksi('news', 'news');
-        pantauKoleksi('gallery', 'gallery');
+      if (user) {
+        mulaiPantau();
       }
     });
+
+    // 3. Fallback pengaman untuk memastikan listener tetap berjalan
+    setTimeout(() => {
+      if (!listenerAktif) {
+        mulaiPantau();
+      }
+    }, 400);
   </script>
 
 </body>
