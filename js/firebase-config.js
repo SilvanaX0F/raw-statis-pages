@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, initializeFirestore, collection, addDoc, getDocs, onSnapshot, query, orderBy, serverTimestamp, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore, initializeFirestore, collection, addDoc, getDocs, getDoc, setDoc, onSnapshot, query, orderBy, serverTimestamp, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
 // === TAMBAHAN BARU: Import Firebase Storage ===
@@ -30,4 +30,4 @@ const auth = getAuth(app);
 const storage = getStorage(app); // Inisialisasi Storage
 
 // Export semua modul
-export { db, auth, storage, firebaseConfig, ref, uploadBytesResumable, getDownloadURL, deleteObject, collection, addDoc, getDocs, onSnapshot, query, orderBy, serverTimestamp, doc, updateDoc, deleteDoc };
+export { db, auth, storage, firebaseConfig, ref, uploadBytesResumable, getDownloadURL, deleteObject, collection, addDoc, getDocs, getDoc, setDoc, onSnapshot, query, orderBy, serverTimestamp, doc, updateDoc, deleteDoc };

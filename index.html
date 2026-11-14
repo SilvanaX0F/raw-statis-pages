@@ -268,18 +268,11 @@
    <!-- Teks Berjalan / Pengumuman -->
     <div class="container home-marquee-wrap">
       <div class="home-marquee-box">
-        <div style="display: inline-block; animation: marquee 38s linear infinite; font-size: var(--fs-sm); font-weight: 600;">
+        <marquee class="home-marquee-text" behavior="scroll" direction="left" scrollamount="6" onmouseover="this.stop();" onmouseout="this.start();">
           📢 Selamat datang di website resmi Yayasan Bina Umat Padang Wulan Cipicung ✨ Silakan hubungi kontak kami melalui halaman Kontak untuk informasi lebih lanjut.
-        </div>
+        </marquee>
       </div>
     </div>
-
-    <style>
-      @keyframes marquee {
-        0% { transform: translateX(100%); }
-        100% { transform: translateX(-100%); }
-      }
-    </style>
 
     <!-- Hero Section (Kotak pertama dengan background kontras & teks jelas) -->
     <section class="hero hero--showcase">
@@ -789,5 +782,6 @@
     setupSliderControls();
     loadGaleriBeranda();
   </script>
+  <script type="module" src="js/site-settings.js"></script>
 </body>
 </html>

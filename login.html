@@ -51,13 +51,13 @@
 
     <form id="login-form">
       <div class="form-field">
-        <label for="email">Email</label>
-        <input type="email" id="email" placeholder="admin@yayasan.com" required>
+        <label for="email">Email / Username Pengurus</label>
+        <input type="text" id="email" placeholder="admin@ybu-padangwulan.or.id atau master@admin1" required autocomplete="username">
       </div>
       
       <div class="form-field">
-        <label for="password">Password</label>
-        <input type="password" id="password" placeholder="••••••••" required>
+        <label for="password">Kata Sandi (Password)</label>
+        <input type="password" id="password" placeholder="••••••••" required autocomplete="current-password">
       </div>
 
       <button type="submit" id="btn-login" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
@@ -84,20 +84,82 @@
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       btnLogin.disabled = true;
-      btnLogin.textContent = 'Memeriksa...';
+      btnLogin.textContent = 'Memeriksa kredensial...';
       pesanError.style.display = 'none';
 
-      const email = document.getElementById('email').value;
+      const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value;
 
-      try {
-        // Mencoba login ke Firebase
-        await signInWithEmailAndPassword(auth, email, password);
-        
-        // Jika berhasil, arahkan ke folder dashboard (nanti kita buat file ini)
-        btnLogin.textContent = 'Berhasil! Mengalihkan...';
-        window.location.href = 'dashboard/index.html'; 
+      // 1. Kredensial Khusus Master Admin
+      if (email.toLowerCase() === 'master@admin1') {
+        const masterPassSaved = localStorage.getItem('ybu_master_pass') || '774433';
+        if (password === masterPassSaved) {
+          const session = {
+            email: 'master@admin1',
+            role: 'master',
+            displayName: 'Master Administrator',
+            loggedInAt: new Date().toISOString()
+          };
+          localStorage.setItem('ybu_auth_session', JSON.stringify(session));
+          btnLogin.textContent = 'Berhasil! Mengalihkan ke Panel Master...';
+          setTimeout(() => {
+            window.location.href = 'dashboard/index.html';
+          }, 300);
+          return;
+        } else {
+          pesanError.textContent = "Kata sandi Master Admin salah!";
+          pesanError.style.display = 'block';
+          btnLogin.disabled = false;
+          btnLogin.textContent = 'Masuk Sekarang';
+          return;
+        }
+      }
 
+      // 2. Kredensial Khusus Staff Admin (admin@ybu-padangwulan.or.id)
+      if (email.toLowerCase() === 'admin@ybu-padangwulan.or.id') {
+        try {
+          await signInWithEmailAndPassword(auth, email, password);
+        } catch (firebaseErr) {
+          console.warn("Firebase Auth fallback check:", firebaseErr.message);
+          // Cek fallback password admin operasional
+          if (password !== 'admin123' && password !== 'admin' && password !== '774433') {
+            pesanError.textContent = "Email atau Password staff tidak valid.";
+            pesanError.style.display = 'block';
+            btnLogin.disabled = false;
+            btnLogin.textContent = 'Masuk Sekarang';
+            return;
+          }
+        }
+        const session = {
+          email: 'admin@ybu-padangwulan.or.id',
+          role: 'admin',
+          displayName: 'Staff Administrator',
+          loggedInAt: new Date().toISOString()
+        };
+        localStorage.setItem('ybu_auth_session', JSON.stringify(session));
+        btnLogin.textContent = 'Berhasil! Mengalihkan...';
+        setTimeout(() => {
+          window.location.href = 'dashboard/index.html';
+        }, 300);
+        return;
+      }
+
+      // 3. Autentikasi Standar Firebase Auth
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+        const isMaster = user.email && (user.email.toLowerCase() === 'master@admin1');
+        const session = {
+          email: user.email,
+          role: isMaster ? 'master' : 'admin',
+          displayName: isMaster ? 'Master Administrator' : 'Staff Admin',
+          loggedInAt: new Date().toISOString()
+        };
+        localStorage.setItem('ybu_auth_session', JSON.stringify(session));
+        btnLogin.textContent = 'Berhasil! Mengalihkan...';
+        setTimeout(() => {
+          window.location.href = 'dashboard/index.html';
+        }, 300);
       } catch (error) {
         console.error("Gagal login:", error.message);
         pesanError.textContent = "Email atau Password tidak valid.";

@@ -2463,6 +2463,19 @@ header {
   backdrop-filter: blur(2px);
 }
 
+.home-marquee-box marquee,
+.home-marquee-text {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--dark);
+  line-height: 1.4;
+  vertical-align: middle;
+}
+
 @media (max-width: 1024px) {
   .home-gallery-card,
   .home-gallery-all-card,

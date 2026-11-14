@@ -1,0 +1,2123 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pengaturan Sistem & Master Data | Yayasan Padang Wulan</title>
+  <link rel="stylesheet" href="css/dashboard.css">
+  <style>
+    /* === MODERN DESIGN SYSTEM UNTUK FORM PENGATURAN === */
+    .table-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .badge-primary-bank {
+      background: var(--primary-light);
+      color: var(--primary);
+      border: 1px solid var(--primary-border);
+      padding: 0.25rem 0.65rem;
+      border-radius: 9999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .btn-copy {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border);
+      color: var(--text-dark);
+      cursor: pointer;
+      padding: 3px 9px;
+      border-radius: var(--radius-sm);
+      font-size: 0.74rem;
+      font-weight: 700;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .btn-copy:hover {
+      background: var(--primary-light);
+      color: var(--primary);
+      border-color: var(--primary-border);
+      transform: translateY(-1px);
+    }
+
+    /* Modern Card & Sections */
+    .settings-subcard {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow-sm);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .settings-subcard:hover {
+      border-color: #cbd5e1;
+      box-shadow: var(--shadow-md);
+    }
+
+    .settings-subcard-head {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.45rem;
+    }
+
+    .settings-subcard-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: var(--radius-md);
+      background: var(--primary-light);
+      color: var(--primary);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .settings-subcard-icon svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .settings-subcard h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      letter-spacing: -0.015em;
+      margin: 0;
+    }
+
+    .settings-subcard p.card-desc {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-bottom: 1.25rem;
+      line-height: 1.5;
+    }
+
+    /* Grid Modern Form */
+    .grid-2-form {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.15rem;
+    }
+
+    @media (max-width: 768px) {
+      .grid-2-form {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Modern Input Group dengan Icon */
+    .input-icon-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+      width: 100%;
+    }
+
+    .input-icon-wrap svg {
+      position: absolute;
+      left: 0.95rem;
+      width: 18px;
+      height: 18px;
+      color: var(--text-muted);
+      pointer-events: none;
+      transition: color 0.2s ease;
+    }
+
+    .input-icon-wrap input,
+    .input-icon-wrap select {
+      width: 100%;
+      padding: 0.75rem 1rem 0.75rem 2.65rem;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      font-size: 0.875rem;
+      background: #ffffff;
+      color: var(--text-dark);
+      transition: all 0.2s ease;
+    }
+
+    .input-icon-wrap input:focus,
+    .input-icon-wrap select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.12);
+    }
+
+    .input-icon-wrap input:focus + svg,
+    .input-icon-wrap:focus-within svg {
+      color: var(--primary);
+    }
+
+    /* Modern Textarea dengan Counter & Preview */
+    .textarea-modern {
+      width: 100%;
+      padding: 0.85rem 1rem;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      font-size: 0.875rem;
+      background: #ffffff;
+      color: var(--text-dark);
+      line-height: 1.6;
+      resize: vertical;
+      transition: all 0.2s ease;
+    }
+
+    .textarea-modern:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.12);
+    }
+
+    .field-footer-info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 0.35rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* Live Interactive Address Preview Box */
+    .live-address-preview {
+      margin-top: 0.85rem;
+      padding: 1rem 1.15rem;
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      border: 1.5px dashed #cbd5e1;
+      border-radius: var(--radius-md);
+      transition: all 0.2s ease;
+    }
+
+    .live-address-preview:hover {
+      border-color: var(--primary);
+    }
+
+    .preview-badge-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.35rem;
+    }
+
+    .preview-badge-tag svg {
+      width: 13px;
+      height: 13px;
+    }
+
+    .live-address-text {
+      font-size: 0.85rem;
+      color: var(--text-dark);
+      font-weight: 600;
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    /* Quick Preset Chips */
+    .quick-chips-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+      margin-top: 0.45rem;
+    }
+
+    .quick-chip {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border);
+      border-radius: 9999px;
+      padding: 0.25rem 0.65rem;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-dark);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .quick-chip:hover {
+      background: var(--primary-light);
+      border-color: var(--primary-border);
+      color: var(--primary);
+    }
+
+    /* Role Matrix & Security Elements */
+    .role-matrix-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .role-card {
+      padding: 1.25rem;
+      border-radius: var(--radius-md);
+      border: 1.5px solid var(--border);
+      background: #ffffff;
+      position: relative;
+      transition: transform 0.2s ease;
+    }
+
+    .role-card.master-card {
+      border-color: rgba(245, 158, 11, 0.4);
+      background: linear-gradient(180deg, #fffbeb 0%, #ffffff 100%);
+    }
+
+    .role-card.staff-card {
+      border-color: rgba(2, 132, 199, 0.3);
+      background: linear-gradient(180deg, #f0f9ff 0%, #ffffff 100%);
+    }
+
+    .role-card-badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 9999px;
+      letter-spacing: 0.04em;
+      margin-bottom: 0.5rem;
+    }
+
+    .role-card.master-card .role-card-badge {
+      background: #f59e0b;
+      color: #ffffff;
+    }
+
+    .role-card.staff-card .role-card-badge {
+      background: #0284c7;
+      color: #ffffff;
+    }
+
+    .role-card h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 0.25rem;
+    }
+
+    .role-card p {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+      margin-bottom: 0.75rem;
+    }
+
+    .role-card ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      font-size: 0.75rem;
+      color: var(--text-main);
+    }
+
+    .role-card ul li {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .role-card ul li svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+
+    /* Live QRIS Box */
+    .qris-preview-box {
+      max-width: 180px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 0.65rem;
+      background: #ffffff;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .qris-preview-box img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: var(--radius-sm);
+    }
+
+    .security-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+      color: var(--primary);
+      background: var(--primary-light);
+      padding: 0.4rem 0.8rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--primary-border);
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER KHUSUS MOBILE -->
+  <div class="mobile-header">
+    <a href="../index.html" style="display: flex; align-items: center;">
+      <img src="../images/log.png" alt="Logo" style="height: 30px;">
+    </a>
+    <button class="hamburger-btn" id="btn-toggle-menu" aria-label="Buka Menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+  </div>
+
+  <!-- OVERLAY GELAP -->
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <div class="dashboard-layout">
+    
+    <!-- SIDEBAR NAVIGASI -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <a href="../index.html" style="display: block;">
+          <img src="../images/logo-footer-preview.png" alt="Yayasan Padang Wulan">
+        </a>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <a href="index.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Ringkasan Utama
+        </a>
+        <a href="donasi.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>Kelola Penerimaan
+        </a>
+        <a href="pengeluaran.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Kelola Pengeluaran
+        </a>
+        <a href="berita.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>Kelola Berita
+        </a>
+        <a href="galeri.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Kelola Galeri
+        </a>
+        <a href="pengaturan.html" class="active" data-role="master" style="display: none;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Pengaturan
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button type="button" class="btn-logout" onclick="window.prosesLogout()">Logout Akun</button>
+        <div class="sidebar-footer-author">By : Cip</div>
+      </div>
+    </aside>
+
+    <!-- KONTEN UTAMA -->
+    <main class="main-content">
+      <div class="top-header-bar">
+        <div class="top-header">
+          <span class="header-eyebrow">Pusat Konfigurasi Master</span>
+          <h1>Pengaturan Sistem & Master Data</h1>
+          <p>Kelola master kategori donasi, uraian program, kategori berita, galeri, serta sinkronisasi profil lembaga, rekening donasi, dan kontrol operasional website.</p>
+        </div>
+        
+        <div class="settings-topbar-actions">
+          <button type="button" id="btn-ekspor-json" class="btn btn-secondary" title="Unduh backup data konfigurasi JSON">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span>Ekspor Backup</span>
+          </button>
+          
+          <button type="button" id="btn-buka-impor" class="btn btn-secondary" title="Pulihkan pengaturan dari file JSON">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <span>Impor Data</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- TABS NAVIGASI PENGATURAN -->
+      <div class="settings-tabs-wrap">
+        <div class="settings-tabs-nav" role="tablist">
+          <button type="button" class="settings-tab-btn is-active" data-tab="tab-donasi" role="tab" aria-selected="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            <span>Kategori Donasi</span>
+            <span class="tab-badge" id="badge-count-donasi">0</span>
+          </button>
+          
+          <button type="button" class="settings-tab-btn" data-tab="tab-program" role="tab" aria-selected="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            <span>Uraian Program</span>
+            <span class="tab-badge" id="badge-count-program">0</span>
+          </button>
+          
+          <button type="button" class="settings-tab-btn" data-tab="tab-berita" role="tab" aria-selected="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            <span>Kategori Berita</span>
+            <span class="tab-badge" id="badge-count-berita">0</span>
+          </button>
+          
+          <button type="button" class="settings-tab-btn" data-tab="tab-galeri" role="tab" aria-selected="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            <span>Kategori Galeri</span>
+            <span class="tab-badge" id="badge-count-galeri">0</span>
+          </button>
+
+          <button type="button" class="settings-tab-btn" data-tab="tab-profil" role="tab" aria-selected="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span>Profil Lembaga</span>
+          </button>
+
+          <button type="button" class="settings-tab-btn" data-tab="tab-rekening" role="tab" aria-selected="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+            <span>Rekening &amp; QRIS</span>
+            <span class="tab-badge" id="badge-count-rekening">0</span>
+          </button>
+
+          <button type="button" class="settings-tab-btn" data-tab="tab-sistem" role="tab" aria-selected="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <span>Sistem &amp; Keamanan</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ====================================================================
+           TAB 1: KATEGORI DONASI (Penerimaan & Sumber Dana)
+           ==================================================================== -->
+      <section id="tab-donasi" class="settings-pane is-active" role="tabpanel">
+        <div class="info-banner">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <div>
+            <strong>Kategori Donasi &amp; Sumber Dana:</strong> Pilihan kategori ini otomatis sinkron pada formulir <em>Kelola Penerimaan</em> dan sumber dana pada <em>Kelola Pengeluaran</em>. Anda dapat menambahkan, mengedit, atau menghapus kategori sesuai kebutuhan yayasan.
+          </div>
+        </div>
+
+        <div class="admin-layout">
+          <!-- FORM TAMBAH MODERN -->
+          <div class="card admin-form-container">
+            <h2 style="margin-bottom: 1.25rem; font-size: 1.15rem; font-weight: 700; color: var(--text-dark);">Tambah Kategori Donasi</h2>
+            <form id="form-tambah-donasi">
+              <div class="form-field">
+                <label for="input-kategori-donasi">Nama Kategori Donasi</label>
+                <div class="input-icon-wrap">
+                  <input type="text" id="input-kategori-donasi" placeholder="Contoh: Infaq Khusus Ramadhan" required autocomplete="off">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                </div>
+                <div class="field-footer-info">
+                  <span>Nama kategori harus unik &amp; jelas</span>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.85rem;">
+                + Tambahkan Kategori Donasi
+              </button>
+            </form>
+          </div>
+
+          <!-- TABEL LIST -->
+          <div class="card">
+            <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+              <div>
+                <h3 style="margin: 0; font-size: 1.05rem; font-weight: 700; color: var(--text-dark);">Daftar Kategori Donasi Aktif</h3>
+              </div>
+              <div style="flex-grow: 1; max-width: 280px; width: 100%;">
+                <input type="text" id="search-kat-donasi" placeholder="Cari kategori donasi..." style="width: 100%; padding: 0.6rem 0.95rem; border: 1.5px solid var(--border); border-radius: var(--radius-md); font-size: 0.85rem; background: #ffffff;">
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th style="width: 50px; text-align: center;">No</th>
+                    <th>Nama Kategori Donasi</th>
+                    <th>Tipe / Karakter</th>
+                    <th style="text-align: center; width: 140px;">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-kat-donasi">
+                  <!-- Diisi via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           TAB 2: URAIAN PROGRAM (Kelola Pengeluaran Yayasan)
+           ==================================================================== -->
+      <section id="tab-program" class="settings-pane" role="tabpanel">
+        <div class="info-banner info-banner--blue">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <div>
+            <strong>Uraian Program &amp; Belanja Penyaluran:</strong> Daftar belanja ini menjadi rujukan dropdown pada modul <em>Kelola Pengeluaran</em> untuk merinci jenis kebutuhan program sosial, operasional, atau honorarium.
+          </div>
+        </div>
+
+        <div class="admin-layout">
+          <!-- FORM TAMBAH -->
+          <div class="card admin-form-container">
+            <h2 style="margin-bottom: 1.25rem; font-size: 1.15rem; font-weight: 700; color: var(--text-dark);">Tambah Uraian Program</h2>
+            <form id="form-tambah-program">
+              <div class="form-field">
+                <label for="input-uraian-program">Nama Uraian Program / Belanja</label>
+                <div class="input-icon-wrap">
+                  <input type="text" id="input-uraian-program" placeholder="Contoh: Belanja Beasiswa Santri TPQ" required autocomplete="off">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                </div>
+                <div class="field-footer-info">
+                  <span>Rincian belanja atau program penyaluran</span>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.85rem; background: var(--accent-blue); border-color: var(--accent-blue);">
+                + Tambahkan Uraian Program
+              </button>
+            </form>
+          </div>
+
+          <!-- TABEL LIST -->
+          <div class="card">
+            <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+              <div>
+                <h3 style="margin: 0; font-size: 1.05rem; font-weight: 700; color: var(--text-dark);">Daftar Uraian Program Aktif</h3>
+              </div>
+              <div style="flex-grow: 1; max-width: 280px; width: 100%;">
+                <input type="text" id="search-uraian-program" placeholder="Cari uraian program..." style="width: 100%; padding: 0.6rem 0.95rem; border: 1.5px solid var(--border); border-radius: var(--radius-md); font-size: 0.85rem; background: #ffffff;">
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th style="width: 50px; text-align: center;">No</th>
+                    <th>Nama Uraian Program</th>
+                    <th>Klasifikasi</th>
+                    <th style="text-align: center; width: 140px;">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-uraian-program">
+                  <!-- Diisi via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           TAB 3: KATEGORI BERITA
+           ==================================================================== -->
+      <section id="tab-berita" class="settings-pane" role="tabpanel">
+        <div class="info-banner info-banner--blue">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <div>
+            <strong>Kategori Berita &amp; Artikel:</strong> Kategori ini muncul pada modul <em>Kelola Berita</em> dan filter pembaca pada halaman publik berita yayasan.
+          </div>
+        </div>
+
+        <div class="admin-layout">
+          <!-- FORM TAMBAH -->
+          <div class="card admin-form-container">
+            <h2 style="margin-bottom: 1.25rem; font-size: 1.15rem; font-weight: 700; color: var(--text-dark);">Tambah Kategori Berita</h2>
+            <form id="form-tambah-berita">
+              <div class="form-field">
+                <label for="input-kategori-berita">Nama Kategori Berita</label>
+                <div class="input-icon-wrap">
+                  <input type="text" id="input-kategori-berita" placeholder="Contoh: Advokasi &amp; Edukasi" required autocomplete="off">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.85rem;">
+                + Tambahkan Kategori Berita
+              </button>
+            </form>
+          </div>
+
+          <!-- TABEL LIST -->
+          <div class="card">
+            <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+              <div>
+                <h3 style="margin: 0; font-size: 1.05rem; font-weight: 700; color: var(--text-dark);">Daftar Kategori Berita Aktif</h3>
+              </div>
+              <div style="flex-grow: 1; max-width: 280px; width: 100%;">
+                <input type="text" id="search-kat-berita" placeholder="Cari kategori berita..." style="width: 100%; padding: 0.6rem 0.95rem; border: 1.5px solid var(--border); border-radius: var(--radius-md); font-size: 0.85rem; background: #ffffff;">
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th style="width: 50px; text-align: center;">No</th>
+                    <th>Nama Kategori Berita</th>
+                    <th>Status</th>
+                    <th style="text-align: center; width: 140px;">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-kat-berita">
+                  <!-- Diisi via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           TAB 4: KATEGORI GALERI
+           ==================================================================== -->
+      <section id="tab-galeri" class="settings-pane" role="tabpanel">
+        <div class="info-banner info-banner--amber">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <div>
+            <strong>Kategori Album Galeri:</strong> Kategori album foto kegiatan untuk mengelompokkan dokumentasi visual yayasan di modul <em>Kelola Galeri</em> dan halaman galeri publik.
+          </div>
+        </div>
+
+        <div class="admin-layout">
+          <!-- FORM TAMBAH -->
+          <div class="card admin-form-container">
+            <h2 style="margin-bottom: 1.25rem; font-size: 1.15rem; font-weight: 700; color: var(--text-dark);">Tambah Kategori Galeri</h2>
+            <form id="form-tambah-galeri">
+              <div class="form-field">
+                <label for="input-kategori-galeri">Nama Kategori Galeri</label>
+                <div class="input-icon-wrap">
+                  <input type="text" id="input-kategori-galeri" placeholder="Contoh: TPQ &amp; Pengajian" required autocomplete="off">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.85rem; background: var(--accent-amber); border-color: var(--accent-amber);">
+                + Tambahkan Kategori Galeri
+              </button>
+            </form>
+          </div>
+
+          <!-- TABEL LIST -->
+          <div class="card">
+            <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+              <div>
+                <h3 style="margin: 0; font-size: 1.05rem; font-weight: 700; color: var(--text-dark);">Daftar Kategori Galeri Aktif</h3>
+              </div>
+              <div style="flex-grow: 1; max-width: 280px; width: 100%;">
+                <input type="text" id="search-kat-galeri" placeholder="Cari kategori galeri..." style="width: 100%; padding: 0.6rem 0.95rem; border: 1.5px solid var(--border); border-radius: var(--radius-md); font-size: 0.85rem; background: #ffffff;">
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th style="width: 50px; text-align: center;">No</th>
+                    <th>Nama Kategori Galeri</th>
+                    <th>Status</th>
+                    <th style="text-align: center; width: 140px;">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-kat-galeri">
+                  <!-- Diisi via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           TAB 5: PROFIL LEMBAGA & KONTAK (TERINTEGRASI DENGAN HALAMAN UTAMA)
+           ==================================================================== -->
+      <section id="tab-profil" class="settings-pane" role="tabpanel">
+        <div class="info-banner">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <div>
+            <strong>Terhubung Langsung dengan Halaman Utama:</strong> Setiap perubahan identitas, narasi, alamat, kontak, dan media sosial di bawah ini langsung otomatis tampil pada header, beranda, footer, dan halaman kontak website yayasan.
+          </div>
+        </div>
+
+        <form id="form-profil-yayasan">
+          <!-- 1. IDENTITAS UTAMA -->
+          <div class="settings-subcard">
+            <div class="settings-subcard-head">
+              <span class="settings-subcard-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"/><path d="M9 8h1"/><path d="M9 12h1"/><path d="M9 16h1"/><path d="M14 8h1"/><path d="M14 12h1"/><path d="M14 16h1"/><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"/></svg>
+              </span>
+              <h3>Identitas Resmi Yayasan &amp; Legalitas</h3>
+            </div>
+            <p class="card-desc">Nama resmi lembaga, inisial singkat, slogan pengabdian, dan nomor SK Pengesahan Kemenkumham RI.</p>
+            
+            <div class="grid-2-form">
+              <div class="form-field">
+                <label for="profil-nama">Nama Lengkap Yayasan</label>
+                <div class="input-icon-wrap">
+                  <input type="text" id="profil-nama" required>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </div>
+              </div>
+              <div class="form-field">
+                <label for="profil-singkatan">Nama Singkat / Inisial</label>
+                <div class="input-icon-wrap">
+                  <input type="text" id="profil-singkatan" placeholder="Contoh: YBU Padang Wulan">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid-2-form" style="margin-top: 1rem;">
+              <div class="form-field">
+                <label for="profil-slogan">Slogan / Visi Singkat</label>
+                <div class="input-icon-wrap">
+                  <input type="text" id="profil-slogan" placeholder="Contoh: Menebar Kebaikan, Memberdayakan Umat">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                </div>
+              </div>
+              <div class="form-field">
+                <label for="profil-sk">Nomor SK Pengesahan Kemenkumham</label>
+                <div class="input-icon-wrap">
+                  <input type="text" id="profil-sk" placeholder="AHU-0012345.AH.01.04.Tahun 2020">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-field" style="margin-top: 1rem;">
+              <label for="profil-deskripsi">Deskripsi Singkat Yayasan (Tampil di Footer Website)</label>
+              <textarea id="profil-deskripsi" class="textarea-modern" style="min-height: 70px;" placeholder="Tuliskan gambaran singkat yayasan yang tampil pada footer..."></textarea>
+            </div>
+          </div>
+
+          <!-- 2. ALAMAT LENGKAP SEKRETARIAT (MODERN SESUAI PERMINTAAN USER) -->
+          <div class="settings-subcard">
+            <div class="settings-subcard-head">
+              <span class="settings-subcard-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              </span>
+              <h3>Alamat Lengkap Sekretariat</h3>
+            </div>
+            <p class="card-desc">Pastikan alamat terisi secara rinci mulai dari dusun, RT/RW, desa/kelurahan, kecamatan, kabupaten, dan provinsi.</p>
+
+            <div class="form-field">
+              <label for="profil-alamat">Teks Alamat Sekretariat</label>
+              <textarea id="profil-alamat" class="textarea-modern" rows="3" required placeholder="Contoh: Dusun Cipicung RT. 015 RW. 008, Karangsari, Padaherang, Kab. Pangandaran, Jawa Barat"></textarea>
+              <div class="field-footer-info">
+                <span>Gunakan format resmi yang mudah dipahami kurir &amp; tamu</span>
+                <span id="char-count-alamat">0 karakter</span>
+              </div>
+            </div>
+
+            <!-- Interactive Live Address Preview Box -->
+            <div class="live-address-preview">
+              <div class="preview-badge-tag">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                Pratinjau Tampilan Alamat di Footer Website:
+              </div>
+              <p class="live-address-text" id="live-preview-alamat-text">Memuat alamat...</p>
+            </div>
+
+            <div class="form-field" style="margin-top: 1.15rem;">
+              <label for="profil-maps">Tautan Google Maps Lokasi Sekretariat</label>
+              <div class="input-icon-wrap">
+                <input type="url" id="profil-maps" placeholder="https://maps.google.com/?q=...">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. KONTAK RESMI & LAYANAN -->
+          <div class="settings-subcard">
+            <div class="settings-subcard-head">
+              <span class="settings-subcard-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.68 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.32 1.85.55 2.81.68A2 2 0 0 1 22 16.92Z"/></svg>
+              </span>
+              <h3>Kontak Resmi &amp; Jam Layanan</h3>
+            </div>
+            <p class="card-desc">Saluran komunikasi utama pengunjung, donatur, serta mitra kerja yayasan.</p>
+
+            <div class="grid-2-form">
+              <div class="form-field">
+                <label for="profil-whatsapp">Nomor WhatsApp Resmi (Awali 08 atau 62)</label>
+                <div class="input-icon-wrap">
+                  <input type="text" id="profil-whatsapp" placeholder="082312345153" required>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                </div>
+              </div>
+              <div class="form-field">
+                <label for="profil-telepon">Nomor Telepon Kantor / Hotline</label>
+                <div class="input-icon-wrap">
+                  <input type="text" id="profil-telepon" placeholder="+62 823-1234-5153">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.68 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.32 1.85.55 2.81.68A2 2 0 0 1 22 16.92Z"/></svg>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid-2-form" style="margin-top: 1rem;">
+              <div class="form-field">
+                <label for="profil-email">Alamat Email Resmi</label>
+                <div class="input-icon-wrap">
+                  <input type="email" id="profil-email" placeholder="info@ybu-padangwulan.or.id" required>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                </div>
+              </div>
+              <div class="form-field">
+                <label for="profil-jam">Jam Operasional Layanan</label>
+                <div class="input-icon-wrap">
+                  <input type="text" id="profil-jam" placeholder="Senin - Sabtu: 08.00 - 16.00 WIB">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. SALURAN MEDIA SOSIAL -->
+          <div class="settings-subcard">
+            <div class="settings-subcard-head">
+              <span class="settings-subcard-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+              </span>
+              <h3>Tautan Media Sosial Resmi</h3>
+            </div>
+            <p class="card-desc">Saluran informasi publik dan dokumentasi kegiatan yayasan di jejaring media sosial.</p>
+
+            <div class="grid-2-form">
+              <div class="form-field">
+                <label for="sosmed-facebook">Halaman Facebook</label>
+                <div class="input-icon-wrap">
+                  <input type="url" id="sosmed-facebook" placeholder="https://facebook.com/yayasanpadangwulan">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                </div>
+              </div>
+              <div class="form-field">
+                <label for="sosmed-instagram">Akun Instagram</label>
+                <div class="input-icon-wrap">
+                  <input type="url" id="sosmed-instagram" placeholder="https://instagram.com/yayasanpadangwulan">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid-2-form" style="margin-top: 1rem;">
+              <div class="form-field">
+                <label for="sosmed-youtube">Kanal YouTube</label>
+                <div class="input-icon-wrap">
+                  <input type="url" id="sosmed-youtube" placeholder="https://youtube.com/@yayasanpadangwulan">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg>
+                </div>
+              </div>
+              <div class="form-field">
+                <label for="sosmed-tiktok">Akun TikTok</label>
+                <div class="input-icon-wrap">
+                  <input type="url" id="sosmed-tiktok" placeholder="https://tiktok.com/@yayasanpadangwulan">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: flex-end; margin-top: 1.5rem;">
+            <button type="submit" class="btn btn-primary" style="padding: 0.9rem 2.2rem; font-size: 0.95rem; box-shadow: var(--shadow-active);">
+              Simpan Profil Lembaga
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- ====================================================================
+           TAB 6: REKENING DONASI & PEMBAYARAN (TERINTEGRASI DENGAN donasi.html)
+           ==================================================================== -->
+      <section id="tab-rekening" class="settings-pane" role="tabpanel">
+        <div class="info-banner">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <div>
+            <strong>Terintegrasi Penuh dengan Halaman Donasi:</strong> Daftar rekening bank dan kode QRIS di bawah ini otomatis tampil secara langsung bagi publik pada halaman <em>Dukung Kami (donasi.html)</em> lengkap dengan fitur salin rekening interaktif.
+          </div>
+        </div>
+
+        <div class="admin-layout">
+          <!-- FORM TAMBAH / EDIT REKENING -->
+          <div class="card admin-form-container">
+            <h2 id="form-rekening-title" style="margin-bottom: 1.25rem; font-size: 1.15rem; font-weight: 700; color: var(--text-dark);">Tambah Rekening Bank</h2>
+            <form id="form-tambah-rekening">
+              <input type="hidden" id="edit-rekening-id" value="">
+
+              <div class="form-field">
+                <label for="rek-bank">Nama Bank</label>
+                <div class="input-icon-wrap">
+                  <input type="text" id="rek-bank" placeholder="Contoh: Bank Syariah Indonesia (BSI)" required autocomplete="off">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"/><path d="M3 10h18"/><path d="M5 6l7-3 7 3"/><path d="M4 10v11"/><path d="M20 10v11"/><path d="M8 14v3"/><path d="M12 14v3"/><path d="M16 14v3"/></svg>
+                </div>
+                <!-- Preset chips bank -->
+                <div class="quick-chips-wrap">
+                  <span class="quick-chip" onclick="document.getElementById('rek-bank').value='Bank Syariah Indonesia (BSI)'">BSI</span>
+                  <span class="quick-chip" onclick="document.getElementById('rek-bank').value='Bank Mandiri'">Mandiri</span>
+                  <span class="quick-chip" onclick="document.getElementById('rek-bank').value='Bank Central Asia (BCA)'">BCA</span>
+                  <span class="quick-chip" onclick="document.getElementById('rek-bank').value='Bank Rakyat Indonesia (BRI)'">BRI</span>
+                  <span class="quick-chip" onclick="document.getElementById('rek-bank').value='Bank Negara Indonesia (BNI)'">BNI</span>
+                </div>
+              </div>
+
+              <div class="form-field" style="margin-top: 0.85rem;">
+                <label for="rek-nomor">Nomor Rekening</label>
+                <div class="input-icon-wrap">
+                  <input type="text" id="rek-nomor" inputmode="numeric" placeholder="Contoh: 7123456789" required autocomplete="off">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                </div>
+              </div>
+
+              <div class="form-field" style="margin-top: 0.85rem;">
+                <label for="rek-atas-nama">Atas Nama (Pemilik Rekening)</label>
+                <div class="input-icon-wrap">
+                  <input type="text" id="rek-atas-nama" placeholder="Contoh: Yayasan Padang Wulan" required autocomplete="off">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </div>
+              </div>
+
+              <div class="form-field" style="margin-top: 0.85rem;">
+                <label for="rek-cabang">Kantor Cabang (Opsional)</label>
+                <div class="input-icon-wrap">
+                  <input type="text" id="rek-cabang" placeholder="Contoh: KCP Pangandaran">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                </div>
+              </div>
+
+              <div class="form-field" style="margin-top: 0.85rem;">
+                <label for="rek-catatan">Catatan / Peruntukan Donasi</label>
+                <div class="input-icon-wrap">
+                  <input type="text" id="rek-catatan" placeholder="Contoh: Rekening Zakat Mal &amp; Infaq">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg>
+                </div>
+              </div>
+
+              <div class="form-field" style="display: flex; align-items: center; gap: 0.6rem; margin-top: 0.75rem;">
+                <input type="checkbox" id="rek-utama" style="width: 17px; height: 17px; cursor: pointer; accent-color: var(--primary);">
+                <label for="rek-utama" style="margin-bottom: 0; cursor: pointer; font-size: 0.85rem; font-weight: 600;">Jadikan Rekening Utama di Halaman Donasi</label>
+              </div>
+
+              <button type="submit" id="btn-simpan-rekening" class="btn btn-primary" style="width: 100%; padding: 0.85rem; margin-top: 1rem;">
+                + Tambahkan Rekening Bank
+              </button>
+              <button type="button" id="btn-batal-rekening" class="btn btn-secondary" style="width: 100%; margin-top: 0.5rem; display: none;">
+                Batal Edit
+              </button>
+            </form>
+          </div>
+
+          <!-- TABEL DAFTAR REKENING & QRIS -->
+          <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+            <div class="card">
+              <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border);">
+                <h3 style="margin: 0; font-size: 1.05rem; font-weight: 700; color: var(--text-dark);">Daftar Rekening Bank Donasi Aktif</h3>
+              </div>
+              <div class="table-responsive">
+                <table class="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Bank &amp; Pemilik</th>
+                      <th>Nomor Rekening</th>
+                      <th>Status</th>
+                      <th style="text-align: center; width: 140px;">Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbody-rekening-bank">
+                    <!-- Diisi via JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- KARTU QRIS DONASI -->
+            <div class="card" style="padding: 1.5rem;">
+              <h3 style="margin-bottom: 0.35rem; font-size: 1.05rem; font-weight: 700; color: var(--text-dark);">Pengaturan Pembayaran Digital QRIS</h3>
+              <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1.25rem;">Tautan gambar kode QRIS resmi dan panduan konfirmasi donatur di halaman donasi.</p>
+
+              <form id="form-qris">
+                <div class="form-field">
+                  <label for="qris-image-url">Tautan / Jalur Gambar Kode QRIS</label>
+                  <div class="input-icon-wrap">
+                    <input type="text" id="qris-image-url" placeholder="Contoh: images/donasi-qris.svg atau tautan gambar online">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+                  </div>
+                </div>
+
+                <div class="form-field" style="margin-top: 0.85rem;">
+                  <label for="qris-nmid">NMID QRIS (National Merchant ID)</label>
+                  <div class="input-icon-wrap">
+                    <input type="text" id="qris-nmid" placeholder="Contoh: ID1020030040050">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  </div>
+                </div>
+
+                <div class="form-field" style="margin-top: 0.85rem;">
+                  <label for="qris-instruksi">Teks Panduan Konfirmasi Donasi</label>
+                  <textarea id="qris-instruksi" class="textarea-modern" style="min-height: 70px;"></textarea>
+                </div>
+
+                <div style="display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-top: 1.15rem;">
+                  <div class="qris-preview-box">
+                    <span style="display: block; font-size: 0.7rem; color: var(--text-muted); font-weight: 700; margin-bottom: 0.35rem;">Preview QRIS:</span>
+                    <img id="img-qris-preview" src="../images/donasi-qris.svg" alt="Preview QRIS" onerror="this.src='https://via.placeholder.com/150?text=QRIS+Preview'">
+                  </div>
+
+                  <button type="submit" class="btn btn-primary" style="padding: 0.8rem 1.6rem;">
+                    Simpan Konfigurasi QRIS
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           TAB 7: SISTEM, KEAMANAN & AKUN ADMIN (ROLE PROTECTION)
+           ==================================================================== -->
+      <section id="tab-sistem" class="settings-pane" role="tabpanel">
+        <div class="info-banner info-banner--blue">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <div>
+            <strong>Pusat Keamanan &amp; Kontrol Operasional:</strong> Pengaturan operasional publik, struktur hak akses role pengurus, informasi sesi login aktif, serta kata sandi akun Master Admin.
+          </div>
+        </div>
+
+        <!-- Role Access Matrix Explanation Card -->
+        <div class="role-matrix-grid">
+          <div class="role-card master-card">
+            <span class="role-card-badge">Master Administrator</span>
+            <h4>master@admin1</h4>
+            <p>Memiliki wewenang mutlak atas seluruh fitur sistem, termasuk hak akses eksklusif ke Menu Pengaturan.</p>
+            <ul>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> Hak Akses Menu Pengaturan &amp; Master Data</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> Kelola Penerimaan &amp; Pengeluaran</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> Publikasi Berita &amp; Galeri Foto</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> Konfigurasi Profil Lembaga &amp; Rekening</li>
+            </ul>
+          </div>
+
+          <div class="role-card staff-card">
+            <span class="role-card-badge">Staff Administrator</span>
+            <h4>admin@ybu-padangwulan.or.id</h4>
+            <p>Akses operasional harian yayasan. Menu Pengaturan otomatis disembunyikan secara menyeluruh dari akun ini.</p>
+            <ul>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> <span style="color: #dc2626; font-weight: 600;">Menu Pengaturan Disembunyikan</span></li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> Kelola Penerimaan &amp; Donasi</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> Kelola Penyaluran &amp; Pengeluaran</li>
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> Kelola Berita &amp; Galeri Dokumentasi</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="settings-grid-2">
+          <!-- CARD OPERASIONAL SISTEM -->
+          <div class="settings-subcard">
+            <div class="settings-subcard-head">
+              <span class="settings-subcard-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+              </span>
+              <h3>Operasional Website &amp; Pengumuman</h3>
+            </div>
+            <p class="card-desc">Fitur kendali status publikasi sistem dan banner pengumuman beranda.</p>
+
+            <form id="form-sistem-operasional">
+              <!-- Switch Maintenance Mode -->
+              <div class="switch-group" style="margin-bottom: 1rem;">
+                <div class="switch-label-wrap">
+                  <strong>Mode Pemeliharaan (Maintenance)</strong>
+                  <span>Tampilkan banner peringatan perbaikan sistem di website</span>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="switch-maintenance">
+                  <span class="slider"></span>
+                </label>
+              </div>
+
+              <div class="form-field" style="margin-bottom: 1.15rem;">
+                <label for="pesan-maintenance">Pesan Saat Mode Pemeliharaan Aktif</label>
+                <textarea id="pesan-maintenance" class="textarea-modern" style="min-height: 60px;"></textarea>
+              </div>
+
+              <!-- Switch Banner Pengumuman -->
+              <div class="switch-group" style="margin-bottom: 1rem;">
+                <div class="switch-label-wrap">
+                  <strong>Banner Berjalan Beranda (Marquee)</strong>
+                  <span>Tampilkan teks pengumuman berjalan di atas halaman beranda</span>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="switch-banner">
+                  <span class="slider"></span>
+                </label>
+              </div>
+
+              <div class="form-field" style="margin-bottom: 1.35rem;">
+                <label for="teks-banner">Teks Pengumuman Berjalan</label>
+                <textarea id="teks-banner" class="textarea-modern" style="min-height: 60px;" placeholder="📢 Tulis pengumuman resmi yayasan yang berjalan di beranda..."></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.85rem;">
+                Simpan Pengaturan Operasional
+              </button>
+            </form>
+          </div>
+
+          <!-- CARD KEAMANAN & AKUN ADMIN -->
+          <div class="settings-subcard">
+            <div class="settings-subcard-head">
+              <span class="settings-subcard-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              </span>
+              <h3>Sesi Aktif &amp; Keamanan Akun</h3>
+            </div>
+            <p class="card-desc">Informasi sesi akun pengurus yang sedang login dan pembaruan kata sandi Master.</p>
+
+            <div style="background: var(--bg-canvas); border: 1.5px solid var(--border); border-radius: var(--radius-md); padding: 1.15rem; margin-bottom: 1.25rem;">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.4rem;">
+                <span style="font-size: 0.78rem; color: var(--text-muted); font-weight: 600;">Status Autentikasi:</span>
+                <span class="security-badge">
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                  Master Terverifikasi
+                </span>
+              </div>
+              <strong id="admin-active-email" style="display: block; font-size: 1rem; color: var(--text-dark); word-break: break-all;">master@admin1</strong>
+              <small id="admin-last-login" style="display: block; color: var(--text-muted); font-size: 0.75rem; margin-top: 0.25rem;">Sesi aktif terlindungi</small>
+            </div>
+
+            <form id="form-ganti-password">
+              <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--text-dark); margin-bottom: 0.85rem;">Perbarui Kata Sandi Master Admin</h4>
+              
+              <div class="form-field" style="margin-bottom: 0.9rem;">
+                <label for="pass-baru">Kata Sandi Baru</label>
+                <div class="input-icon-wrap">
+                  <input type="password" id="pass-baru" placeholder="Minimal 6 karakter" required minlength="6" autocomplete="new-password">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                </div>
+              </div>
+
+              <div class="form-field" style="margin-bottom: 1.15rem;">
+                <label for="pass-konfirmasi">Ulangi Kata Sandi Baru</label>
+                <div class="input-icon-wrap">
+                  <input type="password" id="pass-konfirmasi" placeholder="Ketik ulang kata sandi baru" required minlength="6" autocomplete="new-password">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+              </div>
+
+              <button type="submit" id="btn-update-pass" class="btn btn-secondary" style="width: 100%; padding: 0.85rem;">
+                Simpan Kata Sandi Master Baru
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ====================================================================
+       MODAL DIALOG: EDIT KATEGORI / URAIAN
+       ==================================================================== -->
+  <div class="admin-modal-backdrop" id="modal-edit-kategori">
+    <div class="admin-modal-box">
+      <div class="admin-modal-head">
+        <h3 id="modal-edit-title">Edit Kategori</h3>
+        <button type="button" class="admin-modal-close" id="btn-tutup-modal" aria-label="Tutup">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <form id="form-modal-edit">
+        <div class="admin-modal-body">
+          <input type="hidden" id="modal-edit-tipe" value="">
+          <input type="hidden" id="modal-edit-item-lama" value="">
+          <div class="form-field">
+            <label for="modal-edit-item-baru">Nama Baru</label>
+            <div class="input-icon-wrap">
+              <input type="text" id="modal-edit-item-baru" required autocomplete="off">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            </div>
+            <small style="color: var(--text-muted); font-size: 0.76rem; margin-top: 0.35rem; display: block;">Perubahan nama akan otomatis sinkron pada seluruh formulir dashboard.</small>
+          </div>
+        </div>
+        <div class="admin-modal-foot">
+          <button type="button" class="btn btn-secondary" id="btn-batal-modal">Batal</button>
+          <button type="submit" class="btn btn-primary" id="btn-simpan-modal">Simpan Perubahan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       MODAL DIALOG: IMPOR BACKUP JSON
+       ==================================================================== -->
+  <div class="admin-modal-backdrop" id="modal-impor-json">
+    <div class="admin-modal-box">
+      <div class="admin-modal-head">
+        <h3>Impor File Backup Pengaturan</h3>
+        <button type="button" class="admin-modal-close" id="btn-tutup-impor" aria-label="Tutup">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="admin-modal-body">
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+          Pilih file backup konfigurasi berformat <strong>.json</strong> hasil ekspor sebelumnya. Semua master data kategori, rekening, dan profil yayasan akan diperbarui sesuai file.
+        </p>
+        <div class="form-field">
+          <label for="file-impor-json">Pilih File JSON (.json)</label>
+          <input type="file" id="file-impor-json" accept=".json,application/json" style="padding: 0.6rem; border: 1.5px dashed #cbd5e1; background: var(--bg-canvas); width: 100%; border-radius: var(--radius-md);">
+        </div>
+      </div>
+      <div class="admin-modal-foot">
+        <button type="button" class="btn btn-secondary" id="btn-batal-impor">Batal</button>
+        <button type="button" class="btn btn-primary" id="btn-proses-impor">Proses Impor</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION FLOATING -->
+  <div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+  <!-- HAMBURGER MENU MOBILE SCRIPT -->
+  <script>
+    const btnToggle = document.getElementById('btn-toggle-menu');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+
+    function toggleMenu() {
+      sidebar.classList.toggle('active');
+      overlay.classList.toggle('active');
+    }
+
+    if (btnToggle) btnToggle.addEventListener('click', toggleMenu);
+    if (overlay) overlay.addEventListener('click', toggleMenu);
+  </script>
+
+  <!-- AUTH GUARD DENGAN PROTEKSI ROLE MASTER -->
+  <script type="module" src="js/auth-guard.js"></script>
+
+  <!-- LOGIKA PENGATURAN MODERN -->
+  <script type="module">
+    import { auth } from '../js/firebase-config.js';
+    import { updatePassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getStoredSession, isMasterAdmin } from './js/auth-guard.js';
+    import {
+      loadSettings,
+      getSettingsSync,
+      saveSettings,
+      tambahItemKategori,
+      editItemKategori,
+      hapusItemKategori,
+      tambahRekeningBank,
+      editRekeningBank,
+      hapusRekeningBank,
+      setRekeningUtama,
+      exportSettingsJSON,
+      importSettingsJSON
+    } from './js/settings-store.js';
+
+    // 1. TOAST NOTIFICATION HELPER
+    const toastContainer = document.getElementById('toast-container');
+    function showToast(pesan, tipe = 'success') {
+      const item = document.createElement('div');
+      item.className = `toast-item is-${tipe}`;
+      const icon = tipe === 'success' 
+        ? '<span style="color: var(--primary);">✔</span>' 
+        : (tipe === 'error' ? '<span style="color: var(--accent-red);">✖</span>' : '<span style="color: var(--accent-blue);">ℹ</span>');
+      item.innerHTML = `${icon}<span>${pesan}</span>`;
+      toastContainer.appendChild(item);
+
+      setTimeout(() => {
+        item.style.opacity = '0';
+        item.style.transform = 'translateX(20px)';
+        setTimeout(() => item.remove(), 250);
+      }, 3500);
+    }
+
+    // 2. TAB NAVIGASI LOGIC
+    const tabBtns = document.querySelectorAll('.settings-tab-btn');
+    const tabPanes = document.querySelectorAll('.settings-pane');
+
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('data-tab');
+        tabBtns.forEach(b => {
+          b.classList.remove('is-active');
+          b.setAttribute('aria-selected', 'false');
+        });
+        tabPanes.forEach(p => p.classList.remove('is-active'));
+
+        btn.classList.add('is-active');
+        btn.setAttribute('aria-selected', 'true');
+        const targetPane = document.getElementById(targetId);
+        if (targetPane) targetPane.classList.add('is-active');
+      });
+    });
+
+    // 3. BADGES & TYPE DETECTORS
+    function getTipeDonasiBadge(nama) {
+      const lower = nama.toLowerCase();
+      if (lower.startsWith('zakat')) return '<span class="badge-pill badge-pill--primary">Zakat</span>';
+      if (lower.startsWith('infaq')) return '<span class="badge-pill badge-pill--blue">Infaq</span>';
+      if (lower.startsWith('shodaqoh') || lower.startsWith('wakaf')) return '<span class="badge-pill badge-pill--amber">Shodaqoh/Wakaf</span>';
+      return '<span class="badge-pill badge-pill--subtle">Penerimaan</span>';
+    }
+
+    function getTipeProgramBadge(nama) {
+      const lower = nama.toLowerCase();
+      if (lower.includes('pegawai') || lower.includes('honor') || lower.includes('operasional')) return '<span class="badge-pill badge-pill--amber">Operasional</span>';
+      if (lower.includes('bangunan') || lower.includes('sarpras') || lower.includes('tanah') || lower.includes('alat')) return '<span class="badge-pill badge-pill--blue">Sarpras/Fasilitas</span>';
+      return '<span class="badge-pill badge-pill--primary">Program/Bansos</span>';
+    }
+
+    // 4. RENDERERS UNTUK TIAP KATEGORI & DATA
+    let cachedSettings = getSettingsSync();
+
+    function renderSemuaKategori() {
+      renderKategoriDonasi(cachedSettings.kategoriDonasi || []);
+      renderUraianProgram(cachedSettings.uraianProgram || []);
+      renderKategoriBerita(cachedSettings.kategoriBerita || []);
+      renderKategoriGaleri(cachedSettings.kategoriGaleri || []);
+      renderRekeningBank(cachedSettings.rekeningBank || []);
+      renderProfilYayasan(cachedSettings);
+      renderSistemOperasional(cachedSettings);
+    }
+
+    // A. Kategori Donasi
+    function renderKategoriDonasi(items, filterKeyword = '') {
+      const tbody = document.getElementById('tbody-kat-donasi');
+      const badgeCount = document.getElementById('badge-count-donasi');
+      badgeCount.textContent = items.length;
+
+      const q = filterKeyword.toLowerCase().trim();
+      const filtered = q ? items.filter(it => it.toLowerCase().includes(q)) : items;
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; padding: 2rem; color: var(--text-muted);">${q ? 'Tidak ada kategori donasi yang cocok.' : 'Belum ada kategori donasi.'}</td></tr>`;
+        return;
+      }
+
+      let html = '';
+      filtered.forEach((item, idx) => {
+        const bgRow = idx % 2 === 0 ? 'var(--bg-canvas)' : '#ffffff';
+        html += `
+          <tr style="background: ${bgRow}; border-bottom: 1px solid var(--border);">
+            <td style="text-align: center; padding: 0.85rem 1rem; color: var(--text-muted); font-size: 0.8rem; font-weight: 600;">${idx + 1}</td>
+            <td style="padding: 0.85rem 1rem; font-weight: 700; color: var(--text-dark);">${escapeHtml(item)}</td>
+            <td style="padding: 0.85rem 1rem;">${getTipeDonasiBadge(item)}</td>
+            <td style="text-align: center; padding: 0.85rem 1rem;">
+              <div class="table-actions">
+                <button type="button" class="btn-aksi btn-edit btn-edit-kategori" data-tipe="kategoriDonasi" data-item="${escapeHtml(item)}" title="Edit Kategori">
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  Edit
+                </button>
+                <button type="button" class="btn-aksi btn-hapus btn-hapus-kategori" data-tipe="kategoriDonasi" data-item="${escapeHtml(item)}" title="Hapus Kategori">
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                  Hapus
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      });
+      tbody.innerHTML = html;
+    }
+
+    // B. Uraian Program
+    function renderUraianProgram(items, filterKeyword = '') {
+      const tbody = document.getElementById('tbody-uraian-program');
+      const badgeCount = document.getElementById('badge-count-program');
+      badgeCount.textContent = items.length;
+
+      const q = filterKeyword.toLowerCase().trim();
+      const filtered = q ? items.filter(it => it.toLowerCase().includes(q)) : items;
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; padding: 2rem; color: var(--text-muted);">${q ? 'Tidak ada uraian program yang cocok.' : 'Belum ada uraian program.'}</td></tr>`;
+        return;
+      }
+
+      let html = '';
+      filtered.forEach((item, idx) => {
+        const bgRow = idx % 2 === 0 ? 'var(--bg-canvas)' : '#ffffff';
+        html += `
+          <tr style="background: ${bgRow}; border-bottom: 1px solid var(--border);">
+            <td style="text-align: center; padding: 0.85rem 1rem; color: var(--text-muted); font-size: 0.8rem; font-weight: 600;">${idx + 1}</td>
+            <td style="padding: 0.85rem 1rem; font-weight: 700; color: var(--text-dark);">${escapeHtml(item)}</td>
+            <td style="padding: 0.85rem 1rem;">${getTipeProgramBadge(item)}</td>
+            <td style="text-align: center; padding: 0.85rem 1rem;">
+              <div class="table-actions">
+                <button type="button" class="btn-aksi btn-edit btn-edit-kategori" data-tipe="uraianProgram" data-item="${escapeHtml(item)}" title="Edit Uraian Program">
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  Edit
+                </button>
+                <button type="button" class="btn-aksi btn-hapus btn-hapus-kategori" data-tipe="uraianProgram" data-item="${escapeHtml(item)}" title="Hapus Uraian">
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                  Hapus
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      });
+      tbody.innerHTML = html;
+    }
+
+    // C. Kategori Berita
+    function renderKategoriBerita(items, filterKeyword = '') {
+      const tbody = document.getElementById('tbody-kat-berita');
+      const badgeCount = document.getElementById('badge-count-berita');
+      badgeCount.textContent = items.length;
+
+      const q = filterKeyword.toLowerCase().trim();
+      const filtered = q ? items.filter(it => it.toLowerCase().includes(q)) : items;
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; padding: 2rem; color: var(--text-muted);">${q ? 'Tidak ada kategori yang cocok.' : 'Belum ada kategori berita.'}</td></tr>`;
+        return;
+      }
+
+      let html = '';
+      filtered.forEach((item, idx) => {
+        const bgRow = idx % 2 === 0 ? 'var(--bg-canvas)' : '#ffffff';
+        html += `
+          <tr style="background: ${bgRow}; border-bottom: 1px solid var(--border);">
+            <td style="text-align: center; padding: 0.85rem 1rem; color: var(--text-muted); font-size: 0.8rem; font-weight: 600;">${idx + 1}</td>
+            <td style="padding: 0.85rem 1rem; font-weight: 700; color: var(--text-dark);">${escapeHtml(item)}</td>
+            <td style="padding: 0.85rem 1rem;"><span class="badge-pill badge-pill--blue">Aktif</span></td>
+            <td style="text-align: center; padding: 0.85rem 1rem;">
+              <div class="table-actions">
+                <button type="button" class="btn-aksi btn-edit btn-edit-kategori" data-tipe="kategoriBerita" data-item="${escapeHtml(item)}" title="Edit Kategori">
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  Edit
+                </button>
+                <button type="button" class="btn-aksi btn-hapus btn-hapus-kategori" data-tipe="kategoriBerita" data-item="${escapeHtml(item)}" title="Hapus Kategori">
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                  Hapus
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      });
+      tbody.innerHTML = html;
+    }
+
+    // D. Kategori Galeri
+    function renderKategoriGaleri(items, filterKeyword = '') {
+      const tbody = document.getElementById('tbody-kat-galeri');
+      const badgeCount = document.getElementById('badge-count-galeri');
+      badgeCount.textContent = items.length;
+
+      const q = filterKeyword.toLowerCase().trim();
+      const filtered = q ? items.filter(it => it.toLowerCase().includes(q)) : items;
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; padding: 2rem; color: var(--text-muted);">${q ? 'Tidak ada kategori yang cocok.' : 'Belum ada kategori galeri.'}</td></tr>`;
+        return;
+      }
+
+      let html = '';
+      filtered.forEach((item, idx) => {
+        const bgRow = idx % 2 === 0 ? 'var(--bg-canvas)' : '#ffffff';
+        html += `
+          <tr style="background: ${bgRow}; border-bottom: 1px solid var(--border);">
+            <td style="text-align: center; padding: 0.85rem 1rem; color: var(--text-muted); font-size: 0.8rem; font-weight: 600;">${idx + 1}</td>
+            <td style="padding: 0.85rem 1rem; font-weight: 700; color: var(--text-dark);">${escapeHtml(item)}</td>
+            <td style="padding: 0.85rem 1rem;"><span class="badge-pill badge-pill--amber">Album Foto</span></td>
+            <td style="text-align: center; padding: 0.85rem 1rem;">
+              <div class="table-actions">
+                <button type="button" class="btn-aksi btn-edit btn-edit-kategori" data-tipe="kategoriGaleri" data-item="${escapeHtml(item)}" title="Edit Kategori">
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  Edit
+                </button>
+                <button type="button" class="btn-aksi btn-hapus btn-hapus-kategori" data-tipe="kategoriGaleri" data-item="${escapeHtml(item)}" title="Hapus Kategori">
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                  Hapus
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      });
+      tbody.innerHTML = html;
+    }
+
+    // E. Rekening Bank
+    function renderRekeningBank(banks = []) {
+      const tbody = document.getElementById('tbody-rekening-bank');
+      const badgeCount = document.getElementById('badge-count-rekening');
+      badgeCount.textContent = banks.length;
+
+      if (banks.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; padding: 2rem; color: var(--text-muted);">Belum ada rekening bank didaftarkan.</td></tr>`;
+        return;
+      }
+
+      let html = '';
+      banks.forEach((b, idx) => {
+        const bgRow = idx % 2 === 0 ? 'var(--bg-canvas)' : '#ffffff';
+        const badgeUtama = b.utama 
+          ? `<span class="badge-primary-bank">Rekening Utama</span>` 
+          : `<button type="button" class="btn-copy btn-jadikan-utama" data-id="${b.id}">Jadikan Utama</button>`;
+
+        html += `
+          <tr style="background: ${bgRow}; border-bottom: 1px solid var(--border);">
+            <td style="padding: 0.85rem 1rem;">
+              <strong style="color: var(--text-dark); font-size: 0.92rem; display: block;">${escapeHtml(b.namaBank)}</strong>
+              <span style="font-size: 0.78rem; color: var(--text-muted);">a.n. ${escapeHtml(b.atasNama)} ${b.cabang ? ' • ' + escapeHtml(b.cabang) : ''}</span>
+              ${b.catatan ? `<span style="display: block; font-size: 0.72rem; color: var(--primary); font-weight: 600; margin-top: 2px;">${escapeHtml(b.catatan)}</span>` : ''}
+            </td>
+            <td style="padding: 0.85rem 1rem;">
+              <div style="display: flex; align-items: center; gap: 0.45rem;">
+                <code style="font-size: 0.9rem; font-weight: 700; color: var(--text-dark); background: var(--bg-subtle); padding: 3px 8px; border-radius: 6px; border: 1px solid var(--border);">${escapeHtml(b.nomorRekening)}</code>
+                <button type="button" class="btn-copy btn-salin-rek" data-nomor="${escapeHtml(b.nomorRekening)}" title="Salin nomor rekening">Salin</button>
+              </div>
+            </td>
+            <td style="padding: 0.85rem 1rem;">${badgeUtama}</td>
+            <td style="text-align: center; padding: 0.85rem 1rem;">
+              <div class="table-actions">
+                <button type="button" class="btn-aksi btn-edit btn-edit-rek" data-id="${b.id}" title="Edit Rekening">
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  Edit
+                </button>
+                <button type="button" class="btn-aksi btn-hapus btn-hapus-rek" data-id="${b.id}" title="Hapus Rekening">
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                  Hapus
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      });
+      tbody.innerHTML = html;
+    }
+
+    // F. Profil Yayasan Filler & Live Address Preview
+    const inputAlamat = document.getElementById('profil-alamat');
+    const livePreviewAlamat = document.getElementById('live-preview-alamat-text');
+    const charCountAlamat = document.getElementById('char-count-alamat');
+
+    function updateLiveAddressPreview(val) {
+      const teks = (val || '').trim();
+      livePreviewAlamat.textContent = teks || 'Dusun Cipicung RT. 015 RW. 008, Karangsari, Padaherang, Kab. Pangandaran, Jawa Barat';
+      charCountAlamat.textContent = `${teks.length} karakter`;
+    }
+
+    inputAlamat.addEventListener('input', (e) => {
+      updateLiveAddressPreview(e.target.value);
+    });
+
+    function renderProfilYayasan(settings) {
+      const p = settings.profilYayasan || {};
+      const s = settings.mediaSosial || {};
+
+      document.getElementById('profil-nama').value = p.nama || '';
+      document.getElementById('profil-singkatan').value = p.singkatan || '';
+      document.getElementById('profil-slogan').value = p.slogan || '';
+      document.getElementById('profil-sk').value = p.skKemenkumham || '';
+      document.getElementById('profil-deskripsi').value = p.deskripsiSingkat || '';
+      
+      inputAlamat.value = p.alamat || '';
+      updateLiveAddressPreview(p.alamat || '');
+
+      document.getElementById('profil-whatsapp').value = p.whatsapp || '';
+      document.getElementById('profil-telepon').value = p.telepon || '';
+      document.getElementById('profil-email').value = p.email || '';
+      document.getElementById('profil-jam').value = p.jamOperasional || '';
+      document.getElementById('profil-maps').value = p.mapsUrl || '';
+
+      document.getElementById('sosmed-facebook').value = s.facebook || '';
+      document.getElementById('sosmed-instagram').value = s.instagram || '';
+      document.getElementById('sosmed-youtube').value = s.youtube || '';
+      document.getElementById('sosmed-tiktok').value = s.tiktok || '';
+
+      // QRIS
+      const q = settings.qris || {};
+      document.getElementById('qris-image-url').value = q.imageUrl || '';
+      document.getElementById('qris-nmid').value = q.nmId || '';
+      document.getElementById('qris-instruksi').value = q.instruksi || '';
+      if (q.imageUrl) {
+        document.getElementById('img-qris-preview').src = q.imageUrl;
+      }
+    }
+
+    // G. Sistem Operasional Filler
+    function renderSistemOperasional(settings) {
+      const sis = settings.pengaturanSistem || {};
+      const switchMaint = document.getElementById('switch-maintenance');
+      const switchBan = document.getElementById('switch-banner');
+
+      switchMaint.checked = Boolean(sis.maintenanceMode);
+      document.getElementById('pesan-maintenance').value = sis.pesanMaintenance || '';
+      switchBan.checked = Boolean(sis.tampilkanBanner);
+      document.getElementById('teks-banner').value = sis.bannerPengumuman || '';
+    }
+
+    // 5. EVENT HANDLERS: TAMBAH KATEGORI / URAIAN
+    document.getElementById('form-tambah-donasi').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const input = document.getElementById('input-kategori-donasi');
+      try {
+        await tambahItemKategori('kategoriDonasi', input.value);
+        cachedSettings = getSettingsSync();
+        renderKategoriDonasi(cachedSettings.kategoriDonasi);
+        input.value = '';
+        showToast('Kategori donasi berhasil ditambahkan!');
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    });
+
+    document.getElementById('form-tambah-program').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const input = document.getElementById('input-uraian-program');
+      try {
+        await tambahItemKategori('uraianProgram', input.value);
+        cachedSettings = getSettingsSync();
+        renderUraianProgram(cachedSettings.uraianProgram);
+        input.value = '';
+        showToast('Uraian program berhasil ditambahkan!');
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    });
+
+    document.getElementById('form-tambah-berita').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const input = document.getElementById('input-kategori-berita');
+      try {
+        await tambahItemKategori('kategoriBerita', input.value);
+        cachedSettings = getSettingsSync();
+        renderKategoriBerita(cachedSettings.kategoriBerita);
+        input.value = '';
+        showToast('Kategori berita berhasil ditambahkan!');
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    });
+
+    document.getElementById('form-tambah-galeri').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const input = document.getElementById('input-kategori-galeri');
+      try {
+        await tambahItemKategori('kategoriGaleri', input.value);
+        cachedSettings = getSettingsSync();
+        renderKategoriGaleri(cachedSettings.kategoriGaleri);
+        input.value = '';
+        showToast('Kategori galeri berhasil ditambahkan!');
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    });
+
+    // 6. EVENT SEARCH PADA KATEGORI
+    document.getElementById('search-kat-donasi').addEventListener('input', (e) => {
+      renderKategoriDonasi(cachedSettings.kategoriDonasi || [], e.target.value);
+    });
+    document.getElementById('search-uraian-program').addEventListener('input', (e) => {
+      renderUraianProgram(cachedSettings.uraianProgram || [], e.target.value);
+    });
+    document.getElementById('search-kat-berita').addEventListener('input', (e) => {
+      renderKategoriBerita(cachedSettings.kategoriBerita || [], e.target.value);
+    });
+    document.getElementById('search-kat-galeri').addEventListener('input', (e) => {
+      renderKategoriGaleri(cachedSettings.kategoriGaleri || [], e.target.value);
+    });
+
+    // 7. MODAL EDIT KATEGORI HANDLER
+    const modalEdit = document.getElementById('modal-edit-kategori');
+    const modalEditTitle = document.getElementById('modal-edit-title');
+    const modalEditTipe = document.getElementById('modal-edit-tipe');
+    const modalEditItemLama = document.getElementById('modal-edit-item-lama');
+    const modalEditItemBaru = document.getElementById('modal-edit-item-baru');
+    const btnTutupModal = document.getElementById('btn-tutup-modal');
+    const btnBatalModal = document.getElementById('btn-batal-modal');
+
+    function bukaModalEdit(tipe, itemLama) {
+      modalEditTipe.value = tipe;
+      modalEditItemLama.value = itemLama;
+      modalEditItemBaru.value = itemLama;
+
+      let label = 'Kategori';
+      if (tipe === 'kategoriDonasi') label = 'Kategori Donasi';
+      else if (tipe === 'uraianProgram') label = 'Uraian Program';
+      else if (tipe === 'kategoriBerita') label = 'Kategori Berita';
+      else if (tipe === 'kategoriGaleri') label = 'Kategori Galeri';
+
+      modalEditTitle.textContent = `Edit ${label}`;
+      modalEdit.classList.add('is-open');
+      modalEditItemBaru.focus();
+    }
+
+    function tutupModalEdit() {
+      modalEdit.classList.remove('is-open');
+    }
+
+    btnTutupModal.addEventListener('click', tutupModalEdit);
+    btnBatalModal.addEventListener('click', tutupModalEdit);
+    modalEdit.addEventListener('click', (e) => {
+      if (e.target === modalEdit) tutupModalEdit();
+    });
+
+    document.getElementById('form-modal-edit').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const tipe = modalEditTipe.value;
+      const lama = modalEditItemLama.value;
+      const baru = modalEditItemBaru.value;
+
+      try {
+        await editItemKategori(tipe, lama, baru);
+        cachedSettings = getSettingsSync();
+        renderSemuaKategori();
+        tutupModalEdit();
+        showToast('Perubahan nama berhasil disimpan!');
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    });
+
+    // 8. DELEGASI KLIK TABEL (EDIT & HAPUS KATEGORI)
+    document.addEventListener('click', async (e) => {
+      // Edit Kategori
+      const btnEdit = e.target.closest('.btn-edit-kategori');
+      if (btnEdit) {
+        const tipe = btnEdit.getAttribute('data-tipe');
+        const item = btnEdit.getAttribute('data-item');
+        bukaModalEdit(tipe, item);
+        return;
+      }
+
+      // Hapus Kategori
+      const btnHapus = e.target.closest('.btn-hapus-kategori');
+      if (btnHapus) {
+        const tipe = btnHapus.getAttribute('data-tipe');
+        const item = btnHapus.getAttribute('data-item');
+        if (confirm(`Apakah Anda yakin ingin menghapus "${item}" dari daftar?`)) {
+          try {
+            await hapusItemKategori(tipe, item);
+            cachedSettings = getSettingsSync();
+            renderSemuaKategori();
+            showToast(`"${item}" berhasil dihapus.`);
+          } catch (err) {
+            showToast(err.message, 'error');
+          }
+        }
+        return;
+      }
+
+      // Salin Rekening
+      const btnSalin = e.target.closest('.btn-salin-rek');
+      if (btnSalin) {
+        const no = btnSalin.getAttribute('data-nomor');
+        navigator.clipboard.writeText(no).then(() => {
+          showToast(`Nomor ${no} disalin ke clipboard!`);
+        });
+        return;
+      }
+
+      // Jadikan Utama Rekening
+      const btnUtama = e.target.closest('.btn-jadikan-utama');
+      if (btnUtama) {
+        const id = btnUtama.getAttribute('data-id');
+        try {
+          await setRekeningUtama(id);
+          cachedSettings = getSettingsSync();
+          renderRekeningBank(cachedSettings.rekeningBank);
+          showToast('Rekening utama berhasil diperbarui.');
+        } catch (err) {
+          showToast(err.message, 'error');
+        }
+        return;
+      }
+
+      // Edit Rekening Bank
+      const btnEditRek = e.target.closest('.btn-edit-rek');
+      if (btnEditRek) {
+        const id = btnEditRek.getAttribute('data-id');
+        const b = cachedSettings.rekeningBank.find(item => item.id === id);
+        if (b) {
+          document.getElementById('edit-rekening-id').value = b.id;
+          document.getElementById('rek-bank').value = b.namaBank;
+          document.getElementById('rek-nomor').value = b.nomorRekening;
+          document.getElementById('rek-atas-nama').value = b.atasNama;
+          document.getElementById('rek-cabang').value = b.cabang || '';
+          document.getElementById('rek-catatan').value = b.catatan || '';
+          document.getElementById('rek-utama').checked = Boolean(b.utama);
+
+          document.getElementById('form-rekening-title').textContent = "Edit Rekening Bank";
+          document.getElementById('btn-simpan-rekening').textContent = "Update Rekening";
+          document.getElementById('btn-batal-rekening').style.display = "block";
+          window.scrollTo({ top: 300, behavior: 'smooth' });
+        }
+        return;
+      }
+
+      // Hapus Rekening Bank
+      const btnHapusRek = e.target.closest('.btn-hapus-rek');
+      if (btnHapusRek) {
+        const id = btnHapusRek.getAttribute('data-id');
+        if (confirm('Apakah Anda yakin ingin menghapus rekening bank ini?')) {
+          try {
+            await hapusRekeningBank(id);
+            cachedSettings = getSettingsSync();
+            renderRekeningBank(cachedSettings.rekeningBank);
+            showToast('Rekening bank berhasil dihapus.');
+          } catch (err) {
+            showToast(err.message, 'error');
+          }
+        }
+        return;
+      }
+    });
+
+    // 9. FORM REKENING BANK (TAMBAH / UPDATE)
+    const formRekening = document.getElementById('form-tambah-rekening');
+    const btnBatalRekening = document.getElementById('btn-batal-rekening');
+
+    btnBatalRekening.addEventListener('click', resetFormRekening);
+    function resetFormRekening() {
+      formRekening.reset();
+      document.getElementById('edit-rekening-id').value = '';
+      document.getElementById('form-rekening-title').textContent = "Tambah Rekening Bank";
+      document.getElementById('btn-simpan-rekening').textContent = "+ Tambahkan Rekening Bank";
+      btnBatalRekening.style.display = "none";
+    }
+
+    formRekening.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const editId = document.getElementById('edit-rekening-id').value;
+      const dataPayload = {
+        namaBank: document.getElementById('rek-bank').value,
+        nomorRekening: document.getElementById('rek-nomor').value,
+        atasNama: document.getElementById('rek-atas-nama').value,
+        cabang: document.getElementById('rek-cabang').value,
+        catatan: document.getElementById('rek-catatan').value,
+        utama: document.getElementById('rek-utama').checked
+      };
+
+      try {
+        if (editId) {
+          await editRekeningBank(editId, dataPayload);
+          showToast('Rekening bank berhasil diperbarui!');
+        } else {
+          await tambahRekeningBank(dataPayload);
+          showToast('Rekening bank baru berhasil ditambahkan!');
+        }
+        cachedSettings = getSettingsSync();
+        renderRekeningBank(cachedSettings.rekeningBank);
+        resetFormRekening();
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    });
+
+    // 10. FORM QRIS
+    document.getElementById('form-qris').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const qrisData = {
+        imageUrl: document.getElementById('qris-image-url').value.trim(),
+        nmId: document.getElementById('qris-nmid').value.trim(),
+        instruksi: document.getElementById('qris-instruksi').value.trim()
+      };
+
+      try {
+        await saveSettings({ qris: qrisData });
+        cachedSettings = getSettingsSync();
+        document.getElementById('img-qris-preview').src = qrisData.imageUrl || '../images/donasi-qris.svg';
+        showToast('Pengaturan QRIS berhasil disimpan dan terhubung ke halaman donasi!');
+      } catch (err) {
+        showToast('Gagal menyimpan QRIS: ' + err.message, 'error');
+      }
+    });
+
+    document.getElementById('qris-image-url').addEventListener('input', (e) => {
+      const url = e.target.value.trim();
+      document.getElementById('img-qris-preview').src = url || '../images/donasi-qris.svg';
+    });
+
+    // 11. FORM PROFIL LEMBAGA & SOSMED
+    document.getElementById('form-profil-yayasan').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const profilData = {
+        nama: document.getElementById('profil-nama').value.trim(),
+        singkatan: document.getElementById('profil-singkatan').value.trim(),
+        slogan: document.getElementById('profil-slogan').value.trim(),
+        skKemenkumham: document.getElementById('profil-sk').value.trim(),
+        deskripsiSingkat: document.getElementById('profil-deskripsi').value.trim(),
+        alamat: document.getElementById('profil-alamat').value.trim(),
+        whatsapp: document.getElementById('profil-whatsapp').value.trim(),
+        telepon: document.getElementById('profil-telepon').value.trim(),
+        email: document.getElementById('profil-email').value.trim(),
+        jamOperasional: document.getElementById('profil-jam').value.trim(),
+        mapsUrl: document.getElementById('profil-maps').value.trim(),
+      };
+
+      const sosmedData = {
+        facebook: document.getElementById('sosmed-facebook').value.trim(),
+        instagram: document.getElementById('sosmed-instagram').value.trim(),
+        youtube: document.getElementById('sosmed-youtube').value.trim(),
+        tiktok: document.getElementById('sosmed-tiktok').value.trim()
+      };
+
+      try {
+        await saveSettings({
+          profilYayasan: profilData,
+          mediaSosial: sosmedData
+        });
+        cachedSettings = getSettingsSync();
+        showToast('Profil lembaga berhasil disimpan & disinkronkan ke halaman utama!');
+      } catch (err) {
+        showToast('Gagal menyimpan profil: ' + err.message, 'error');
+      }
+    });
+
+    // 12. FORM SISTEM OPERASIONAL (MAINTENANCE & BANNER)
+    document.getElementById('form-sistem-operasional').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const sistemData = {
+        maintenanceMode: document.getElementById('switch-maintenance').checked,
+        pesanMaintenance: document.getElementById('pesan-maintenance').value.trim(),
+        tampilkanBanner: document.getElementById('switch-banner').checked,
+        bannerPengumuman: document.getElementById('teks-banner').value.trim()
+      };
+
+      try {
+        await saveSettings({ pengaturanSistem: sistemData });
+        cachedSettings = getSettingsSync();
+        showToast('Pengaturan operasional sistem berhasil disimpan!');
+      } catch (err) {
+        showToast('Gagal menyimpan operasional: ' + err.message, 'error');
+      }
+    });
+
+    // 13. GANTI PASSWORD MASTER ADMIN (master@admin1)
+    document.getElementById('form-ganti-password').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const pass1 = document.getElementById('pass-baru').value;
+      const pass2 = document.getElementById('pass-konfirmasi').value;
+      const btn = document.getElementById('btn-update-pass');
+
+      if (pass1 !== pass2) {
+        showToast('Konfirmasi kata sandi baru tidak cocok!', 'error');
+        return;
+      }
+      if (pass1.length < 6) {
+        showToast('Kata sandi baru minimal 6 karakter!', 'error');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Menyimpan sandi baru...';
+
+      try {
+        // Simpan ke penyimpanan sandi master
+        localStorage.setItem('ybu_master_pass', pass1);
+
+        // Jika ada user Firebase yang terikat, coba perbarui juga
+        const user = auth.currentUser;
+        if (user) {
+          try {
+            await updatePassword(user, pass1);
+          } catch (eAuth) {
+            console.warn('Firebase auth updatePassword dilewati untuk user lokal master:', eAuth);
+          }
+        }
+
+        document.getElementById('pass-baru').value = '';
+        document.getElementById('pass-konfirmasi').value = '';
+        showToast('Kata sandi Master Admin berhasil diperbarui!');
+      } catch (err) {
+        showToast('Gagal mengubah sandi: ' + err.message, 'error');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Simpan Kata Sandi Master Baru';
+      }
+    });
+
+    // 14. EKSPOR & IMPOR DATA BACKUP JSON
+    document.getElementById('btn-ekspor-json').addEventListener('click', () => {
+      try {
+        exportSettingsJSON();
+        showToast('File backup pengaturan berhasil diunduh!');
+      } catch (err) {
+        showToast('Gagal ekspor: ' + err.message, 'error');
+      }
+    });
+
+    const modalImpor = document.getElementById('modal-impor-json');
+    const btnBukaImpor = document.getElementById('btn-buka-impor');
+    const btnTutupImpor = document.getElementById('btn-tutup-impor');
+    const btnBatalImpor = document.getElementById('btn-batal-impor');
+    const btnProsesImpor = document.getElementById('btn-proses-impor');
+    const fileImporInput = document.getElementById('file-impor-json');
+
+    btnBukaImpor.addEventListener('click', () => {
+      fileImporInput.value = '';
+      modalImpor.classList.add('is-open');
+    });
+
+    function tutupModalImpor() {
+      modalImpor.classList.remove('is-open');
+    }
+
+    btnTutupImpor.addEventListener('click', tutupModalImpor);
+    btnBatalImpor.addEventListener('click', tutupModalImpor);
+    modalImpor.addEventListener('click', (e) => {
+      if (e.target === modalImpor) tutupModalImpor();
+    });
+
+    btnProsesImpor.addEventListener('click', async () => {
+      const file = fileImporInput.files[0];
+      if (!file) {
+        showToast('Pilih file JSON terlebih dahulu!', 'error');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        try {
+          const content = e.target.result;
+          await importSettingsJSON(content);
+          cachedSettings = getSettingsSync();
+          renderSemuaKategori();
+          tutupModalImpor();
+          showToast('Data pengaturan berhasil dipulihkan dari file backup!');
+        } catch (err) {
+          showToast('Gagal memulihkan file: ' + err.message, 'error');
+        }
+      };
+      reader.readAsText(file);
+    });
+
+    // 15. DETEKSI SESI MASTER ADMIN
+    const currentSession = getStoredSession();
+    if (currentSession) {
+      document.getElementById('admin-active-email').textContent = currentSession.email || 'master@admin1';
+      const lastLogin = currentSession.loggedInAt 
+        ? new Date(currentSession.loggedInAt).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' })
+        : 'Sesi saat ini';
+      document.getElementById('admin-last-login').textContent = `Terakhir masuk: ${lastLogin}`;
+    }
+
+    // 16. UTILITY ESCAPE HTML
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    // 17. INISIALISASI HALAMAN PENGATURAN
+    async function init() {
+      renderSemuaKategori();
+
+      try {
+        const fresh = await loadSettings();
+        cachedSettings = fresh;
+        renderSemuaKategori();
+      } catch (e) {
+        console.warn('Latar belakang sync pengaturan:', e);
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>
