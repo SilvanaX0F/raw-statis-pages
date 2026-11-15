@@ -731,6 +731,7 @@
         'infaq dari sampah': 'Infaq dari Sedekah Sampah',
         'infaq dari sedekah sampah': 'Infaq dari Sedekah Sampah',
         'infaq dari sarpras': 'Infaq dari Sarpras',
+        'infaq dari sarpras & log': 'Infaq dari Sarpras & Log',
         'shodaqoh': 'Shodaqoh',
         'sodaqoh': 'Shodaqoh',
         'wakaf': 'Wakaf'
@@ -752,6 +753,7 @@
         'Infaq dari Sedekah Sampah': { bg: '#ECFDF5', text: '#047857' },
         'Infaq dari Sampah': { bg: '#ECFDF5', text: '#047857' },
         'Infaq dari Sarpras': { bg: '#E0E7FF', text: '#3730A3' },
+        'Infaq dari Sarpras & Log': { bg: '#E0E7FF', text: '#3730A3' },
         'Shodaqoh': { bg: '#F3E8FF', text: '#6B21A8' },
         'Sodaqoh': { bg: '#F3E8FF', text: '#6B21A8' },
         'Wakaf': { bg: '#FEFCBF', text: '#975A16' }
@@ -860,7 +862,26 @@
       function normalisasiKategoriDonasi(kat) {
         if (!kat) return 'Lainnya';
         var trimmed = String(kat).trim().replace(/\s+/g, ' ');
-        return MAP_KATEGORI_DONASI[trimmed.toLowerCase()] || trimmed;
+        var mapped = MAP_KATEGORI_DONASI[trimmed.toLowerCase()] || trimmed;
+
+        // Cocokkan persis (case-insensitive) dengan pos dana yang sedang aktif
+        for (var i = 0; i < DAFTAR_POS_DANA.length; i++) {
+          if (DAFTAR_POS_DANA[i].toLowerCase() === mapped.toLowerCase()) {
+            return DAFTAR_POS_DANA[i];
+          }
+        }
+
+        // Cocokkan secara fleksibel jika ada penyesuaian nama di dashboard pengaturan
+        // (Contoh data lama: "Infaq dari Sarpras", di pengaturan aktif: "Infaq dari Sarpras & Log")
+        for (var j = 0; j < DAFTAR_POS_DANA.length; j++) {
+          var posL = DAFTAR_POS_DANA[j].toLowerCase();
+          var mapL = mapped.toLowerCase();
+          if (posL.indexOf(mapL) === 0 || mapL.indexOf(posL) === 0) {
+            return DAFTAR_POS_DANA[j];
+          }
+        }
+
+        return mapped;
       }
 
       function getDonasiBadgeStyle(kat) {

@@ -25,7 +25,7 @@ export const DEFAULT_SETTINGS = {
     "Infaq Majlis Taklim Muslimat",
     "Infaq Majlis Taklim Thoriqoh",
     "Infaq dari Sedekah Sampah",
-    "Infaq dari Sarpras",
+    "Infaq dari Sarpras & Log",
     "Shodaqoh",
     "Wakaf"
   ],
