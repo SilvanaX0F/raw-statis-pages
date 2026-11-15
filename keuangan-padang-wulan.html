@@ -132,8 +132,9 @@
               <option value="Infaq Pendidikan (TPQ)">Infaq Pendidikan (TPQ)</option>
               <option value="Infaq Operasional (DKM)">Infaq Operasional (DKM)</option>
               <option value="Infaq PHBI">Infaq PHBI</option>
-              <option value="Infaq Majlis Taklim">Infaq Majlis Taklim</option>
-              <option value="Infaq dari Sampah">Infaq dari Sampah</option>
+              <option value="Infaq Majlis Taklim Muslimat">Infaq Majlis Taklim Muslimat</option>
+              <option value="Infaq Majlis Taklim Thoriqoh">Infaq Majlis Taklim Thoriqoh</option>
+              <option value="Infaq dari Sedekah Sampah">Infaq dari Sedekah Sampah</option>
               <option value="Infaq dari Sarpras">Infaq dari Sarpras</option>
               <option value="Shodaqoh">Shodaqoh</option>
               <option value="Wakaf">Wakaf</option>
@@ -230,8 +231,9 @@
                 <option value="Infaq Pendidikan (TPQ)">Infaq Pendidikan (TPQ)</option>
                 <option value="Infaq Operasional (DKM)">Infaq Operasional (DKM)</option>
                 <option value="Infaq PHBI">Infaq PHBI</option>
-                <option value="Infaq Majlis Taklim">Infaq Majlis Taklim</option>
-                <option value="Infaq dari Sampah">Infaq dari Sampah</option>
+                <option value="Infaq Majlis Taklim Muslimat">Infaq Majlis Taklim Muslimat</option>
+                <option value="Infaq Majlis Taklim Thoriqoh">Infaq Majlis Taklim Thoriqoh</option>
+                <option value="Infaq dari Sedekah Sampah">Infaq dari Sedekah Sampah</option>
                 <option value="Infaq dari Sarpras">Infaq dari Sarpras</option>
                 <option value="Shodaqoh">Shodaqoh</option>
                 <option value="Wakaf">Wakaf</option>
@@ -691,7 +693,7 @@
       var FIREBASE_API_KEY = 'AIzaSyAAQK1Ne1tGHgpbaPr74Ow_NNaYdJo12wY';
       var itemsPerPage = 10;
 
-      // Daftar 13 Pos Dana Utama Yayasan (urutan konsisten di form & ringkasan)
+      // Daftar 14 Pos Dana Utama Yayasan (urutan konsisten di form & ringkasan)
       var DAFTAR_POS_DANA = [
         'Zakat Mal',
         'Zakat Fitrah',
@@ -701,8 +703,9 @@
         'Infaq Pendidikan (TPQ)',
         'Infaq Operasional (DKM)',
         'Infaq PHBI',
-        'Infaq Majlis Taklim',
-        'Infaq dari Sampah',
+        'Infaq Majlis Taklim Muslimat',
+        'Infaq Majlis Taklim Thoriqoh',
+        'Infaq dari Sedekah Sampah',
         'Infaq dari Sarpras',
         'Shodaqoh',
         'Wakaf'
@@ -722,8 +725,11 @@
         'infaq operasional': 'Infaq Operasional (DKM)',
         'infaq operasional (dkm)': 'Infaq Operasional (DKM)',
         'infaq phbi': 'Infaq PHBI',
-        'infaq majlis taklim': 'Infaq Majlis Taklim',
-        'infaq dari sampah': 'Infaq dari Sampah',
+        'infaq majlis taklim': 'Infaq Majlis Taklim Muslimat',
+        'infaq majlis taklim muslimat': 'Infaq Majlis Taklim Muslimat',
+        'infaq majlis taklim thoriqoh': 'Infaq Majlis Taklim Thoriqoh',
+        'infaq dari sampah': 'Infaq dari Sedekah Sampah',
+        'infaq dari sedekah sampah': 'Infaq dari Sedekah Sampah',
         'infaq dari sarpras': 'Infaq dari Sarpras',
         'shodaqoh': 'Shodaqoh',
         'sodaqoh': 'Shodaqoh',
@@ -740,7 +746,10 @@
         'Infaq Pendidikan (TPQ)': { bg: '#E6FFFA', text: '#234E52' },
         'Infaq Operasional (DKM)': { bg: '#F1F5F9', text: '#334155' },
         'Infaq PHBI': { bg: '#FEF3C7', text: '#92400E' },
+        'Infaq Majlis Taklim Muslimat': { bg: '#FCE7F3', text: '#9D174D' },
+        'Infaq Majlis Taklim Thoriqoh': { bg: '#FDF2F8', text: '#BE185D' },
         'Infaq Majlis Taklim': { bg: '#FCE7F3', text: '#9D174D' },
+        'Infaq dari Sedekah Sampah': { bg: '#ECFDF5', text: '#047857' },
         'Infaq dari Sampah': { bg: '#ECFDF5', text: '#047857' },
         'Infaq dari Sarpras': { bg: '#E0E7FF', text: '#3730A3' },
         'Shodaqoh': { bg: '#F3E8FF', text: '#6B21A8' },
@@ -1252,7 +1261,72 @@
         if ('booleanValue' in field) return Boolean(field.booleanValue);
         if ('timestampValue' in field) return field.timestampValue;
         if ('nullValue' in field) return null;
+        if ('arrayValue' in field) {
+          var vals = (field.arrayValue && field.arrayValue.values) ? field.arrayValue.values : [];
+          return vals.map(parseFirestoreRestValue);
+        }
+        if ('mapValue' in field) {
+          return parseFirestoreRestDoc(field.mapValue);
+        }
         return undefined;
+      }
+
+      function perbaruiDaftarKategori(kategoriBaru) {
+        if (!Array.isArray(kategoriBaru) || kategoriBaru.length === 0) return;
+        var daftarBersih = kategoriBaru.map(function (k) {
+          if (k === 'Infaq dari Sampah') return 'Infaq dari Sedekah Sampah';
+          return k;
+        });
+        if (daftarBersih.indexOf('Infaq Majlis Taklim') !== -1 && daftarBersih.indexOf('Infaq Majlis Taklim Muslimat') === -1) {
+          var idx = daftarBersih.indexOf('Infaq Majlis Taklim');
+          daftarBersih.splice(idx, 1, 'Infaq Majlis Taklim Muslimat', 'Infaq Majlis Taklim Thoriqoh');
+        }
+
+        DAFTAR_POS_DANA = daftarBersih;
+
+        if (selectFilterDonasi) {
+          var curValDonasi = selectFilterDonasi.value;
+          var optsDonasi = '<option value="Semua">Semua Pendapatan dan Penerimaan</option>';
+          daftarBersih.forEach(function (k) {
+            optsDonasi += '<option value="' + escapeHtml(k) + '">' + escapeHtml(k) + '</option>';
+          });
+          selectFilterDonasi.innerHTML = optsDonasi;
+          if (daftarBersih.indexOf(curValDonasi) !== -1 || curValDonasi === 'Semua') {
+            selectFilterDonasi.value = curValDonasi;
+          } else {
+            selectFilterDonasi.value = 'Semua';
+          }
+        }
+
+        if (selectFilterSumberDana) {
+          var curValSumber = selectFilterSumberDana.value;
+          var optsSumber = '<option value="Semua">Semua Sumber Dana</option>';
+          daftarBersih.forEach(function (k) {
+            optsSumber += '<option value="' + escapeHtml(k) + '">' + escapeHtml(k) + '</option>';
+          });
+          selectFilterSumberDana.innerHTML = optsSumber;
+          if (daftarBersih.indexOf(curValSumber) !== -1 || curValSumber === 'Semua') {
+            selectFilterSumberDana.value = curValSumber;
+          } else {
+            selectFilterSumberDana.value = 'Semua';
+          }
+        }
+
+        if (stateDonasi === 'ready' || statePengeluaran === 'ready') {
+          perbaruiRingkasanFinansial();
+        }
+      }
+
+      try {
+        var rawSettingsCache = localStorage.getItem('ybu_admin_settings_v1');
+        if (rawSettingsCache) {
+          var parsedSettings = JSON.parse(rawSettingsCache);
+          if (parsedSettings && Array.isArray(parsedSettings.kategoriDonasi)) {
+            perbaruiDaftarKategori(parsedSettings.kategoriDonasi);
+          }
+        }
+      } catch (e) {
+        console.warn('Gagal membaca cache settings:', e);
       }
 
       function parseFirestoreRestDoc(doc) {
@@ -1310,6 +1384,24 @@
         return hasil;
       }
 
+      async function fetchSettingsViaRest() {
+        var url = 'https://firestore.googleapis.com/v1/projects/' +
+          FIREBASE_PROJECT_ID +
+          '/databases/(default)/documents/settings/config?key=' +
+          encodeURIComponent(FIREBASE_API_KEY);
+        try {
+          var res = await fetch(url, { method: 'GET', cache: 'no-store' });
+          if (!res.ok) return;
+          var json = await res.json();
+          var parsed = parseFirestoreRestDoc(json);
+          if (parsed && Array.isArray(parsed.kategoriDonasi)) {
+            perbaruiDaftarKategori(parsed.kategoriDonasi);
+          }
+        } catch (e) {
+          console.warn('Gagal memuat master kategori via REST:', e);
+        }
+      }
+
       function settlePromise(p) {
         return p.then(
           function (value) { return { status: 'fulfilled', value: value }; },
@@ -1324,7 +1416,8 @@
         try {
           var hasilSettled = await Promise.all([
             settlePromise(fetchCollectionViaRest('donations')),
-            settlePromise(fetchCollectionViaRest('expenses'))
+            settlePromise(fetchCollectionViaRest('expenses')),
+            settlePromise(fetchSettingsViaRest())
           ]);
 
           var donasiRes = hasilSettled[0];
@@ -1354,6 +1447,7 @@
         applyDonasiData: applyDonasiData,
         applyPengeluaranData: applyPengeluaranData,
         markErrorIfNotReady: markErrorIfNotReady,
+        perbaruiKategori: perbaruiDaftarKategori,
         muatViaRest: muatSemuaViaRest
       };
 
@@ -1395,10 +1489,26 @@
   <script type="module">
     (async () => {
       try {
-        const { db, collection, onSnapshot, query } = await import('./js/firebase-config.js');
+        const { db, collection, doc, onSnapshot, query } = await import('./js/firebase-config.js');
         const appBridge = window.__keuanganApp;
 
         if (appBridge) {
+          // Realtime sinkronisasi master settings / kategori donasi
+          onSnapshot(
+            doc(db, 'settings', 'config'),
+            (snap) => {
+              if (snap.exists()) {
+                const data = snap.data();
+                if (data && Array.isArray(data.kategoriDonasi)) {
+                  appBridge.perbaruiKategori(data.kategoriDonasi);
+                }
+              }
+            },
+            (err) => {
+              console.warn('Realtime settings dialihkan ke mode HTTP:', err);
+            }
+          );
+
           onSnapshot(
             query(collection(db, 'donations')),
             (snap) => {

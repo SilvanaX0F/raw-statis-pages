@@ -22,8 +22,9 @@ export const DEFAULT_SETTINGS = {
     "Infaq Pendidikan (TPQ)",
     "Infaq Operasional (DKM)",
     "Infaq PHBI",
-    "Infaq Majlis Taklim",
-    "Infaq dari Sampah",
+    "Infaq Majlis Taklim Muslimat",
+    "Infaq Majlis Taklim Thoriqoh",
+    "Infaq dari Sedekah Sampah",
     "Infaq dari Sarpras",
     "Shodaqoh",
     "Wakaf"
@@ -101,7 +102,13 @@ function mergeWithDefault(source) {
   if (!source || typeof source !== 'object') return merged;
 
   if (Array.isArray(source.kategoriDonasi) && source.kategoriDonasi.length > 0) {
-    merged.kategoriDonasi = [...source.kategoriDonasi];
+    let katList = [...source.kategoriDonasi];
+    if (katList.includes("Infaq Majlis Taklim") && !katList.includes("Infaq Majlis Taklim Muslimat")) {
+      const idx = katList.indexOf("Infaq Majlis Taklim");
+      katList.splice(idx, 1, "Infaq Majlis Taklim Muslimat", "Infaq Majlis Taklim Thoriqoh");
+    }
+    katList = katList.map(k => k === "Infaq dari Sampah" ? "Infaq dari Sedekah Sampah" : k);
+    merged.kategoriDonasi = katList;
   }
   if (Array.isArray(source.uraianProgram) && source.uraianProgram.length > 0) {
     merged.uraianProgram = [...source.uraianProgram];
@@ -250,7 +257,23 @@ export async function tambahItemKategori(tipe, namaItem) {
     throw new Error(`Item "${bersih}" sudah ada dalam daftar.`);
   }
 
-  list.push(bersih);
+  // Susun di bawah kelompok awalan kata yang sama jika ada (misal awalan "Infaq", "Zakat", "Belanja")
+  const kataPertama = bersih.split(/\s+/)[0].toLowerCase();
+  let insertIndex = -1;
+  for (let i = list.length - 1; i >= 0; i--) {
+    const itemKataPertama = list[i].trim().split(/\s+/)[0].toLowerCase();
+    if (itemKataPertama === kataPertama) {
+      insertIndex = i + 1;
+      break;
+    }
+  }
+
+  if (insertIndex !== -1) {
+    list.splice(insertIndex, 0, bersih);
+  } else {
+    list.push(bersih);
+  }
+
   await saveSettings({ [tipe]: list });
   return list;
 }
