@@ -132,7 +132,7 @@
               <option value="Infaq Pendidikan (TPQ)">Infaq Pendidikan (TPQ)</option>
               <option value="Infaq Operasional (DKM)">Infaq Operasional (DKM)</option>
               <option value="Infaq PHBI">Infaq PHBI</option>
-              <option value="Infaq Majlis Taklim Muslimat">Infaq Majlis Taklim Muslimat</option>
+              <option value="Infaq Majlis Taklim Muslimah">Infaq Majlis Taklim Muslimah</option>
               <option value="Infaq Majlis Taklim Thoriqoh">Infaq Majlis Taklim Thoriqoh</option>
               <option value="Infaq dari Sedekah Sampah">Infaq dari Sedekah Sampah</option>
               <option value="Infaq dari Sarpras">Infaq dari Sarpras</option>
@@ -231,7 +231,7 @@
                 <option value="Infaq Pendidikan (TPQ)">Infaq Pendidikan (TPQ)</option>
                 <option value="Infaq Operasional (DKM)">Infaq Operasional (DKM)</option>
                 <option value="Infaq PHBI">Infaq PHBI</option>
-                <option value="Infaq Majlis Taklim Muslimat">Infaq Majlis Taklim Muslimat</option>
+                <option value="Infaq Majlis Taklim Muslimah">Infaq Majlis Taklim Muslimah</option>
                 <option value="Infaq Majlis Taklim Thoriqoh">Infaq Majlis Taklim Thoriqoh</option>
                 <option value="Infaq dari Sedekah Sampah">Infaq dari Sedekah Sampah</option>
                 <option value="Infaq dari Sarpras">Infaq dari Sarpras</option>
@@ -703,7 +703,7 @@
         'Infaq Pendidikan (TPQ)',
         'Infaq Operasional (DKM)',
         'Infaq PHBI',
-        'Infaq Majlis Taklim Muslimat',
+        'Infaq Majlis Taklim Muslimah',
         'Infaq Majlis Taklim Thoriqoh',
         'Infaq dari Sedekah Sampah',
         'Infaq dari Sarpras',
@@ -725,8 +725,9 @@
         'infaq operasional': 'Infaq Operasional (DKM)',
         'infaq operasional (dkm)': 'Infaq Operasional (DKM)',
         'infaq phbi': 'Infaq PHBI',
-        'infaq majlis taklim': 'Infaq Majlis Taklim Muslimat',
-        'infaq majlis taklim muslimat': 'Infaq Majlis Taklim Muslimat',
+        'infaq majlis taklim': 'Infaq Majlis Taklim Muslimah',
+        'infaq majlis taklim muslimat': 'Infaq Majlis Taklim Muslimah',
+        'infaq majlis taklim muslimah': 'Infaq Majlis Taklim Muslimah',
         'infaq majlis taklim thoriqoh': 'Infaq Majlis Taklim Thoriqoh',
         'infaq dari sampah': 'Infaq dari Sedekah Sampah',
         'infaq dari sedekah sampah': 'Infaq dari Sedekah Sampah',
@@ -747,6 +748,7 @@
         'Infaq Pendidikan (TPQ)': { bg: '#E6FFFA', text: '#234E52' },
         'Infaq Operasional (DKM)': { bg: '#F1F5F9', text: '#334155' },
         'Infaq PHBI': { bg: '#FEF3C7', text: '#92400E' },
+        'Infaq Majlis Taklim Muslimah': { bg: '#FCE7F3', text: '#9D174D' },
         'Infaq Majlis Taklim Muslimat': { bg: '#FCE7F3', text: '#9D174D' },
         'Infaq Majlis Taklim Thoriqoh': { bg: '#FDF2F8', text: '#BE185D' },
         'Infaq Majlis Taklim': { bg: '#FCE7F3', text: '#9D174D' },
@@ -862,7 +864,19 @@
       function normalisasiKategoriDonasi(kat) {
         if (!kat) return 'Lainnya';
         var trimmed = String(kat).trim().replace(/\s+/g, ' ');
-        var mapped = MAP_KATEGORI_DONASI[trimmed.toLowerCase()] || trimmed;
+
+        // Khusus transaksi historis Majlis Taklim: arahkan ke pos Muslimah atau Muslimat yang aktif di DAFTAR_POS_DANA
+        var lower = trimmed.toLowerCase();
+        if (lower === 'infaq majlis taklim' || lower === 'infaq majlis taklim muslimat' || lower === 'infaq majlis taklim muslimah') {
+          for (var m = 0; m < DAFTAR_POS_DANA.length; m++) {
+            var ml = DAFTAR_POS_DANA[m].toLowerCase();
+            if (ml === 'infaq majlis taklim muslimah' || ml === 'infaq majlis taklim muslimat') {
+              return DAFTAR_POS_DANA[m];
+            }
+          }
+        }
+
+        var mapped = MAP_KATEGORI_DONASI[lower] || trimmed;
 
         // Cocokkan persis (case-insensitive) dengan pos dana yang sedang aktif
         for (var i = 0; i < DAFTAR_POS_DANA.length; i++) {
@@ -1300,37 +1314,34 @@
           if (!trimmed) return;
           if (trimmed.toLowerCase() === 'infaq dari sampah') {
             hasil.push('Infaq dari Sedekah Sampah');
-          } else if (trimmed.toLowerCase() === 'infaq majlis taklim') {
-            if (hasil.indexOf('Infaq Majlis Taklim Muslimat') === -1) hasil.push('Infaq Majlis Taklim Muslimat');
-            if (hasil.indexOf('Infaq Majlis Taklim Thoriqoh') === -1) hasil.push('Infaq Majlis Taklim Thoriqoh');
           } else {
             var exists = hasil.some(function (h) { return h.toLowerCase() === trimmed.toLowerCase(); });
             if (!exists) hasil.push(trimmed);
           }
         });
 
-        if (hasil.indexOf('Infaq Majlis Taklim Muslimat') === -1) hasil.push('Infaq Majlis Taklim Muslimat');
-        if (hasil.indexOf('Infaq Majlis Taklim Thoriqoh') === -1) hasil.push('Infaq Majlis Taklim Thoriqoh');
-        if (hasil.indexOf('Infaq dari Sedekah Sampah') === -1) hasil.push('Infaq dari Sedekah Sampah');
-
-        // Pastikan Thoriqoh tepat di bawah Muslimat dan di atas Sedekah Sampah
-        hasil = hasil.filter(function (it) {
-          var l = it.toLowerCase();
-          return l !== 'infaq majlis taklim thoriqoh' && l !== 'infaq dari sedekah sampah';
-        });
-
-        var idxM = -1;
+        // Urutkan Thoriqoh di bawah Muslimah / Muslimat jika keduanya ada di list
+        var hasThoriqoh = hasil.some(function (h) { return h.toLowerCase() === 'infaq majlis taklim thoriqoh'; });
+        var idxMuslim = -1;
         for (var i = 0; i < hasil.length; i++) {
-          if (hasil[i].toLowerCase() === 'infaq majlis taklim muslimat') {
-            idxM = i;
+          var l = hasil[i].toLowerCase();
+          if (l === 'infaq majlis taklim muslimah' || l === 'infaq majlis taklim muslimat') {
+            idxMuslim = i;
             break;
           }
         }
-        if (idxM !== -1) {
-          hasil.splice(idxM + 1, 0, 'Infaq Majlis Taklim Thoriqoh', 'Infaq dari Sedekah Sampah');
-        } else {
-          hasil.push('Infaq Majlis Taklim Muslimat', 'Infaq Majlis Taklim Thoriqoh', 'Infaq dari Sedekah Sampah');
+
+        if (hasThoriqoh && idxMuslim !== -1) {
+          hasil = hasil.filter(function (it) { return it.toLowerCase() !== 'infaq majlis taklim thoriqoh'; });
+          for (var j = 0; j < hasil.length; j++) {
+            var lj = hasil[j].toLowerCase();
+            if (lj === 'infaq majlis taklim muslimah' || lj === 'infaq majlis taklim muslimat') {
+              hasil.splice(j + 1, 0, 'Infaq Majlis Taklim Thoriqoh');
+              break;
+            }
+          }
         }
+
         return hasil;
       }
 
