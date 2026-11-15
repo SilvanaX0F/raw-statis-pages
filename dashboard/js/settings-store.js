@@ -97,18 +97,64 @@ function deepClone(obj) {
   return JSON.parse(JSON.stringify(obj));
 }
 
+export function susunUrutanKategoriDonasi(list = []) {
+  if (!Array.isArray(list) || list.length === 0) return [...DEFAULT_SETTINGS.kategoriDonasi];
+
+  let hasil = [];
+  list.forEach(item => {
+    const trimmed = String(item || '').trim();
+    if (!trimmed) return;
+    if (trimmed.toLowerCase() === 'infaq dari sampah') {
+      hasil.push('Infaq dari Sedekah Sampah');
+    } else if (trimmed.toLowerCase() === 'infaq majlis taklim') {
+      if (!hasil.some(h => h.toLowerCase() === 'infaq majlis taklim muslimat')) {
+        hasil.push('Infaq Majlis Taklim Muslimat');
+      }
+      if (!hasil.some(h => h.toLowerCase() === 'infaq majlis taklim thoriqoh')) {
+        hasil.push('Infaq Majlis Taklim Thoriqoh');
+      }
+    } else {
+      if (!hasil.some(h => h.toLowerCase() === trimmed.toLowerCase())) {
+        hasil.push(trimmed);
+      }
+    }
+  });
+
+  if (!hasil.some(h => h.toLowerCase() === 'infaq majlis taklim muslimat')) {
+    hasil.push('Infaq Majlis Taklim Muslimat');
+  }
+  if (!hasil.some(h => h.toLowerCase() === 'infaq majlis taklim thoriqoh')) {
+    hasil.push('Infaq Majlis Taklim Thoriqoh');
+  }
+  if (!hasil.some(h => h.toLowerCase() === 'infaq dari sedekah sampah')) {
+    hasil.push('Infaq dari Sedekah Sampah');
+  }
+
+  // Pisahkan Thoriqoh dan Sedekah Sampah untuk disusun tepat berurutan:
+  // Infaq Majlis Taklim Muslimat -> Infaq Majlis Taklim Thoriqoh -> Infaq dari Sedekah Sampah
+  hasil = hasil.filter(item => {
+    const l = item.toLowerCase();
+    return l !== 'infaq majlis taklim thoriqoh' && l !== 'infaq dari sedekah sampah';
+  });
+
+  const idxMuslimat = hasil.findIndex(item => item.toLowerCase() === 'infaq majlis taklim muslimat');
+  if (idxMuslimat !== -1) {
+    hasil.splice(idxMuslimat + 1, 0, 'Infaq Majlis Taklim Thoriqoh', 'Infaq dari Sedekah Sampah');
+  } else {
+    hasil.push('Infaq Majlis Taklim Muslimat', 'Infaq Majlis Taklim Thoriqoh', 'Infaq dari Sedekah Sampah');
+  }
+
+  return hasil;
+}
+
 function mergeWithDefault(source) {
   const merged = deepClone(DEFAULT_SETTINGS);
   if (!source || typeof source !== 'object') return merged;
 
   if (Array.isArray(source.kategoriDonasi) && source.kategoriDonasi.length > 0) {
-    let katList = [...source.kategoriDonasi];
-    if (katList.includes("Infaq Majlis Taklim") && !katList.includes("Infaq Majlis Taklim Muslimat")) {
-      const idx = katList.indexOf("Infaq Majlis Taklim");
-      katList.splice(idx, 1, "Infaq Majlis Taklim Muslimat", "Infaq Majlis Taklim Thoriqoh");
-    }
-    katList = katList.map(k => k === "Infaq dari Sampah" ? "Infaq dari Sedekah Sampah" : k);
-    merged.kategoriDonasi = katList;
+    merged.kategoriDonasi = susunUrutanKategoriDonasi(source.kategoriDonasi);
+  } else {
+    merged.kategoriDonasi = [...DEFAULT_SETTINGS.kategoriDonasi];
   }
   if (Array.isArray(source.uraianProgram) && source.uraianProgram.length > 0) {
     merged.uraianProgram = [...source.uraianProgram];
@@ -173,6 +219,13 @@ export async function loadSettings() {
       const dataFirestore = snap.data();
       const merged = mergeWithDefault(dataFirestore);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
+      // Sinkronkan kembali ke Firestore jika urutan baru disesuaikan
+      const firestoreKat = dataFirestore.kategoriDonasi || [];
+      if (JSON.stringify(firestoreKat) !== JSON.stringify(merged.kategoriDonasi)) {
+        try {
+          await setDoc(docRef, { kategoriDonasi: merged.kategoriDonasi }, { merge: true });
+        } catch (eSync) {}
+      }
       return merged;
     } else {
       // Inisialisasi dokumen baru di Firestore jika belum ada
@@ -242,7 +295,7 @@ export async function getKategoriGaleri() {
   return s.kategoriGaleri || DEFAULT_SETTINGS.kategoriGaleri;
 }
 
-// 7. OPERASI CRUD KATEGORI (TAMBAH, EDIT, HAPUS, RESET)
+// 7. OPERASI CRUD KATEGORI (TAMBAH, EDIT, HAPUS, RESET, GESER)
 export async function tambahItemKategori(tipe, namaItem) {
   const bersih = String(namaItem || '').trim();
   if (!bersih) {
@@ -250,7 +303,10 @@ export async function tambahItemKategori(tipe, namaItem) {
   }
 
   const settings = getSettingsSync();
-  const list = settings[tipe] ? [...settings[tipe]] : [];
+  let list = settings[tipe] ? [...settings[tipe]] : [];
+  if (tipe === 'kategoriDonasi') {
+    list = susunUrutanKategoriDonasi(list);
+  }
 
   const duplikat = list.some((item) => item.toLowerCase() === bersih.toLowerCase());
   if (duplikat) {
@@ -273,6 +329,22 @@ export async function tambahItemKategori(tipe, namaItem) {
   } else {
     list.push(bersih);
   }
+
+  await saveSettings({ [tipe]: list });
+  return list;
+}
+
+export async function geserUrutanKategori(tipe, index, arah) {
+  const settings = getSettingsSync();
+  const list = settings[tipe] ? [...settings[tipe]] : [];
+  const idx = Number(index);
+  if (isNaN(idx) || idx < 0 || idx >= list.length) return list;
+
+  const targetIdx = arah === 'up' ? idx - 1 : idx + 1;
+  if (targetIdx < 0 || targetIdx >= list.length) return list;
+
+  const item = list.splice(idx, 1)[0];
+  list.splice(targetIdx, 0, item);
 
   await saveSettings({ [tipe]: list });
   return list;

@@ -1301,6 +1301,8 @@
       tambahItemKategori,
       editItemKategori,
       hapusItemKategori,
+      geserUrutanKategori,
+      susunUrutanKategoriDonasi,
       tambahRekeningBank,
       editRekeningBank,
       hapusRekeningBank,
@@ -1400,6 +1402,12 @@
             <td style="padding: 0.85rem 1rem;">${getTipeDonasiBadge(item)}</td>
             <td style="text-align: center; padding: 0.85rem 1rem;">
               <div class="table-actions">
+                <button type="button" class="btn-aksi btn-geser-kat" data-tipe="kategoriDonasi" data-index="${idx}" data-arah="up" title="Pindah Ke Atas" ${idx === 0 ? 'disabled style="opacity:0.35;cursor:not-allowed;"' : ''}>
+                  ▲
+                </button>
+                <button type="button" class="btn-aksi btn-geser-kat" data-tipe="kategoriDonasi" data-index="${idx}" data-arah="down" title="Pindah Ke Bawah" ${idx === filtered.length - 1 ? 'disabled style="opacity:0.35;cursor:not-allowed;"' : ''}>
+                  ▼
+                </button>
                 <button type="button" class="btn-aksi btn-edit btn-edit-kategori" data-tipe="kategoriDonasi" data-item="${escapeHtml(item)}" title="Edit Kategori">
                   <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                   Edit
@@ -1440,6 +1448,12 @@
             <td style="padding: 0.85rem 1rem;">${getTipeProgramBadge(item)}</td>
             <td style="text-align: center; padding: 0.85rem 1rem;">
               <div class="table-actions">
+                <button type="button" class="btn-aksi btn-geser-kat" data-tipe="uraianProgram" data-index="${idx}" data-arah="up" title="Pindah Ke Atas" ${idx === 0 ? 'disabled style="opacity:0.35;cursor:not-allowed;"' : ''}>
+                  ▲
+                </button>
+                <button type="button" class="btn-aksi btn-geser-kat" data-tipe="uraianProgram" data-index="${idx}" data-arah="down" title="Pindah Ke Bawah" ${idx === filtered.length - 1 ? 'disabled style="opacity:0.35;cursor:not-allowed;"' : ''}>
+                  ▼
+                </button>
                 <button type="button" class="btn-aksi btn-edit btn-edit-kategori" data-tipe="uraianProgram" data-item="${escapeHtml(item)}" title="Edit Uraian Program">
                   <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                   Edit
@@ -1774,6 +1788,22 @@
 
     // 8. DELEGASI KLIK TABEL (EDIT & HAPUS KATEGORI)
     document.addEventListener('click', async (e) => {
+      // Geser Urutan Kategori / Uraian
+      const btnGeser = e.target.closest('.btn-geser-kat');
+      if (btnGeser) {
+        const tipe = btnGeser.getAttribute('data-tipe');
+        const idx = parseInt(btnGeser.getAttribute('data-index'), 10);
+        const arah = btnGeser.getAttribute('data-arah');
+        try {
+          await geserUrutanKategori(tipe, idx, arah);
+          cachedSettings = getSettingsSync();
+          renderSemuaKategori();
+        } catch (err) {
+          showToast(err.message, 'error');
+        }
+        return;
+      }
+
       // Edit Kategori
       const btnEdit = e.target.closest('.btn-edit-kategori');
       if (btnEdit) {
@@ -2108,11 +2138,14 @@
 
     // 17. INISIALISASI HALAMAN PENGATURAN
     async function init() {
+      cachedSettings.kategoriDonasi = susunUrutanKategoriDonasi(cachedSettings.kategoriDonasi);
       renderSemuaKategori();
 
       try {
         const fresh = await loadSettings();
         cachedSettings = fresh;
+        cachedSettings.kategoriDonasi = susunUrutanKategoriDonasi(cachedSettings.kategoriDonasi);
+        await saveSettings({ kategoriDonasi: cachedSettings.kategoriDonasi });
         renderSemuaKategori();
       } catch (e) {
         console.warn('Latar belakang sync pengaturan:', e);
