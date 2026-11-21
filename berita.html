@@ -158,6 +158,12 @@
           </div>
           <h2 id="modal-berita-judul" style="font-size: clamp(1.25rem, 1.1rem + 0.8vw, 1.8rem); line-height: 1.35; margin-bottom: 1rem; color: var(--secondary);"></h2>
           <div id="modal-berita-isi" style="color: var(--text); line-height: 1.8; font-size: 0.98rem; white-space: pre-line;"></div>
+          <div class="modal-news__footer" style="margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid var(--border, #e3e8e5); display: flex; justify-content: flex-end;">
+            <button type="button" class="btn btn-secondary" id="modal-berita-btn-back" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.65rem 1.35rem; border-radius: var(--radius-md, 12px); font-weight: 600; font-size: 0.875rem; cursor: pointer; border: 1px solid var(--border, #cbd5e1); background: #ffffff; color: var(--text, #1f2937); transition: all 0.2s;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px;"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+              Kembali
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -228,16 +234,21 @@
     }
     .modal-news__media {
       width: 100%;
-      max-height: 380px;
-      background: #0f2438;
+      max-height: 420px;
+      background: #091a29;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       overflow: hidden;
+      position: relative;
     }
     .modal-news__media img {
       width: 100%;
-      height: 100%;
-      max-height: 380px;
-      object-fit: cover;
+      height: auto;
+      max-height: 420px;
+      object-fit: contain;
       display: block;
+      margin: 0 auto;
     }
     .modal-news__body {
       padding: 1.75rem 2rem 2.25rem;
@@ -257,8 +268,9 @@
     @media (max-width: 640px) {
       .modal-news { padding: 0.5rem; }
       .modal-news__dialog { max-height: 94vh; border-radius: 16px; }
-      .modal-news__body { padding: 1.25rem 1.25rem 1.75rem; }
-      .modal-news__media { max-height: 220px; }
+      .modal-news__body { padding: 1.25rem 1.25rem 1.5rem; }
+      .modal-news__media { max-height: 280px; }
+      .modal-news__media img { max-height: 280px; }
     }
   </style>
 
@@ -284,10 +296,16 @@
     const modalBeritaIsi = document.getElementById('modal-berita-isi');
     const modalBeritaClose = document.getElementById('modal-berita-close');
     const modalBeritaBackdrop = document.getElementById('modal-berita-backdrop');
+    const modalBeritaBtnBack = document.getElementById('modal-berita-btn-back');
 
     function bukaModalBerita(item) {
       if (!modalBeritaEl || !item) return;
-      modalBeritaImg.src = item.imageUrl || 'images/news/kegiatan1.jpg';
+      modalBeritaImg.onerror = function() {
+        this.onerror = null;
+        this.src = 'images/news/kegiatan1.jpg';
+      };
+      const rawImg = (item.imageUrl || '').trim();
+      modalBeritaImg.src = rawImg ? rawImg : 'images/news/kegiatan1.jpg';
       modalBeritaImg.alt = item.judul || 'Berita Yayasan';
       modalBeritaKat.textContent = item.kategori || 'Berita';
       modalBeritaTgl.textContent = formatTanggalIndo(item.tanggal);
@@ -307,6 +325,7 @@
 
     if (modalBeritaClose) modalBeritaClose.addEventListener('click', tutupModalBerita);
     if (modalBeritaBackdrop) modalBeritaBackdrop.addEventListener('click', tutupModalBerita);
+    if (modalBeritaBtnBack) modalBeritaBtnBack.addEventListener('click', tutupModalBerita);
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && modalBeritaEl && modalBeritaEl.style.display === 'flex') {
         tutupModalBerita();
@@ -390,7 +409,7 @@
             <article class="card news-featured news-card--clickable" data-news-id="${featured.id}" style="box-shadow: var(--shadow-md); border-radius: var(--radius-lg); overflow: hidden;">
               <div class="news-card__media">
                 <span class="news-card__category" style="position: absolute; top: 1rem; left: 1rem; background: var(--primary); color: white; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700; z-index: 2;">${featured.kategori || 'Berita'}</span>
-                <img src="${featuredImg}" alt="${featured.judul}" style="width: 100%; height: auto; max-height: 450px; object-fit: cover;">
+                <img src="${featuredImg}" alt="${featured.judul}" onerror="this.onerror=null; this.src='images/news/kegiatan1.jpg';" style="width: 100%; height: auto; max-height: 450px; object-fit: cover;">
               </div>
               <div class="news-card__body" style="padding: 2rem;">
                 <span class="news-card__date" style="color: var(--muted); font-size: var(--fs-sm); display: block; margin-bottom: 0.5rem;">${formatTanggalIndo(featured.tanggal)}</span>
@@ -429,9 +448,9 @@
           const imgSrc = item.imageUrl || 'images/news/kegiatan1.jpg';
           htmlContent += `
             <article class="card news-card news-card--clickable" data-news-id="${item.id}" style="box-shadow: var(--shadow-sm); border-radius: var(--radius-md); overflow: hidden; display: flex; flex-direction: column;">
-              <div class="news-card__media" style="position: relative;">
+              <div class="news-card__media" style="position: relative; background: #f1f5f9;">
                 <span class="news-card__category" style="position: absolute; top: 1rem; left: 1rem; background: var(--white); color: var(--secondary); padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700; z-index: 2;">${item.kategori || 'Berita'}</span>
-                <img src="${imgSrc}" alt="${item.judul}" style="width: 100%; height: 220px; object-fit: cover;">
+                <img src="${imgSrc}" alt="${item.judul}" onerror="this.onerror=null; this.src='images/news/kegiatan1.jpg';" style="width: 100%; height: 220px; object-fit: cover;">
               </div>
               <div class="news-card__body" style="padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column;">
                 <span class="news-card__date" style="color: var(--muted); font-size: var(--fs-xs); display: block; margin-bottom: 0.5rem;">${formatTanggalIndo(item.tanggal)}</span>
