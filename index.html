@@ -360,32 +360,6 @@
           <p>Kegiatan ini dilakukan untuk menguatkan rasa kebersamaan dan kekeluargaan di masyarakat, juga meningkatkan serta menanamkan gerakan gotong royong berbasis kerakyatan.</p>
         </div>
       </article>
-
-      <!-- Berita 2 (Kosong) -->
-      <article class="card news-card" data-reveal>
-        <div class="news-card__media">
-          <span class="news-card__category">Pendidikan</span>
-          <img src="images/news/berita-2.svg" alt="Dokumentasi kegiatan pendidikan" width="480" height="320" loading="lazy">
-        </div>
-        <div class="news-card__body">
-          <span class="news-card__date">-</span>
-          <h3>Saat ini belum ada kegiatan</h3>
-          <p>Belum ada informasi kegiatan atau berita terbaru yang ditampilkan untuk saat ini.</p>
-        </div>
-      </article>
-
-      <!-- Berita 3 (Kosong) -->
-      <article class="card news-card" data-reveal>
-        <div class="news-card__media">
-          <span class="news-card__category">Pemberdayaan</span>
-          <img src="images/news/berita-3.svg" alt="Dokumentasi pelatihan pemberdayaan" width="480" height="320" loading="lazy">
-        </div>
-        <div class="news-card__body">
-          <span class="news-card__date">-</span>
-          <h3>Saat ini belum ada kegiatan</h3>
-          <p>Belum ada informasi kegiatan atau berita terbaru yang ditampilkan untuk saat ini.</p>
-        </div>
-      </article>
       
     </div>
   </div>
@@ -1017,38 +991,6 @@
               </article>
             `;
           });
-
-          const placeholderCards = [
-            {
-              kategori: 'Pendidikan',
-              img: 'images/news/berita-2.svg',
-              judul: 'Saat ini belum ada kegiatan',
-              teks: 'Belum ada informasi kegiatan atau berita terbaru yang ditampilkan untuk saat ini.'
-            },
-            {
-              kategori: 'Pemberdayaan',
-              img: 'images/news/berita-3.svg',
-              judul: 'Saat ini belum ada kegiatan',
-              teks: 'Belum ada informasi kegiatan atau berita terbaru yang ditampilkan untuk saat ini.'
-            }
-          ];
-
-          for (let i = top3.length; i < 3; i++) {
-            const ph = placeholderCards[i - top3.length] || placeholderCards[0];
-            html += `
-              <article class="card news-card is-visible" style="display: flex; flex-direction: column; overflow: hidden; border-radius: var(--radius-md);">
-                <div class="news-card__media">
-                  <span class="news-card__category">${ph.kategori}</span>
-                  <img src="${ph.img}" alt="${ph.judul}" width="480" height="320" loading="lazy" style="width: 100%; height: 220px; object-fit: cover;">
-                </div>
-                <div class="news-card__body" style="padding: 1.5rem; flex-grow: 1;">
-                  <span class="news-card__date" style="margin-bottom: 0.5rem; display: block; font-size: 0.825rem; color: var(--muted);">-</span>
-                  <h3 style="font-size: 1.15rem; line-height: 1.4; margin-bottom: 0.5rem;">${ph.judul}</h3>
-                  <p style="color: var(--muted); line-height: 1.5; font-size: 0.9rem;">${ph.teks}</p>
-                </div>
-              </article>
-            `;
-          }
 
           container.innerHTML = html;
         }, (err) => {
