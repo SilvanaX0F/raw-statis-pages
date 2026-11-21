@@ -346,7 +346,7 @@
       </div>
       <a href="berita.html" class="link-arrow">Lihat Semua Berita <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
     </div>
-    <div class="grid grid-3">
+    <div class="grid grid-3" id="home-news-grid">
       
       <!-- Berita 1 (Diperbarui) -->
       <article class="card news-card" data-reveal>
@@ -779,8 +779,105 @@
       }
     }
 
+    function formatTanggalIndo(tglStr) {
+      if (!tglStr) return '-';
+      try {
+        const d = new Date(tglStr);
+        if (isNaN(d.getTime())) return tglStr;
+        return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+      } catch (e) {
+        return tglStr;
+      }
+    }
+
+    async function loadBeritaBeranda() {
+      const container = document.getElementById('home-news-grid');
+      if (!container) return;
+
+      try {
+        const q = query(collection(db, 'news'));
+        const snap = await getDocs(q);
+        if (snap.empty) return;
+
+        const list = [];
+        snap.forEach(doc => {
+          const d = doc.data();
+          d.id = doc.id;
+          list.push(d);
+        });
+
+        list.sort((a, b) => new Date(b.tanggal || 0) - new Date(a.tanggal || 0));
+        const top3 = list.slice(0, 3);
+        if (top3.length === 0) return;
+
+        let html = '';
+        top3.forEach((item) => {
+          const imgSrc = item.imageUrl || 'images/news/kegiatan1.jpg';
+          const tglFmt = formatTanggalIndo(item.tanggal);
+          const kategori = item.kategori || 'Kegiatan';
+          const judul = escapeHtml(item.judul || 'Tanpa Judul');
+          const ringkasan = escapeHtml(item.isi || '');
+
+          html += `
+            <article class="card news-card" data-reveal style="display: flex; flex-direction: column; overflow: hidden; border-radius: var(--radius-md);">
+              <div class="news-card__media" style="position: relative;">
+                <span class="news-card__category" style="position: absolute; top: 1rem; left: 1rem; z-index: 2;">${escapeHtml(kategori)}</span>
+                <a href="berita.html" style="display: block; width: 100%; height: 220px; overflow: hidden;">
+                  <img src="${imgSrc}" alt="${judul}" width="480" height="320" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
+                </a>
+              </div>
+              <div class="news-card__body" style="padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column;">
+                <span class="news-card__date" style="margin-bottom: 0.5rem; display: block; font-size: 0.825rem; color: var(--muted);">${tglFmt}</span>
+                <h3 style="font-size: 1.15rem; line-height: 1.4; margin-bottom: 0.5rem; color: var(--secondary);">
+                  <a href="berita.html" style="color: inherit; text-decoration: none;">${judul}</a>
+                </h3>
+                <p style="color: var(--muted); line-height: 1.5; font-size: 0.9rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 0;">${ringkasan}</p>
+              </div>
+            </article>
+          `;
+        });
+
+        const placeholderCards = [
+          {
+            kategori: 'Pendidikan',
+            img: 'images/news/berita-2.svg',
+            judul: 'Saat ini belum ada kegiatan',
+            teks: 'Belum ada informasi kegiatan atau berita terbaru yang ditampilkan untuk saat ini.'
+          },
+          {
+            kategori: 'Pemberdayaan',
+            img: 'images/news/berita-3.svg',
+            judul: 'Saat ini belum ada kegiatan',
+            teks: 'Belum ada informasi kegiatan atau berita terbaru yang ditampilkan untuk saat ini.'
+          }
+        ];
+
+        for (let i = top3.length; i < 3; i++) {
+          const ph = placeholderCards[i - 1] || placeholderCards[0];
+          html += `
+            <article class="card news-card" data-reveal style="display: flex; flex-direction: column; overflow: hidden; border-radius: var(--radius-md);">
+              <div class="news-card__media">
+                <span class="news-card__category">${ph.kategori}</span>
+                <img src="${ph.img}" alt="${ph.judul}" width="480" height="320" loading="lazy" style="width: 100%; height: 220px; object-fit: cover;">
+              </div>
+              <div class="news-card__body" style="padding: 1.5rem; flex-grow: 1;">
+                <span class="news-card__date" style="margin-bottom: 0.5rem; display: block; font-size: 0.825rem; color: var(--muted);">-</span>
+                <h3 style="font-size: 1.15rem; line-height: 1.4; margin-bottom: 0.5rem;">${ph.judul}</h3>
+                <p style="color: var(--muted); line-height: 1.5; font-size: 0.9rem;">${ph.teks}</p>
+              </div>
+            </article>
+          `;
+        }
+
+        container.innerHTML = html;
+      } catch (err) {
+        console.warn('Gagal memuat berita dinamis di beranda:', err);
+      }
+    }
+
     setupSliderControls();
     loadGaleriBeranda();
+    loadBeritaBeranda();
   </script>
   <script type="module" src="js/site-settings.js"></script>
 </body>
