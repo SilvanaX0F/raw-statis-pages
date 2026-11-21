@@ -146,7 +146,7 @@
 
   <!-- ================= LOGIKA TARIK DATA BERITA (FIREBASE) ================= -->
   <script type="module">
-    import { db, collection, getDocs, query } from './js/firebase-config.js';
+    import { db, collection, getDocs, query, onSnapshot } from './js/firebase-config.js';
 
     const beritaContainer = document.getElementById('berita-container');
     
@@ -154,35 +154,43 @@
     let currentPage = 1;
     const itemsPerPage = 6; // Menampilkan 6 card berita per halaman (di bawah featured)
 
-    async function loadNewsPublic() {
+    function loadNewsPublic() {
       try {
         const q = query(collection(db, 'news'));
-        const snap = await getDocs(q);
+        onSnapshot(q, (snap) => {
+          if (snap.empty) {
+            beritaContainer.innerHTML = `
+              <div class="container" style="padding: 4rem 0; text-align: center;">
+                <h3 style="color: var(--secondary);">Belum Ada Berita</h3>
+                <p style="color: var(--muted);">Nantikan pembaruan informasi dari kami segera.</p>
+              </div>`;
+            return;
+          }
 
-        if (snap.empty) {
+          allNews = [];
+          snap.forEach(doc => {
+            const d = doc.data();
+            d.id = doc.id;
+            allNews.push(d);
+          });
+
+          // Urutkan dari yang terbaru ke terlama (berdasarkan tanggal, lalu waktu dibuat)
+          allNews.sort((a, b) => {
+            const diffTgl = new Date(b.tanggal || 0) - new Date(a.tanggal || 0);
+            if (diffTgl !== 0) return diffTgl;
+            return (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0);
+          });
+          
+          renderPage(1);
+        }, (err) => {
+          console.error("Gagal memuat berita publik:", err);
           beritaContainer.innerHTML = `
-            <div class="container" style="padding: 4rem 0; text-align: center;">
-              <h3 style="color: var(--secondary);">Belum Ada Berita</h3>
-              <p style="color: var(--muted);">Nantikan pembaruan informasi dari kami segera.</p>
+            <div class="container" style="padding: 4rem 0; text-align: center; color: red;">
+              <p>Gagal memuat berita. Silakan muat ulang halaman.</p>
             </div>`;
-          return;
-        }
-
-        snap.forEach(doc => {
-          allNews.push(doc.data());
         });
-
-        // Urutkan dari yang terbaru ke terlama
-        allNews.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
-        
-        renderPage(1);
-
       } catch (err) {
-        console.error("Gagal memuat berita publik:", err);
-        beritaContainer.innerHTML = `
-          <div class="container" style="padding: 4rem 0; text-align: center; color: red;">
-            <p>Gagal memuat berita. Silakan muat ulang halaman.</p>
-          </div>`;
+        console.error("Gagal menginisialisasi listener berita publik:", err);
       }
     }
 
@@ -205,7 +213,7 @@
 
       // BERITA PERTAMA (SELALU JADI FEATURED ARTICLE DI ATAS)
       const featured = allNews[0];
-      const featuredImg = featured.imageUrl || 'https://via.placeholder.com/640x420?text=No+Image';
+      const featuredImg = featured.imageUrl || 'images/news/kegiatan1.jpg';
       
       htmlContent += `
         <section class="section section--sm">
@@ -243,7 +251,7 @@
 
         // LOOPING CARD KECIL
         currentGridItems.forEach(item => {
-          const imgSrc = item.imageUrl || 'https://via.placeholder.com/480x320?text=No+Image';
+          const imgSrc = item.imageUrl || 'images/news/kegiatan1.jpg';
           htmlContent += `
             <article class="card news-card" style="box-shadow: var(--shadow-sm); border-radius: var(--radius-md); overflow: hidden; display: flex; flex-direction: column;">
               <div class="news-card__media" style="position: relative;">

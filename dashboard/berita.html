@@ -243,7 +243,11 @@
           const data = doc.data(); data.id = doc.id; dataBeritaMaster.push(data);
         });
 
-        dataBeritaMaster.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
+        dataBeritaMaster.sort((a, b) => {
+          const diffTgl = new Date(b.tanggal || 0) - new Date(a.tanggal || 0);
+          if (diffTgl !== 0) return diffTgl;
+          return (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0);
+        });
         renderTabelAdmin(dataBeritaMaster);
 
       } catch (err) {
@@ -334,10 +338,10 @@
           dataPayload.updatedAt = serverTimestamp();
           await updateDoc(doc(db, 'news', editId), dataPayload);
           pesanStatus.style.color = 'var(--primary)'; pesanStatus.textContent = '✅ Berita berhasil diperbarui!';
-          resetForm();
         }
 
-        form.reset(); imgPreview.style.display = 'none'; loadDataAdmin();
+        resetForm();
+        loadDataAdmin();
         setTimeout(() => { pesanStatus.textContent = ''; }, 3000);
 
       } catch (error) {
