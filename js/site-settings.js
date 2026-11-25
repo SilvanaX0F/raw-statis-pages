@@ -230,7 +230,7 @@ function terapkanKeDonasi(settings) {
   const nomorWA = p.whatsapp || '082312345153';
   const waNomor = nomorWA.replace(/[^0-9]/g, '');
   const waClean = waNomor.startsWith('0') ? '62' + waNomor.slice(1) : waNomor;
-  const pesanWA = encodeURIComponent(`Halo Admin ${p.nama || 'Yayasan Padang Wulan'},\nSaya ingin melakukan konfirmasi donasi yang telah saya kirimkan. Mohon informasinya.`);
+  const pesanWA = encodeURIComponent(`Halo Admin ${p.nama || 'Yayasan Bina Umat Padang Wulan Cipicung'},\nSaya ingin melakukan konfirmasi donasi yang telah saya kirimkan. Mohon informasinya.`);
   if (waBtn) {
     waBtn.href = `https://wa.me/${waClean}?text=${pesanWA}`;
     waBtn.target = '_blank';
