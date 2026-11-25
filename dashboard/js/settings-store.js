@@ -155,11 +155,7 @@ function mergeWithDefault(source) {
     merged.profilYayasan = { ...merged.profilYayasan, ...source.profilYayasan };
   }
   if (Array.isArray(source.rekeningBank)) {
-    merged.rekeningBank = deepClone(source.rekeningBank).filter(b => {
-      if (!b || !b.nomorRekening) return false;
-      const no = String(b.nomorRekening).trim();
-      return no !== '7123456789' && no !== '1300098765432';
-    });
+    merged.rekeningBank = deepClone(source.rekeningBank).filter(b => b && b.nomorRekening && String(b.nomorRekening).trim() !== '');
   }
   if (source.qris && typeof source.qris === 'object') {
     const q = { ...merged.qris, ...source.qris };

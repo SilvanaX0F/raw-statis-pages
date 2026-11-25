@@ -53,11 +53,7 @@ export function getLocalSettings() {
     if (raw) {
       const parsed = JSON.parse(raw);
       const cleanedBanks = Array.isArray(parsed.rekeningBank)
-        ? parsed.rekeningBank.filter(b => {
-            if (!b || !b.nomorRekening) return false;
-            const no = String(b.nomorRekening).trim();
-            return no !== '7123456789' && no !== '1300098765432';
-          })
+        ? parsed.rekeningBank.filter(b => b && b.nomorRekening && String(b.nomorRekening).trim() !== '')
         : [];
 
       let qrisObj = { ...DEFAULT_SITE_SETTINGS.qris, ...(parsed.qris || {}) };
@@ -230,11 +226,12 @@ function terapkanKeDonasi(settings) {
   }
 
   // C. Update WhatsApp Konfirmasi
-  const waBtn = document.querySelector('.donation-confirm-card a[href*="kontak.html"]');
-  if (waBtn && p.whatsapp) {
-    const waNomor = p.whatsapp.replace(/[^0-9]/g, '');
-    const waClean = waNomor.startsWith('0') ? '62' + waNomor.slice(1) : waNomor;
-    const pesanWA = encodeURIComponent(`Halo Admin ${p.nama || 'Yayasan'},\nSaya ingin melakukan konfirmasi donasi yang telah saya kirimkan. Mohon informasinya.`);
+  const waBtn = document.querySelector('.donation-confirm-card a[href*="kontak.html"], .donation-confirm-card a[href*="wa.me"]');
+  const nomorWA = p.whatsapp || '082312345153';
+  const waNomor = nomorWA.replace(/[^0-9]/g, '');
+  const waClean = waNomor.startsWith('0') ? '62' + waNomor.slice(1) : waNomor;
+  const pesanWA = encodeURIComponent(`Halo Admin ${p.nama || 'Yayasan Padang Wulan'},\nSaya ingin melakukan konfirmasi donasi yang telah saya kirimkan. Mohon informasinya.`);
+  if (waBtn) {
     waBtn.href = `https://wa.me/${waClean}?text=${pesanWA}`;
     waBtn.target = '_blank';
     waBtn.rel = 'noopener noreferrer';
@@ -328,8 +325,9 @@ export async function initSiteSettings() {
   // 1. Terapkan seketika dari cache lokal untuk mencegah lag / layout shift
   const settings = getLocalSettings();
   const currentPath = window.location.pathname.toLowerCase();
+  const isDonasiPage = !!document.getElementById('donasi-rekening-list') || currentPath.includes('donasi');
 
-  if (currentPath.endsWith('donasi.html')) {
+  if (isDonasiPage) {
     terapkanKeDonasi(settings);
   } else {
     terapkanKeBeranda(settings);
@@ -341,13 +339,20 @@ export async function initSiteSettings() {
     const snap = await getDoc(docRef);
     if (snap.exists()) {
       const dataFirestore = snap.data();
+      const local = getLocalSettings();
+      const firestoreBanks = Array.isArray(dataFirestore.rekeningBank) && dataFirestore.rekeningBank.length > 0
+        ? dataFirestore.rekeningBank
+        : (local.rekeningBank || []);
+
       const updated = {
         ...DEFAULT_SITE_SETTINGS,
-        ...dataFirestore
+        ...local,
+        ...dataFirestore,
+        rekeningBank: firestoreBanks
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
 
-      if (currentPath.endsWith('donasi.html')) {
+      if (isDonasiPage) {
         terapkanKeDonasi(updated);
       } else {
         terapkanKeBeranda(updated);
@@ -360,7 +365,7 @@ export async function initSiteSettings() {
   // 3. Dengarkan event lokal jika dashboard baru saja mengupdate settings
   window.addEventListener('ybu-settings-updated', (e) => {
     if (e.detail) {
-      if (currentPath.endsWith('donasi.html')) {
+      if (isDonasiPage) {
         terapkanKeDonasi(e.detail);
       } else {
         terapkanKeBeranda(e.detail);
@@ -371,7 +376,7 @@ export async function initSiteSettings() {
   window.addEventListener('storage', (e) => {
     if (e.key === STORAGE_KEY) {
       const fresh = getLocalSettings();
-      if (currentPath.endsWith('donasi.html')) {
+      if (isDonasiPage) {
         terapkanKeDonasi(fresh);
       } else {
         terapkanKeBeranda(fresh);

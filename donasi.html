@@ -85,7 +85,15 @@
               <h2 style="font-size: var(--fs-xl);">QRIS</h2>
             </div>
             <div id="donasi-qris-box" style="margin-top: 1rem;">
-              <!-- Akan diisi secara dinamis dari Pengaturan Dashboard -->
+              <div class="qris-empty-state" style="padding: 1.65rem 1.25rem; border-radius: 12px; background: rgba(15, 36, 56, 0.03); border: 1.5px dashed rgba(15, 36, 56, 0.16); text-align: center;">
+                <div style="width: 44px; height: 44px; border-radius: 50%; background: rgba(15, 36, 56, 0.08); display: flex; align-items: center; justify-content: center; margin: 0 auto 0.75rem; color: var(--dark);">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 22px; height: 22px;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><rect x="7" y="7" width="3" height="3"/><rect x="14" y="7" width="3" height="3"/><rect x="7" y="14" width="3" height="3"/></svg>
+                </div>
+                <h4 style="font-size: 0.98rem; font-weight: 700; color: #0f172a; margin-bottom: 0.35rem;">QRIS Sedang Disiapkan</h4>
+                <p class="text-muted" style="font-size: var(--fs-xs); line-height: 1.5; margin: 0;">
+                  Metode pembayaran digital QRIS yayasan saat ini sedang dalam proses registrasi merchant resmi oleh pengurus.
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -99,7 +107,7 @@
             <li><span class="donation-steps__num">4</span> Tim kami akan mengirimkan ucapan terima kasih resmi atas donasi Anda.</li>
           </ol>
           <div class="flex gap-sm mt-lg" style="flex-wrap: wrap;">
-            <a href="kontak.html" class="btn btn-dark">Konfirmasi via Kontak</a>
+            <a href="https://wa.me/6282312345153?text=Halo%20Admin%20Yayasan%20Padang%20Wulan%2C%20saya%20ingin%20melakukan%20konfirmasi%20donasi" target="_blank" rel="noopener noreferrer" class="btn btn-dark">Konfirmasi via WhatsApp</a>
             <a href="index.html" class="btn btn-secondary">Kembali ke Beranda</a>
           </div>
         </div>
@@ -206,6 +214,43 @@
 
   <button type="button" class="back-to-top" data-back-to-top aria-label="Kembali ke atas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg></button>
 
+  <script>
+    // Inisialisasi cepat rekening bank dari penyimpanan lokal untuk mencegah delay render
+    (function() {
+      try {
+        const raw = localStorage.getItem('ybu_admin_settings_v1');
+        if (!raw) return;
+        const data = JSON.parse(raw);
+        const banks = Array.isArray(data.rekeningBank) ? data.rekeningBank.filter(b => b && b.nomorRekening) : [];
+        const listEl = document.getElementById('donasi-rekening-list');
+        const noteEl = document.getElementById('donasi-rekening-note');
+        if (listEl && banks.length > 0) {
+          if (noteEl) noteEl.style.display = 'block';
+          listEl.innerHTML = banks.map(b => {
+            const isUtama = Boolean(b.utama);
+            const esc = s => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+            return `
+              <div class="donation-bank" style="padding: 1.15rem; border-radius: 10px; border: 1.5px solid ${isUtama ? '#059669' : '#e2e8f0'}; background: ${isUtama ? '#f0fdf4' : '#ffffff'}; position: relative; margin-bottom: 0.75rem;">
+                ${isUtama ? '<span style="position: absolute; top: -10px; right: 12px; background: #059669; color: #fff; font-size: 0.68rem; font-weight: 800; padding: 2px 8px; border-radius: 9999px; text-transform: uppercase;">Rekening Utama</span>' : ''}
+                <div>
+                  <div style="font-weight: 800; font-size: 1.05rem; color: #0f172a;">${esc(b.namaBank)}</div>
+                  <div style="display: flex; align-items: center; gap: 0.5rem; margin: 0.35rem 0;">
+                    <span style="font-family: monospace; font-size: 1.25rem; font-weight: 800; letter-spacing: 0.04em; color: #059669;">${esc(b.nomorRekening)}</span>
+                    <button type="button" class="btn-salin-rekening" data-no="${esc(b.nomorRekening)}" style="background: #e2e8f0; border: none; border-radius: 6px; padding: 3px 8px; font-size: 0.72rem; font-weight: 700; cursor: pointer;">Salin</button>
+                  </div>
+                  <div class="text-muted" style="font-size: var(--fs-sm);">
+                    Atas Nama: <strong style="color: #0f172a;">${esc(b.atasNama)}</strong>
+                    ${b.cabang ? ' • <span style="font-size: 0.8rem;">' + esc(b.cabang) + '</span>' : ''}
+                  </div>
+                  ${b.catatan ? `<div style="font-size: 0.76rem; color: #059669; margin-top: 0.35rem; font-weight: 600;">${esc(b.catatan)}</div>` : ''}
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+      } catch (e) {}
+    })();
+  </script>
   <script src="js/main.js"></script>
   <script type="module" src="js/site-settings.js"></script>
 </body>
